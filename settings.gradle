@@ -1,0 +1,17 @@
+rootProject.name = "micro-services"
+
+include "common-service"
+
+include "store-api"
+include "store-service"
+
+include "order-api"
+include "order-service"
+
+include "warehouse-api"
+include "warehouse-service"
+
+include "warranty-api"
+include "warranty-service"
+include 'store-api'
+
