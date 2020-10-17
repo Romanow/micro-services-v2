@@ -1,0 +1,34 @@
+{
+	"id": "a8bbf394-758b-4fcb-8cc7-7c4dabeecaa6",
+	"name": "[local] Services",
+	"values": [
+		{
+			"key": "schema",
+			"value": "http",
+			"enabled": true
+		},
+		{
+			"key": "host",
+			"value": "localhost",
+			"enabled": true
+		},
+		{
+			"key": "warrantyPort",
+			"value": "8180",
+			"enabled": true
+		},
+		{
+			"key": "apiPath",
+			"value": "api/v1",
+			"enabled": true
+		},
+		{
+			"key": "itemUid",
+			"value": "d5a64d3b-7a86-4d18-b363-a11679001447",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-10-17T22:18:53.551Z",
+	"_postman_exported_using": "Postman/7.33.1"
+}

@@ -1,16 +1,17 @@
 plugins {
     id "java"
     id "idea"
-    id "org.jetbrains.kotlin.jvm" version "1.3.41"
-    id "org.jetbrains.kotlin.plugin.jpa" version "1.3.41"
-    id "org.jetbrains.kotlin.plugin.spring" version "1.3.41"
-    id "com.gorylenko.gradle-git-properties" version "2.2.2"
-    id "org.springframework.boot" version "2.3.0.RELEASE"
+    id "org.jetbrains.kotlin.jvm" version "1.3.72"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.3.72" apply false
+    id "org.jetbrains.kotlin.plugin.spring" version "1.3.72" apply false
+    id "com.gorylenko.gradle-git-properties" version "2.2.2" apply false
+    id "org.springframework.boot" version "2.3.4.RELEASE" apply false
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 
 ext {
-    springBootVersion = "2.3.0.RELEASE"
+    springBootVersion = "2.3.4.RELEASE"
+    kotlinVersion = "1.3.72"
     validationApiVersion = "2.0.1.Final"
     guavaVersion = "27.1-jre"
     gsonVersion = "2.8.5"
@@ -19,7 +20,7 @@ ext {
     lombokVersion = "1.18.2"
 }
 
-allprojects { ->
+subprojects { project ->
     apply plugin: "java"
     apply plugin: "idea"
     apply plugin: "org.jetbrains.kotlin.jvm"
@@ -48,10 +49,35 @@ allprojects { ->
     }
 
     dependencies {
-        compile "javax.validation:validation-api:$validationApiVersion"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+        implementation "javax.validation:validation-api:$validationApiVersion"
         implementation "org.apache.commons:commons-lang3"
         implementation "com.google.guava:guava:$guavaVersion"
         implementation "com.google.code.gson:gson:$gsonVersion"
+
         compileOnly "com.google.code.findbugs:jsr305:$fingBugsVersion"
+
+        if (project.name.endsWith("service")) {
+            implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+            implementation "org.springframework.boot:spring-boot-starter-web"
+            implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+            implementation "org.springframework.boot:spring-boot-starter-actuator"
+            implementation "org.springframework.boot:spring-boot-starter-security"
+            implementation "org.springframework.boot:spring-boot-starter-validation"
+            implementation "org.springframework.boot:spring-boot-starter-logging"
+
+            implementation "org.postgresql:postgresql"
+            implementation "org.flywaydb:flyway-core"
+            implementation "io.micrometer:micrometer-registry-prometheus"
+            implementation "org.codehaus.janino:janino"
+
+            implementation "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"
+            implementation "org.springdoc:springdoc-openapi-kotlin:$openApiVersion"
+
+            annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+        }
     }
 }

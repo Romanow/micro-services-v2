@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty name="APPLICATION_NAME" scope="context" source="spring.application.name"/>
+    <springProperty name="LOG_PATH" scope="context" source="logging.file.path"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <if condition='isDefined("LOG_PATH")'>
+        <then>
+            <appender name="GRAYLOG" class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <file>${LOG_PATH}/application.json</file>
+                <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                    <layout class="ru.romanow.inst.services.common.utils.GraylogLayout">
+                        <applicationName>${APPLICATION_NAME}</applicationName>
+                    </layout>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <if condition='isDefined("LOG_PATH")'>
+            <then><appender-ref ref="GRAYLOG"/></then>
+        </if>
+    </root>
+</configuration>

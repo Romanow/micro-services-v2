@@ -1,0 +1,12 @@
+plugins {
+    id "org.springframework.boot"
+}
+
+dependencies {
+    implementation project(":order-api")
+    implementation project(":common-service")
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+}

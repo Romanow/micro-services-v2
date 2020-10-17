@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.romanow.inst.services.common.CommonAutoConfiguration
+
+org.springframework.context.ApplicationListener=\
+  ru.romanow.inst.services.common.config.ApplicationPropertyListener

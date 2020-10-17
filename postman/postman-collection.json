@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "f4e7fbec-3189-4058-a115-c7b4b5c9a7b7",
+		"name": "Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Warranty Service",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "passwd",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "management",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/manage/health",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warrantyPort}}",
+							"path": [
+								"manage",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start warranty",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d77c3b77-4bfb-49c5-bdf3-f9897fbfb8b2",
+								"exec": [
+									"var uuid = require(\"uuid\");",
+									"postman.setEnvironmentVariable(\"itemUid\", uuid.v4());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "dcb1d080-35de-45de-83a4-1e02a65892af",
+								"exec": [
+									"pm.test(\"Warranty successfully created\", function() {",
+									"    pm.response.to.have.status(201)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warrantyPort}}",
+							"path": [
+								"{{apiPath}}",
+								"warranty",
+								"{{itemUid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Warranty status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "90f679df-2043-442b-9800-5a7ee934b91a",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(200)",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+									"    ",
+									"    const response = pm.response.json();",
+									"    const itemUid = pm.variables.get(\"itemUid\")",
+									"    pm.expect(response.itemId).to.eq(itemUid)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warrantyPort}}",
+							"path": [
+								"{{apiPath}}",
+								"warranty",
+								"{{itemUid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request for warranty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "098f14ec-54ac-46e9-9b66-96512d5b0373",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(200)",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+									"    ",
+									"    const response = pm.response.json();",
+									"    pm.expect(response.decision).to.eq(\"RETURN\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"It drowned\",\n    \"availableCount\": 2\n}"
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}/warranty",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warrantyPort}}",
+							"path": [
+								"{{apiPath}}",
+								"warranty",
+								"{{itemUid}}",
+								"warranty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start warranty Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "887a344b-5e5f-4ac3-b51f-013e543470d9",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "22df8818-9d19-43a2-8e7a-b65fae4969be",
+								"exec": [
+									"pm.test(\"Stop warranty\", function() {",
+									"    pm.response.to.have.status(204)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warrantyPort}}",
+							"path": [
+								"{{apiPath}}",
+								"warranty",
+								"{{itemUid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
