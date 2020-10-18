@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import ru.romanow.inst.services.order.model.CreateOrderRequest
-import ru.romanow.inst.services.order.model.ErrorResponse
-import ru.romanow.inst.services.order.model.OrderInfoResponse
-import ru.romanow.inst.services.order.model.OrdersInfoResponse
+import ru.romanow.inst.services.order.model.*
 import ru.romanow.inst.services.order.service.OrderManagementService
 import ru.romanow.inst.services.order.service.OrderService
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
@@ -52,7 +49,7 @@ class OrderController(
         ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
     ])
     @PostMapping(value = ["/{userUid}"], consumes = ["application/json"], produces = ["application/json"])
-    fun makeOrder(@PathVariable userUid: UUID, @Valid @RequestBody request: CreateOrderRequest): UUID {
+    fun makeOrder(@PathVariable userUid: UUID, @Valid @RequestBody request: CreateOrderRequest): CreateOrderResponse {
         return orderManagementService.makeOrder(userUid, request)
     }
 

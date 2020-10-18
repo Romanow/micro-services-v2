@@ -107,6 +107,7 @@ class StoreServiceImpl(
         logger.info("Request to Order Service for user '$userUid' to process order")
         return orderService
             .makePurchase(userUid, request)
+            .map { it.orderUid }
             .orElseThrow { OrderProcessException("User '$userUid' order not created") }
     }
 

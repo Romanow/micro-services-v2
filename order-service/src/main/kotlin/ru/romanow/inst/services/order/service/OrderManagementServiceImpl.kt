@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.romanow.inst.services.order.exceptions.WarrantyProcessException
 import ru.romanow.inst.services.order.model.CreateOrderRequest
+import ru.romanow.inst.services.order.model.CreateOrderResponse
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import java.util.*
@@ -16,7 +17,7 @@ class OrderManagementServiceImpl(
 ) : OrderManagementService {
     private val logger = LoggerFactory.getLogger(OrderManagementServiceImpl::class.java)
 
-    override fun makeOrder(userUid: UUID, request: CreateOrderRequest): UUID {
+    override fun makeOrder(userUid: UUID, request: CreateOrderRequest): CreateOrderResponse {
         val model = request.model
         val size = request.size
         logger.info("Create order (model: $model, sie: $size) for user '$userUid'")
@@ -31,7 +32,7 @@ class OrderManagementServiceImpl(
         warrantyService.startWarranty(orderItemUid)
         orderService.createOrder(orderUid, userUid, orderItemUid)
 
-        return orderUid
+        return CreateOrderResponse(orderUid)
     }
 
     override fun refundOrder(orderUid: UUID) {

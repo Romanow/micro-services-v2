@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
 import ru.romanow.inst.services.common.utils.JsonSerializer
 import ru.romanow.inst.services.common.utils.RestClient
+import ru.romanow.inst.services.order.model.CreateOrderResponse
 import ru.romanow.inst.services.order.model.OrderInfoResponse
 import ru.romanow.inst.services.order.model.OrdersInfoResponse
 import ru.romanow.inst.services.store.exceptions.ItemNotAvailableException
@@ -40,9 +41,9 @@ class OrderServiceImpl(
             .execute()
     }
 
-    override fun makePurchase(userUid: UUID, request: PurchaseRequest): Optional<UUID> {
+    override fun makePurchase(userUid: UUID, request: PurchaseRequest): Optional<CreateOrderResponse> {
         val url = "$orderServiceUrl/api/v1/orders/$userUid"
-        return restClient.post(url, request, UUID::class.java)
+        return restClient.post(url, request, CreateOrderResponse::class.java)
             .exceptionMapping(CONFLICT) { ItemNotAvailableException(extractErrorMessage(it)) }
             .exceptionMapping(UNPROCESSABLE_ENTITY) { OrderProcessException(extractErrorMessage(it)) }
             .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }

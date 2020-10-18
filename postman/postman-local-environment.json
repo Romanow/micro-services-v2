@@ -29,17 +29,17 @@
 		},
 		{
 			"key": "itemUid",
-			"value": "27e2804c-7c16-4d1a-a3b3-7bbd782f8f85",
+			"value": "752d8aa1-1b1f-4c3c-8a05-ff02e08de399",
 			"enabled": true
 		},
 		{
 			"key": "orderUid",
-			"value": "15ca11b3-2768-44b9-995a-cbb9cd58d8c4",
+			"value": "0307da11-7367-4d0c-aa69-5246ea8013bd",
 			"enabled": true
 		},
 		{
 			"key": "orderItemUid",
-			"value": "d8cb8425-2148-4a37-84ea-242597a59527",
+			"value": "3fdfe916-fc69-49df-a1d0-9762925bc2cf",
 			"enabled": true
 		},
 		{
@@ -49,16 +49,21 @@
 		},
 		{
 			"key": "storePort",
-			"value": "",
+			"value": "8480",
 			"enabled": true
 		},
 		{
 			"key": "userUid",
-			"value": "023908f6-598d-4970-8464-9cc2a9c9b5e5",
+			"value": "b39c3fbb-0f0a-4635-8957-86646721cb7b",
+			"enabled": true
+		},
+		{
+			"key": "mainUserUid",
+			"value": "6D2CB5A0-943C-4B96-9AA6-89EAC7BDFD2B",
 			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2020-10-18T21:41:23.727Z",
+	"_postman_exported_at": "2020-10-18T23:40:51.622Z",
 	"_postman_exported_using": "Postman/7.34.0"
 }
