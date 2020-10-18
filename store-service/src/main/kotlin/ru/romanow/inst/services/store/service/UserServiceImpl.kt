@@ -15,7 +15,7 @@ class UserServiceImpl(
     @Transactional(readOnly = true)
     override fun getUserById(userId: UUID): User {
         return userRepository.findByUid(userId)
-            .orElseThrow { EntityNotFoundException(String.format("User with id '%s' not found", userId)) }
+            .orElseThrow { EntityNotFoundException("User with id '$userId' not found") }
     }
 
     @Transactional(readOnly = true)

@@ -8,9 +8,8 @@ import ru.romanow.inst.services.warehouse.domain.OrderItem
 import java.util.*
 
 interface OrderItemRepository : JpaRepository<OrderItem, Int> {
-    fun findByOrderItemUid(uid: UUID): Optional<OrderItem>
 
     @Modifying
-    @Query("delete from OrderItem where orderItemUid = :orderItemUid")
-    fun returnOrderItem(@Param("orderItemUid") orderItemUid: UUID)
+    @Query("update OrderItem set canceled = true where orderItemUid = :orderItemUid")
+    fun cancelOrderItem(@Param("orderItemUid") orderItemUid: UUID)
 }

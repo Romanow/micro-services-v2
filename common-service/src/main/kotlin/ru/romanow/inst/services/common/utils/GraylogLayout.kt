@@ -47,7 +47,7 @@ class GraylogLayout : LayoutBase<ILoggingEvent>() {
             map["_file_name"] = stackElement.fileName
             map["line_number"] = stackElement.lineNumber
         }
-        return String.format("%s\n", gson.toJson(map))
+        return "${gson.toJson(map)}\n"
     }
 
     private fun buildStackTrace(traceElements: Array<StackTraceElementProxy>): String {

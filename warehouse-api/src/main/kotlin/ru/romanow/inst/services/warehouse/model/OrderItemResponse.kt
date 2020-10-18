@@ -4,7 +4,7 @@ import java.util.*
 
 data class OrderItemResponse(
     val orderItemUid: UUID,
-    val itemUid: UUID,
+    val orderUid: UUID,
     val model: String,
     val size: SizeChart
 )

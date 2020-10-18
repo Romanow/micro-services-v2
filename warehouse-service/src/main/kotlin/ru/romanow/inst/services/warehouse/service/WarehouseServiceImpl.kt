@@ -1,31 +1,93 @@
 package ru.romanow.inst.services.warehouse.service
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import ru.romanow.inst.services.warehouse.domain.Item
 import ru.romanow.inst.services.warehouse.domain.OrderItem
+import ru.romanow.inst.services.warehouse.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.warehouse.model.ItemInfoResponse
 import ru.romanow.inst.services.warehouse.model.OrderItemRequest
 import ru.romanow.inst.services.warehouse.model.OrderItemResponse
+import ru.romanow.inst.services.warehouse.repository.ItemRepository
+import ru.romanow.inst.services.warehouse.repository.OrderItemRepository
 import java.util.*
+import javax.persistence.EntityNotFoundException
 
 @Service
-class WarehouseServiceImpl : WarehouseService {
-    override fun getItemInfo(itemId: UUID): ItemInfoResponse {
-        TODO("not implemented")
+class WarehouseServiceImpl(
+    private val itemRepository: ItemRepository,
+    private val orderItemRepository: OrderItemRepository
+) : WarehouseService {
+    private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
+
+    @Transactional(readOnly = true)
+    override fun getItemInfo(orderItemUid: UUID): ItemInfoResponse {
+        return itemRepository
+            .findByOrderItemUid(orderItemUid)
+            .map { buildItemInfo(it) }
+            .orElseThrow { EntityNotFoundException("Item not found for orderItemUid '$orderItemUid'") }
     }
 
-    override fun getOrderItem(itemId: UUID): OrderItem {
-        TODO("not implemented")
+    @Transactional(readOnly = true)
+    override fun getOrderItem(orderItemUid: UUID): Item {
+        return itemRepository
+            .findByOrderItemUid(orderItemUid)
+            .orElseThrow { EntityNotFoundException("Item not found for orderItemUid '$orderItemUid'") }
     }
 
+    @Transactional
     override fun takeItem(request: OrderItemRequest): OrderItemResponse {
-        TODO("not implemented")
+        val model = request.model
+        val size = request.size
+        val orderUid = request.orderUid
+
+        logger.info("Take item (model: $model, sie: $size) for order '$orderUid'")
+
+        val item = itemRepository.findItemByModelAndSize(model, size)
+            .orElseThrow { EntityNotFoundException("Item with model '$model' and size '$size' not found") }
+
+        if (item.availableCount < 1) {
+            throw ItemNotAvailableException("Item '$item' is finished on warehouse")
+        }
+
+        val orderItemUid = UUID.randomUUID()
+        var orderItem = OrderItem(
+            item = item,
+            orderUid = orderUid,
+            orderItemUid = orderItemUid,
+            canceled = false
+        )
+        orderItem = orderItemRepository.save(orderItem)
+        logger.info("Create OrderItem '$orderItem' for order '$orderUid'")
+
+        itemRepository.takeOneItem(item.id!!)
+        logger.info("Take one item for itemId '${item.id}'")
+        return buildOrderItemResponse(orderItem, item)
     }
 
+    @Transactional
     override fun returnItem(orderItemUid: UUID) {
-        TODO("not implemented")
+        itemRepository.returnOneItem(orderItemUid)
+        orderItemRepository.cancelOrderItem(orderItemUid)
+        logger.info("Return one item '$orderItemUid' to warehouse")
     }
 
-    override fun checkItemAvailableCount(itemId: UUID): Int {
-        TODO("not implemented")
+    @Transactional(readOnly = true)
+    override fun checkItemAvailableCount(orderItemUid: UUID): Int {
+        return getOrderItem(orderItemUid).availableCount
     }
+
+    private fun buildItemInfo(item: Item) = ItemInfoResponse(
+        model = item.model!!,
+        size = item.size!!
+    )
+
+    private fun buildOrderItemResponse(orderItem: OrderItem, item: Item) =
+        OrderItemResponse(
+            orderItemUid = orderItem.orderItemUid!!,
+            orderUid = orderItem.orderUid!!,
+            size = item.size!!,
+            model = item.model!!
+        )
 }

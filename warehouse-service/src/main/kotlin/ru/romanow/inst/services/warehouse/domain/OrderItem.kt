@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "order_item", indexes = [
     Index(name = "idx_order_item_item_id", columnList = "item_id"),
     Index(name = "idx_order_item_order_uid", columnList = "order_uid"),
-    Index(name = "idx_order_order_item_uid", columnList = "item_uid", unique = true)
+    Index(name = "idx_order_item_item_uid", columnList = "order_item_uid", unique = true)
 ])
 class OrderItem(
 

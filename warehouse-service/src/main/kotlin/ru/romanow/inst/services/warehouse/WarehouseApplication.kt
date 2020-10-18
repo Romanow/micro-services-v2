@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-open class WarehouseApplication
+class WarehouseApplication
 
 fun main(args: Array<String>) {
     SpringApplication.run(WarehouseApplication::class.java, *args)

@@ -9,7 +9,7 @@
 			"name": "Warranty Service",
 			"item": [
 				{
-					"name": "Health Check",
+					"name": "[warranty] Health Check",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -50,7 +50,7 @@
 					"response": []
 				},
 				{
-					"name": "Start warranty",
+					"name": "[warranty] Start warranty",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -107,7 +107,7 @@
 					"response": []
 				},
 				{
-					"name": "Warranty status",
+					"name": "[warranty] Warranty status",
 					"event": [
 						{
 							"listen": "test",
@@ -147,7 +147,7 @@
 					"response": []
 				},
 				{
-					"name": "Request for warranty",
+					"name": "[warranty] Request for warranty",
 					"event": [
 						{
 							"listen": "test",
@@ -202,7 +202,7 @@
 					"response": []
 				},
 				{
-					"name": "Start warranty Copy",
+					"name": "[warranty] Stop warranty",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -232,13 +232,13 @@
 						"header": [
 							{
 								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"url": {
@@ -252,6 +252,326 @@
 								"{{apiPath}}",
 								"warranty",
 								"{{itemUid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Warehouse Service",
+			"item": [
+				{
+					"name": "[warehouse] Health Check",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "passwd",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "management",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warehousePort}}/manage/health",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warehousePort}}",
+							"path": [
+								"manage",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[warehouse] Take item from Warehouse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e985b15f-cb69-457c-aa90-0e9ee5fe56c7",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(200)",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+									"    ",
+									"    const response = pm.response.json();",
+									"    const orderUid = pm.variables.get(\"orderUid\")",
+									"    pm.expect(response.orderItemUid).to.exist",
+									"    pm.expect(response.orderUid).to.eq(orderUid)",
+									"    pm.expect(response.model).to.eq(\"Lego 8880\")",
+									"    pm.expect(response.size).to.eq(\"L\")",
+									"",
+									"    pm.environment.set(\"orderItemUid\", response.orderItemUid)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f75e35cc-81c5-42e9-b745-27fbc06b7e3a",
+								"exec": [
+									"var uuid = require(\"uuid\");",
+									"postman.setEnvironmentVariable(\"orderUid\", uuid.v4());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderUid\": \"{{orderUid}}\",\n    \"model\": \"Lego 8880\",\n    \"size\": \"L\"\n}"
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warehousePort}}",
+							"path": [
+								"{{apiPath}}",
+								"warehouse",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[warehouse] Get item info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "507b8f84-1f0a-453a-97f6-e5095457ce40",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(200)",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+									"    ",
+									"    const response = pm.response.json();",
+									"    pm.expect(response.model).to.eq(\"Lego 8880\")",
+									"    pm.expect(response.size).to.eq(\"L\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "51d7fb7a-fbff-4128-b8d3-20ae12ecf29f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderUid\": \"{{orderUid}}\",\n    \"model\": \"Lego 8880\",\n    \"size\": \"L\"\n}"
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warehousePort}}",
+							"path": [
+								"{{apiPath}}",
+								"warehouse",
+								"{{orderItemUid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[warehouse] Warranty Request",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e5e14d4c-8f99-4b00-859d-2f6dd844dcc5",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee5c29b0-d5ee-4535-a3a1-f04f5897966d",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(404)",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+									"    ",
+									"    const response = pm.response.json();",
+									"    const orderItemUid = pm.variables.get(\"orderItemUid\")",
+									"    pm.expect(response.message).to.eq(\"Warranty not found for itemId '\" + orderItemUid + \"'\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"It drowned\"\n}"
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}/warranty",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warehousePort}}",
+							"path": [
+								"{{apiPath}}",
+								"warehouse",
+								"{{orderItemUid}}",
+								"warranty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[warehouse] Return item",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d905dc9f-7c27-4fe2-9895-7e366d3ac0ad",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "a123f1ae-3d1b-4423-96be-4f2c3b13b7af",
+								"exec": [
+									"pm.test(\"Warranty info\", function() {",
+									"    pm.response.to.have.status(204)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{warehousePort}}",
+							"path": [
+								"{{apiPath}}",
+								"warehouse",
+								"{{orderItemUid}}"
 							]
 						}
 					},

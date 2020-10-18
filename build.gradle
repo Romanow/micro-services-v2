@@ -1,5 +1,4 @@
 plugins {
-    id "java"
     id "idea"
     id "org.jetbrains.kotlin.jvm" version "1.3.72"
     id "org.jetbrains.kotlin.plugin.jpa" version "1.3.72" apply false
@@ -20,10 +19,9 @@ ext {
     lombokVersion = "1.18.2"
 }
 
-subprojects { project ->
-    apply plugin: "java"
+allprojects { project ->
     apply plugin: "idea"
-    apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "kotlin"
     apply plugin: "io.spring.dependency-management"
 
     sourceCompatibility = 1.11
@@ -36,11 +34,11 @@ subprojects { project ->
         }
     }
 
+    [compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
+
     repositories {
         mavenCentral()
     }
-
-    [ compileKotlin, compileTestKotlin ]*.kotlinOptions*.jvmTarget = "11"
 
     dependencyManagement {
         imports {
@@ -51,6 +49,7 @@ subprojects { project ->
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
 
         implementation "javax.validation:validation-api:$validationApiVersion"
         implementation "org.apache.commons:commons-lang3"

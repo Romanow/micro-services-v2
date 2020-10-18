@@ -5,10 +5,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.bind.annotation.*
+import ru.romanow.inst.services.warehouse.exceptions.ItemNotAvailableException
+import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
 import ru.romanow.inst.services.warranty.model.ErrorResponse
 import javax.persistence.EntityNotFoundException
 
@@ -31,6 +30,20 @@ class ExceptionController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException::class)
     fun notFound(exception: EntityNotFoundException): ErrorResponse {
+        return ErrorResponse(exception.message)
+    }
+
+    @ApiResponse(responseCode = "409", description = "Item not available")
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ItemNotAvailableException::class)
+    fun conflict(exception: ItemNotAvailableException): ErrorResponse {
+        return ErrorResponse(exception.message)
+    }
+
+    @ApiResponse(responseCode = "422", description = "External request failed")
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(WarrantyProcessException::class)
+    fun conflict(exception: WarrantyProcessException): ErrorResponse {
         return ErrorResponse(exception.message)
     }
 

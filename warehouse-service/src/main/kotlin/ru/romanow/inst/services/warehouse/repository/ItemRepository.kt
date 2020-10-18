@@ -10,8 +10,11 @@ import java.util.*
 
 interface ItemRepository : JpaRepository<Item, Int> {
 
+    @Query("select oi.item from OrderItem oi where oi.orderItemUid = :orderItemUid")
+    fun findByOrderItemUid(orderItemUid: UUID): Optional<Item>
+
     @Query("select i from Item i where i.model = :model and i.size = :size")
-    fun findItemByModelAndSize(@Param("model") model: String, @Param("size") size: SizeChart): Optional<Item?>?
+    fun findItemByModelAndSize(@Param("model") model: String, @Param("size") size: SizeChart): Optional<Item>
 
     @Modifying
     @Query("update Item set availableCount = availableCount - 1 where id = :id")

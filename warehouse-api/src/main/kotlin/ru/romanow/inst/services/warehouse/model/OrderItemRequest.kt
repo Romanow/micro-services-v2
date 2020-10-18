@@ -4,7 +4,7 @@ import java.util.*
 import javax.validation.constraints.NotEmpty
 
 data class OrderItemRequest(
-    var orderId: UUID,
+    var orderUid: UUID,
     @field:NotEmpty(message = "{field.is.empty")
     val model: String,
     val size: SizeChart

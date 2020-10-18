@@ -25,9 +25,9 @@ class WarehouseController(
 
     @Operation(summary = "Get item information")
     @ApiResponse(responseCode = "200", description = "Item information")
-    @GetMapping(value = ["/{itemId}"], produces = ["application/json"])
-    private fun item(@PathVariable itemId: UUID): ItemInfoResponse {
-        return warehouseService.getItemInfo(itemId)
+    @GetMapping(value = ["/{orderItemUid}"], produces = ["application/json"])
+    private fun item(@PathVariable orderItemUid: UUID): ItemInfoResponse {
+        return warehouseService.getItemInfo(orderItemUid)
     }
 
     @Operation(summary = "Take item from warehouse")
