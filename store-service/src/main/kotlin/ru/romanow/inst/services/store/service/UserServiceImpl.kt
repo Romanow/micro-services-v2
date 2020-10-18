@@ -13,13 +13,13 @@ class UserServiceImpl(
 ): UserService {
 
     @Transactional(readOnly = true)
-    override fun getUserById(userId: UUID): User {
-        return userRepository.findByUid(userId)
-            .orElseThrow { EntityNotFoundException("User with id '$userId' not found") }
+    override fun getUserById(userUid: UUID): User {
+        return userRepository.findByUserUid(userUid)
+            .orElseThrow { EntityNotFoundException("User with uid '$userUid' not found") }
     }
 
     @Transactional(readOnly = true)
-    override fun checkUserExists(userId: UUID): Boolean {
-        return userRepository.findByUid(userId).isPresent
+    override fun checkUserExists(userUid: UUID): Boolean {
+        return userRepository.findByUserUid(userUid).isPresent
     }
 }

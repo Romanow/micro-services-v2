@@ -4,6 +4,6 @@ import ru.romanow.inst.services.store.domain.User
 import java.util.*
 
 interface UserService {
-    fun getUserById(userId: UUID): User
-    fun checkUserExists(userId: UUID): Boolean
+    fun getUserById(userUid: UUID): User
+    fun checkUserExists(userUid: UUID): Boolean
 }

@@ -9,6 +9,7 @@ dependencies {
     implementation project(":store-api")
     implementation project(":order-api")
     implementation project(":warranty-api")
+    implementation project(":warehouse-api")
     implementation project(":common-service")
 }
 

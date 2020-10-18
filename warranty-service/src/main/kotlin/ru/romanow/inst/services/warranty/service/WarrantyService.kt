@@ -7,9 +7,9 @@ import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
 import java.util.*
 
 interface WarrantyService {
-    fun getWarrantyByItemId(itemId: UUID): Warranty
-    fun getWarrantyInfo(itemId: UUID): WarrantyInfoResponse
-    fun warrantyRequest(itemId: UUID, request: ItemWarrantyRequest): OrderWarrantyResponse
-    fun startWarranty(itemId: UUID)
-    fun stopWarranty(itemId: UUID)
+    fun getWarrantyByItemUid(itemUid: UUID): Warranty
+    fun getWarrantyInfo(itemUid: UUID): WarrantyInfoResponse
+    fun warrantyRequest(itemUid: UUID, request: ItemWarrantyRequest): OrderWarrantyResponse
+    fun startWarranty(itemUid: UUID)
+    fun stopWarranty(itemUid: UUID)
 }

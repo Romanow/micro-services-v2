@@ -4,13 +4,9 @@ import ru.romanow.inst.services.store.model.*
 import java.util.*
 
 interface StoreService {
-    fun findUserOrders(userId: UUID): UserOrdersResponse
-
-    fun findUserOrder(userId: UUID, orderId: UUID): UserOrderResponse
-
-    fun makePurchase(userId: UUID, request: PurchaseRequest): UUID
-
-    fun refundPurchase(userId: UUID, orderId: UUID)
-
-    fun warrantyRequest(userId: UUID, orderId: UUID, request: WarrantyRequest): WarrantyResponse
+    fun findUserOrders(userUid: UUID): UserOrdersResponse
+    fun findUserOrder(userUid: UUID, orderUid: UUID): UserOrderResponse
+    fun makePurchase(userUid: UUID, request: PurchaseRequest): UUID
+    fun refundPurchase(userUid: UUID, orderUid: UUID)
+    fun warrantyRequest(userUid: UUID, orderUid: UUID, request: WarrantyRequest): WarrantyResponse
 }

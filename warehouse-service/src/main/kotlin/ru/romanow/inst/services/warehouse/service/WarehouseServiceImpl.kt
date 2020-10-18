@@ -9,6 +9,7 @@ import ru.romanow.inst.services.warehouse.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.warehouse.model.ItemInfoResponse
 import ru.romanow.inst.services.warehouse.model.OrderItemRequest
 import ru.romanow.inst.services.warehouse.model.OrderItemResponse
+import ru.romanow.inst.services.warehouse.model.SizeChart
 import ru.romanow.inst.services.warehouse.repository.ItemRepository
 import ru.romanow.inst.services.warehouse.repository.OrderItemRepository
 import java.util.*
@@ -39,7 +40,7 @@ class WarehouseServiceImpl(
     @Transactional
     override fun takeItem(request: OrderItemRequest): OrderItemResponse {
         val model = request.model
-        val size = request.size
+        val size = SizeChart.valueOf(request.size)
         val orderUid = request.orderUid
 
         logger.info("Take item (model: $model, sie: $size) for order '$orderUid'")
@@ -80,14 +81,14 @@ class WarehouseServiceImpl(
 
     private fun buildItemInfo(item: Item) = ItemInfoResponse(
         model = item.model!!,
-        size = item.size!!
+        size = item.size!!.name
     )
 
     private fun buildOrderItemResponse(orderItem: OrderItem, item: Item) =
         OrderItemResponse(
             orderItemUid = orderItem.orderItemUid!!,
             orderUid = orderItem.orderUid!!,
-            size = item.size!!,
+            size = item.size!!.name,
             model = item.model!!
         )
 }

@@ -1,6 +1,6 @@
 package ru.romanow.inst.services.warranty.web
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.Hidden
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.romanow.inst.services.warranty.model.ErrorResponse
 import javax.persistence.EntityNotFoundException
 
+@Hidden
 @RestControllerAdvice(annotations = [RestController::class])
 class ExceptionController {
     private val logger = LoggerFactory.getLogger(ExceptionController::class.java)
 
-    @ApiResponse(responseCode = "400", description = "Wrong data")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun badRequest(exception: MethodArgumentNotValidException): ErrorResponse {
@@ -27,14 +27,12 @@ class ExceptionController {
         return ErrorResponse(validationErrors)
     }
 
-    @ApiResponse(responseCode = "404", description = "Requested item not found")
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException::class)
     fun notFound(exception: EntityNotFoundException): ErrorResponse {
         return ErrorResponse(exception.message)
     }
 
-    @ApiResponse(responseCode = "500", description = "Server error")
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException::class)
     fun handleException(exception: RuntimeException): ErrorResponse {

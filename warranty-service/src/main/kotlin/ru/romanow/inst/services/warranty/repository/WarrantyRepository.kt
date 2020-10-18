@@ -9,9 +9,9 @@ import java.util.*
 
 interface WarrantyRepository : JpaRepository<Warranty, Int> {
 
-    fun findWarrantyByItemId(itemId: UUID): Optional<Warranty>
+    fun findByItemUid(itemUid: UUID): Optional<Warranty>
 
     @Modifying
-    @Query("delete from Warranty where itemId = :itemId")
-    fun stopWarranty(@Param("itemId") itemId: UUID): Int
+    @Query("delete from Warranty w where w.itemUid = :itemUid")
+    fun stopWarranty(@Param("itemUid") itemUid: UUID): Int
 }

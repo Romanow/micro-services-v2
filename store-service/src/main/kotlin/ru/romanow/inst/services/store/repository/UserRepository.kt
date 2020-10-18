@@ -5,5 +5,5 @@ import ru.romanow.inst.services.store.domain.User
 import java.util.*
 
 interface UserRepository : JpaRepository<User, Int> {
-    fun findByUid(userId: UUID): Optional<User>
+    fun findByUserUid(userUid: UUID): Optional<User>
 }

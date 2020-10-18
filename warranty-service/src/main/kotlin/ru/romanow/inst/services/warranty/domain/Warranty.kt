@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "warranty", indexes = [
-    Index(name = "idx_warranty_item_id", columnList = "item_id", unique = true)
+    Index(name = "idx_warranty_item_uid", columnList = "item_uid", unique = true)
 ])
 class Warranty(
 
@@ -16,8 +16,8 @@ class Warranty(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column(name = "item_id", nullable = false, unique = true, length = 40)
-    var itemId: UUID? = null,
+    @Column(name = "item_uid", nullable = false, unique = true, length = 40)
+    var itemUid: UUID? = null,
 
     @Column(name = "warranty_date", nullable = false)
     var warrantyDate: LocalDateTime? = null,
@@ -35,15 +35,15 @@ class Warranty(
 
         other as Warranty
 
-        return Objects.equal(itemId, other.itemId) &&
+        return Objects.equal(itemUid, other.itemUid) &&
             status === other.status
     }
 
     override fun hashCode(): Int {
-        return Objects.hashCode(itemId, warrantyDate, status)
+        return Objects.hashCode(itemUid, warrantyDate, status)
     }
 
     override fun toString(): String {
-        return "Warranty(id=$id, itemId=$itemId, warrantyDate=$warrantyDate, status=$status)"
+        return "Warranty(id=$id, itemUid=$itemUid, warrantyDate=$warrantyDate, status=$status)"
     }
 }

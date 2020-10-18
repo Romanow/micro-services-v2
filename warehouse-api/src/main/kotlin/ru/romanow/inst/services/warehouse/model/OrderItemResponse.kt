@@ -6,5 +6,5 @@ data class OrderItemResponse(
     val orderItemUid: UUID,
     val orderUid: UUID,
     val model: String,
-    val size: SizeChart
+    val size: String
 )

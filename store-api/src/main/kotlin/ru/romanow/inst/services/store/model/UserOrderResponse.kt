@@ -3,10 +3,10 @@ package ru.romanow.inst.services.store.model
 import java.util.*
 
 data class UserOrderResponse(
-    var orderId: UUID,
+    var orderUid: UUID,
     val date: String,
-    val model: String,
-    val size: SizeChart,
-    val warrantyDate: String,
-    val warrantyStatus: WarrantyStatus
+    var model: String? = null,
+    var size: SizeChart? = null,
+    var warrantyDate: String? = null,
+    var warrantyStatus: WarrantyStatus? = null
 )

@@ -1,5 +1,3 @@
 package ru.romanow.inst.services.store.model
 
-import java.util.*
-
-class UserOrdersResponse : ArrayList<UserOrderResponse>()
+class UserOrdersResponse(list: MutableList<UserOrderResponse>) : ArrayList<UserOrderResponse>(list)

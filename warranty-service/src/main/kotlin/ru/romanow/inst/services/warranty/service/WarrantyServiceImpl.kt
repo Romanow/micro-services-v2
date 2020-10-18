@@ -25,54 +25,54 @@ class WarrantyServiceImpl(
     private val logger = LoggerFactory.getLogger(WarrantyServiceImpl::class.java)
 
     @Transactional(readOnly = true)
-    override fun getWarrantyByItemId(itemId: UUID): Warranty {
+    override fun getWarrantyByItemUid(itemUid: UUID): Warranty {
         return warrantyRepository
-            .findWarrantyByItemId(itemId)
-            .orElseThrow { EntityNotFoundException("Warranty not found for itemId '$itemId'") }
+            .findByItemUid(itemUid)
+            .orElseThrow { EntityNotFoundException("Warranty not found for itemUid '$itemUid'") }
     }
 
     @Transactional(readOnly = true)
-    override fun getWarrantyInfo(itemId: UUID): WarrantyInfoResponse {
-        return buildWarrantyInfo(getWarrantyByItemId(itemId))
+    override fun getWarrantyInfo(itemUid: UUID): WarrantyInfoResponse {
+        return buildWarrantyInfo(getWarrantyByItemUid(itemUid))
     }
 
     @Transactional
-    override fun warrantyRequest(itemId: UUID, request: ItemWarrantyRequest): OrderWarrantyResponse {
-        logger.info("Process warranty request (reason: {}) for item '{}'", request.reason, itemId)
+    override fun warrantyRequest(itemUid: UUID, request: ItemWarrantyRequest): OrderWarrantyResponse {
+        logger.info("Process warranty request (reason: {}) for item '{}'", request.reason, itemUid)
 
-        val warranty = getWarrantyByItemId(itemId)
+        val warranty = getWarrantyByItemUid(itemUid)
         var decision = REFUSE
         if (isActiveWarranty(warranty) && warranty.status === ON_WARRANTY) {
             decision = if (request.availableCount > 0) RETURN else FIXING
         }
 
         logger.info("Warranty decision on item '{}' is {} (count: {}, status: {})",
-            itemId, decision, request.availableCount, warranty.status)
+            itemUid, decision, request.availableCount, warranty.status)
 
         updateWarranty(warranty, decision, request.reason)
         return OrderWarrantyResponse(
-            decision = decision,
+            decision = decision.name,
             warrantyDate = formatDate(warranty.warrantyDate!!)
         )
     }
 
     @Transactional
-    override fun startWarranty(itemId: UUID) {
+    override fun startWarranty(itemUid: UUID) {
         val warranty = Warranty(
-            itemId = itemId,
+            itemUid = itemUid,
             status = ON_WARRANTY,
             warrantyDate = now()
         )
 
         warrantyRepository.save(warranty)
-        logger.info("Start warranty for item '{}'", itemId)
+        logger.info("Start warranty for item '{}'", itemUid)
     }
 
     @Transactional
-    override fun stopWarranty(itemId: UUID) {
-        val deleted = warrantyRepository.stopWarranty(itemId)
+    override fun stopWarranty(itemUid: UUID) {
+        val deleted = warrantyRepository.stopWarranty(itemUid)
         if (deleted > 0) {
-            logger.info("Remove item '{}' from warranty", itemId)
+            logger.info("Remove item '{}' from warranty", itemUid)
         }
     }
 
@@ -81,7 +81,7 @@ class WarrantyServiceImpl(
         warranty.status = if (decision === REFUSE) REMOVED_FROM_WARRANTY else USE_WARRANTY
 
         warrantyRepository.save(warranty)
-        logger.info("Update warranty status {} for itemId '{}'", warranty.status, warranty.itemId)
+        logger.info("Update warranty status {} for itemUid '{}'", warranty.status, warranty.itemUid)
     }
 
     private fun isActiveWarranty(warranty: Warranty) =
@@ -89,8 +89,8 @@ class WarrantyServiceImpl(
 
     private fun buildWarrantyInfo(warranty: Warranty) =
         WarrantyInfoResponse(
-            itemId = warranty.itemId!!,
-            status = warranty.status!!,
+            itemUid = warranty.itemUid!!,
+            status = warranty.status!!.name,
             warrantyDate = formatDate(warranty.warrantyDate!!)
         )
 

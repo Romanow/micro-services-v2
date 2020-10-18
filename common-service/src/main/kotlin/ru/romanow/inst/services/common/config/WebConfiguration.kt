@@ -7,6 +7,8 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import ru.romanow.inst.services.common.utils.RestClient
+
 
 @EnableWebMvc
 @Configuration
@@ -21,4 +23,7 @@ class WebConfiguration : WebMvcConfigurer {
 
     @Bean
     fun restTemplate() = RestTemplate()
+
+    @Bean
+    fun restClient() = RestClient(restTemplate())
 }
