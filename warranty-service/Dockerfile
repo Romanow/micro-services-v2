@@ -2,6 +2,8 @@ FROM openjdk:11-jdk
 
 VOLUME /tmp
 
+ENV PORT=8180
+
 ADD build/libs/warranty-service.jar warranty-service.jar
 
 RUN bash -c 'touch /warranty-service.jar'

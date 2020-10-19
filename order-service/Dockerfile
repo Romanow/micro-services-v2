@@ -2,6 +2,8 @@ FROM openjdk:11-jdk
 
 VOLUME /tmp
 
+ENV PORT=8380
+
 ADD build/libs/order-service.jar order-service.jar
 
 RUN bash -c 'touch /order-service.jar'

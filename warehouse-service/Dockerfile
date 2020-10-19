@@ -2,6 +2,8 @@ FROM openjdk:11-jdk
 
 VOLUME /tmp
 
+ENV PORT=8280
+
 ADD build/libs/warehouse-service.jar warehouse-service.jar
 
 RUN bash -c 'touch /warehouse-service.jar'
