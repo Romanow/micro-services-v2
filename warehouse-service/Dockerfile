@@ -2,10 +2,10 @@ FROM openjdk:11-jdk
 
 VOLUME /tmp
 
-ADD build/libs/warranty-service.jar warranty-service.jar
+ADD build/libs/warehouse-service.jar warehouse-service.jar
 
-RUN bash -c 'touch /warranty-service.jar'
+RUN bash -c 'touch /warehouse-service.jar'
 
 EXPOSE 8280
 
-ENTRYPOINT ["java","-Dserver.port=$PORT","-Djava.security.egd=file:/dev/./urandom","-XX:+UseContainerSupport","-Xmx512m","-Xms128m","-jar","/warranty-service.jar"]
+ENTRYPOINT ["java","-Dserver.port=$PORT","-Djava.security.egd=file:/dev/./urandom","-XX:+UseContainerSupport","-Xmx512m","-Xms128m","-jar","/warehouse-service.jar"]
