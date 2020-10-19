@@ -6,24 +6,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Install Java
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
       - name: Build project
         uses: eskatos/gradle-command-action@v1
         with:
           dependencies-cache-enabled: true
           arguments: clean build
-      - name: Deploy project
+
+  deploy:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Store Service
         uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: store-service-lab
+          heroku_app_name: store-service-app
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: store-service
-          docker_build_args: |
-            PROFILE
-        env:
-          PROFILE: heroku
+
+      - name: Deploy Store Service
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: warranty-service-app
+          heroku_email: romanowalex@mail.ru
+          usedocker: true
+          appdir: warranty-service
+
+      - name: Deploy Store Service
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: warehouse-service-app
+          heroku_email: romanowalex@mail.ru
+          usedocker: true
+          appdir: warehouse-service
+
+      - name: Deploy Store Service
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: order-service-app
+          heroku_email: romanowalex@mail.ru
+          usedocker: true
+          appdir: order-service

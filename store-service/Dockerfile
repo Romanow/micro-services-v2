@@ -2,9 +2,6 @@ FROM openjdk:11-jdk
 
 VOLUME /tmp
 
-ARG PROFILE
-ENV SPRING_PROFILES_ACTIVE=$PROFILE
-
 ADD build/libs/store-service.jar store-service.jar
 
 RUN bash -c 'touch /store-service.jar'
