@@ -11,4 +11,4 @@ RUN bash -c 'touch /store-service.jar'
 
 EXPOSE 8480
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-XX:+UseContainerSupport","-Xmx512m","-Xms128m","-jar","/store-service.jar"]
+ENTRYPOINT ["java","-Dserver.port=$PORT","-Djava.security.egd=file:/dev/./urandom","-XX:+UseContainerSupport","-Xmx512m","-Xms128m","-jar","/store-service.jar"]
