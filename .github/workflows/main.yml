@@ -24,6 +24,6 @@ jobs:
           usedocker: true
           appdir: store-service
           docker_build_args: |
-            SPRING_PROFILES_ACTIVE
+            PROFILE
         env:
-          SPRING_PROFILES_ACTIVE: heroku
+          PROFILE: heroku
