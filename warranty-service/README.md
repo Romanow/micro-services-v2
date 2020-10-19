@@ -19,4 +19,3 @@ CREATE TABLE warranty
     warranty_date TIMESTAMP    NOT NULL
 );
 ```
-
