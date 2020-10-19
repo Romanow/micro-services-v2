@@ -49,12 +49,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/manage/health",
-							"protocol": "{{schema}}",
+							"raw": "{{warrantyUrl}}/manage/health",
 							"host": [
-								"{{host}}"
+								"{{warrantyUrl}}"
 							],
-							"port": "{{warrantyPort}}",
 							"path": [
 								"manage",
 								"health"
@@ -105,12 +103,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{warrantyUrl}}/{{apiPath}}/warranty/{{itemUid}}",
 							"host": [
-								"{{host}}"
+								"{{warrantyUrl}}"
 							],
-							"port": "{{warrantyPort}}",
 							"path": [
 								"{{apiPath}}",
 								"warranty",
@@ -145,12 +141,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{warrantyUrl}}/{{apiPath}}/warranty/{{itemUid}}",
 							"host": [
-								"{{host}}"
+								"{{warrantyUrl}}"
 							],
-							"port": "{{warrantyPort}}",
 							"path": [
 								"{{apiPath}}",
 								"warranty",
@@ -202,12 +196,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}/warranty",
-							"protocol": "{{schema}}",
+							"raw": "{{warrantyUrl}}/{{apiPath}}/warranty/{{itemUid}}/warranty",
 							"host": [
-								"{{host}}"
+								"{{warrantyUrl}}"
 							],
-							"port": "{{warrantyPort}}",
 							"path": [
 								"{{apiPath}}",
 								"warranty",
@@ -259,12 +251,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warrantyPort}}/{{apiPath}}/warranty/{{itemUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{warrantyUrl}}/{{apiPath}}/warranty/{{itemUid}}",
 							"host": [
-								"{{host}}"
+								"{{warrantyUrl}}"
 							],
-							"port": "{{warrantyPort}}",
 							"path": [
 								"{{apiPath}}",
 								"warranty",
@@ -321,12 +311,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warehousePort}}/manage/health",
-							"protocol": "{{schema}}",
+							"raw": "{{warehouseUrl}}/manage/health",
 							"host": [
-								"{{host}}"
+								"{{warehouseUrl}}"
 							],
-							"port": "{{warehousePort}}",
 							"path": [
 								"manage",
 								"health"
@@ -397,12 +385,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/",
-							"protocol": "{{schema}}",
+							"raw": "{{warehouseUrl}}/{{apiPath}}/warehouse/",
 							"host": [
-								"{{host}}"
+								"{{warehouseUrl}}"
 							],
-							"port": "{{warehousePort}}",
 							"path": [
 								"{{apiPath}}",
 								"warehouse",
@@ -471,12 +457,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{warehouseUrl}}/{{apiPath}}/warehouse/{{orderItemUid}}",
 							"host": [
-								"{{host}}"
+								"{{warehouseUrl}}"
 							],
-							"port": "{{warehousePort}}",
 							"path": [
 								"{{apiPath}}",
 								"warehouse",
@@ -542,12 +526,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}/warranty",
-							"protocol": "{{schema}}",
+							"raw": "{{warehouseUrl}}/{{apiPath}}/warehouse/{{orderItemUid}}/warranty",
 							"host": [
-								"{{host}}"
+								"{{warehouseUrl}}"
 							],
-							"port": "{{warehousePort}}",
 							"path": [
 								"{{apiPath}}",
 								"warehouse",
@@ -602,12 +584,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{warehousePort}}/{{apiPath}}/warehouse/{{orderItemUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{warehouseUrl}}/{{apiPath}}/warehouse/{{orderItemUid}}",
 							"host": [
-								"{{host}}"
+								"{{warehouseUrl}}"
 							],
-							"port": "{{warehousePort}}",
 							"path": [
 								"{{apiPath}}",
 								"warehouse",
@@ -664,12 +644,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/manage/health",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/manage/health",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"manage",
 								"health"
@@ -724,12 +702,10 @@
 							"raw": "{\n    \"model\": \"Lego 8880\",\n    \"size\": \"L\"\n}"
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/{{apiPath}}/orders/{{userUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/{{apiPath}}/orders/{{userUid}}",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"{{apiPath}}",
 								"orders",
@@ -781,12 +757,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/{{apiPath}}/orders/{{userUid}}/{{orderUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/{{apiPath}}/orders/{{userUid}}/{{orderUid}}",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"{{apiPath}}",
 								"orders",
@@ -840,12 +814,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/{{apiPath}}/orders/{{userUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/{{apiPath}}/orders/{{userUid}}",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"{{apiPath}}",
 								"orders",
@@ -909,12 +881,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/{{apiPath}}/orders/{{orderUid}}/warranty",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/{{apiPath}}/orders/{{orderUid}}/warranty",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"{{apiPath}}",
 								"orders",
@@ -961,12 +931,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{orderPort}}/{{apiPath}}/orders/{{orderUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{orderUrl}}/{{apiPath}}/orders/{{orderUid}}",
 							"host": [
-								"{{host}}"
+								"{{orderUrl}}"
 							],
-							"port": "{{orderPort}}",
 							"path": [
 								"{{apiPath}}",
 								"orders",
@@ -1045,12 +1013,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/manage/health",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/manage/health",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"manage",
 								"health"
@@ -1103,12 +1069,10 @@
 							"raw": "{\n    \"model\": \"Lego 8880\",\n    \"size\": \"L\"\n}"
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/{{apiPath}}/store/{{mainUserUid}}/purchase",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/purchase",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"{{apiPath}}",
 								"store",
@@ -1166,12 +1130,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"{{apiPath}}",
 								"store",
@@ -1222,12 +1184,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/{{apiPath}}/store/{{mainUserUid}}/orders",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/orders",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"{{apiPath}}",
 								"store",
@@ -1296,12 +1256,10 @@
 							}
 						},
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/warranty",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/warranty",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"{{apiPath}}",
 								"store",
@@ -1349,12 +1307,10 @@
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{host}}:{{storePort}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/refund",
-							"protocol": "{{schema}}",
+							"raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/refund",
 							"host": [
-								"{{host}}"
+								"{{storeUrl}}"
 							],
-							"port": "{{storePort}}",
 							"path": [
 								"{{apiPath}}",
 								"store",

@@ -53,3 +53,12 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: order-service
+
+      - name: Run API Tests
+        id: run-newman
+        uses: anthonyvscode/newman-action@v1
+        with:
+          collection: postman/postman-collection.json
+          environment: postman/postman-heroku-environment.json
+          delayRequest: 50
+          reporters: cli
