@@ -23,3 +23,7 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: store-service
+          docker_build_args: |
+            SPRING_PROFILES_ACTIVE
+        env:
+          SPRING_PROFILES_ACTIVE: heroku
