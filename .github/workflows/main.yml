@@ -15,3 +15,10 @@ jobs:
         with:
           dependencies-cache-enabled: true
           arguments: clean build
+      - name: Deploy project
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: store-service-lab
+          heroku_email: romanowalex@mail.ru
+          appdir: store-service
