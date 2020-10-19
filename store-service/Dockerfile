@@ -10,4 +10,4 @@ RUN bash -c 'touch /store-service.jar'
 
 EXPOSE 8480
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=$PROFILE","-jar","/store-service.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=heroku","-jar","/store-service.jar"]
