@@ -27,7 +27,7 @@ jobs:
           usedocker: true
           appdir: store-service
 
-      - name: Deploy Store Service
+      - name: Deploy Warranty Service
         uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -36,7 +36,7 @@ jobs:
           usedocker: true
           appdir: warranty-service
 
-      - name: Deploy Store Service
+      - name: Deploy Warehouse Service
         uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -45,7 +45,7 @@ jobs:
           usedocker: true
           appdir: warehouse-service
 
-      - name: Deploy Store Service
+      - name: Deploy Order Service
         uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
