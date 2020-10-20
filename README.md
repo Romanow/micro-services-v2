@@ -52,6 +52,15 @@ docker run -p 8010:8080 swaggerapi/swagger-ui
 # сборка проектов
 ./gradlew clean build
 
+# в /etc/hosts добавить ссылки на localhost
+sudo tee -a /etc/hosts > /dev/null <<EOT
+127.0.0.1     postgres
+127.0.0.1     store-service
+127.0.0.1     order-service
+127.0.0.1     warehouse-service
+127.0.0.1     warranty-service
+EOT
+
 # Запуск проектов через Docker Compose
 docker-compose build
 dcoker-compose up -d
