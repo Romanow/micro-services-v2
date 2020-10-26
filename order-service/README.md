@@ -1,9 +1,9 @@
 # Order Service
 
 ## Описание API
-1. `GET /api/v1/orders/{userUid}` – сделать заказ от имени пользователя;
+1. `POST /api/v1/orders/{userUid}` – сделать заказ от имени пользователя;
 1. `GET /api/v1/orders/{userUid}/{orderUid}` – получить информацию по конкретному заказу пользователя;
-1. `POST /api/v1/orders/{userUid}` – получить все заказы пользователя;
+1. `GET /api/v1/orders/{userUid}` – получить все заказы пользователя;
 1. `POST /api/v1/orders/{orderUid}/warranty` – запрос гарантии по заказу;
 1. `DELETE /api/v1/orders/{orderUid}` – вернуть заказ.
 
