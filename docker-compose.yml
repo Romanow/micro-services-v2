@@ -16,7 +16,7 @@ services:
 
   store-service:
     build: ./store-service
-    image: store-service:last
+    image: romanowalex/store-service:v1.0
     container_name: store-service
     environment:
       PORT: 8480
@@ -27,7 +27,7 @@ services:
 
   order-service:
     build: ./order-service
-    image: order-service:last
+    image: romanowalex/order-service:v1.0
     container_name: order-service
     environment:
       PORT: 8380
@@ -38,7 +38,7 @@ services:
 
   warehouse-service:
     build: ./warehouse-service
-    image: warehouse-service:last
+    image: romanowalex/warehouse-service:v1.0
     container_name: warehouse-service
     ports:
       - 8280:8280
@@ -47,7 +47,7 @@ services:
 
   warranty-service:
     build: ./warranty-service
-    image: warranty-service:last
+    image: romanowalex/warranty-service:v1.0
     container_name: warranty-service
     ports:
       - 8180:8180

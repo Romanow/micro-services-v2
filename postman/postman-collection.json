@@ -794,10 +794,11 @@
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
 									"    const response = pm.response.json();",
 									"    const orderUid = pm.variables.get(\"orderUid\")",
-									"    pm.expect(response.length).to.eq(1)",
-									"    pm.expect(response[0].orderUid).to.eq(orderUid)",
-									"    pm.expect(response[0].itemUid).to.not.empty",
-									"    pm.expect(response[0].status).to.eq(\"PAID\")",
+									"    pm.expect(response.length).to.be.above(0)",
+									"    var order = _.find(response, (item) => item.orderUid === orderUid)",
+									"    pm.expect(order.orderUid).to.eq(orderUid)",
+									"    pm.expect(order.itemUid).to.not.empty",
+									"    pm.expect(order.status).to.eq(\"PAID\")",
 									"})"
 								],
 								"type": "text/javascript"
