@@ -79,4 +79,4 @@ docker-compose up -d postgres
 Для автоматизированной проверки используется [GitHub Actions](.github/workflows/main.yml), CI/CD содержит шаги:
 * сборка;
 * деплой _каждого_ приложения на Heroku;
-* прогон скриптов postman через newman для enviroment'а herkou.
+* прогон скриптов postman через newman для enviroment'а heroku.
