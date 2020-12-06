@@ -2,7 +2,11 @@ package ru.romanow.inst.services.order.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory
+import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
+import ru.romanow.inst.services.common.config.Fallback
 import ru.romanow.inst.services.common.utils.JsonSerializer.fromJson
 import ru.romanow.inst.services.common.utils.RestClient
 import ru.romanow.inst.services.order.exceptions.WarrantyProcessException
@@ -13,26 +17,36 @@ import java.util.*
 class WarrantyServiceImpl(
     @Value("\${warranty.service.url}")
     private val warrantyServiceUrl: String,
-    private val restClient: RestClient
+    private val restClient: RestClient,
+    private val fallback: Fallback,
+    private val factory: CircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarrantyServiceImpl::class.java)
 
     override fun startWarranty(itemUid: UUID) {
         val url = "$warrantyServiceUrl/api/v1/warranty/$itemUid"
-        restClient
-            .post(url, null, Void::class.java)
-            .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
-            .execute()
+        factory
+            .create("startWarranty")
+            .run({
+                restClient
+                    .post(url, null, Void::class.java)
+                    .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.POST, url, throwable) })
+
         logger.info("Successfully start warranty for item '$itemUid'")
     }
 
     override fun stopWarranty(itemUid: UUID) {
         val url = "$warrantyServiceUrl/api/v1/warranty/$itemUid"
-        restClient
-            .delete(url, Void::class.java)
-            .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
-            .execute()
-
+        factory
+            .create("stopWarranty")
+            .run({
+                restClient
+                    .delete(url, Void::class.java)
+                    .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.DELETE, url, throwable) })
         logger.info("Successfully stopped warranty for item '$itemUid'")
     }
 

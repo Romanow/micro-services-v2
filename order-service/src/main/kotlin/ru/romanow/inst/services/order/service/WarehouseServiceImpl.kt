@@ -1,8 +1,12 @@
 package ru.romanow.inst.services.order.service
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import ru.romanow.inst.services.common.config.Fallback
 import ru.romanow.inst.services.common.utils.JsonSerializer
 import ru.romanow.inst.services.common.utils.RestClient
 import ru.romanow.inst.services.order.exceptions.ItemNotAvailableException
@@ -21,33 +25,47 @@ import javax.persistence.EntityNotFoundException
 class WarehouseServiceImpl(
     @Value("\${warehouse.service.url}")
     private val warehouseServiceUrl: String,
-    private val restClient: RestClient
+    private val restClient: RestClient,
+    private val fallback: Fallback,
+    private val factory: CircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 ) : WarehouseService {
 
     override fun takeItem(orderUid: UUID, model: String, size: SizeChart): Optional<OrderItemResponse> {
         val url = "$warehouseServiceUrl/api/v1/warehouse"
         val request = OrderItemRequest(orderUid, model, size.name)
-        return restClient.post(url, request, OrderItemResponse::class.java)
-            .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .exceptionMapping(HttpStatus.CONFLICT) { ItemNotAvailableException(extractErrorMessage(it)) }
-            .commonExceptionMapping { WarehouseProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("takeItem")
+            .run({
+                restClient.post(url, request, OrderItemResponse::class.java)
+                    .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .exceptionMapping(HttpStatus.CONFLICT) { ItemNotAvailableException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { WarehouseProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.POST, url, throwable) })
     }
 
     override fun returnItem(itemUid: UUID) {
         val url = "$warehouseServiceUrl/api/v1/warehouse/$itemUid"
-        restClient.delete(url, Void::class.java)
-            .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
-            .execute()
+        factory
+            .create("returnItem")
+            .run({
+                restClient.delete(url, Void::class.java)
+                    .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.DELETE, url, throwable) })
     }
 
     override fun useWarrantyItem(itemUid: UUID, request: OrderWarrantyRequest): Optional<OrderWarrantyResponse> {
         val url = "$warehouseServiceUrl/api/v1/warehouse/$itemUid/warranty"
-        return restClient.post(url, request, OrderWarrantyResponse::class.java)
-            .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .exceptionMapping(HttpStatus.UNPROCESSABLE_ENTITY) { WarehouseProcessException(extractErrorMessage(it)) }
-            .commonExceptionMapping { WarehouseProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("useWarrantyItem")
+            .run({
+                restClient.post(url, request, OrderWarrantyResponse::class.java)
+                    .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .exceptionMapping(HttpStatus.UNPROCESSABLE_ENTITY) { WarehouseProcessException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { WarehouseProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.DELETE, url, throwable) })
     }
 
     private fun extractErrorMessage(errorResponse: String) =

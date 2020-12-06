@@ -1,6 +1,7 @@
 package ru.romanow.inst.services.common.config
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
@@ -22,6 +23,7 @@ class WebConfiguration : WebMvcConfigurer {
     }
 
     @Bean
+    @LoadBalanced
     fun restTemplate() = RestTemplate()
 
     @Bean

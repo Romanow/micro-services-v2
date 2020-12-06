@@ -14,9 +14,35 @@ services:
     ports:
       - 5432:5432
 
+  prometheus:
+    image: prom/prometheus:v2.23.0
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/data'
+
+  grafana:
+    image: grafana/grafana:5.4.3
+    container_name: grafana
+    ports:
+      - 3000:3000
+    user: "104"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
   store-service:
     build: ./store-service
-    image: store-service:last
+    image: store-service:v1.0
     container_name: store-service
     environment:
       PORT: 8480
@@ -27,7 +53,7 @@ services:
 
   order-service:
     build: ./order-service
-    image: order-service:last
+    image: order-service:v1.0
     container_name: order-service
     environment:
       PORT: 8380
@@ -38,7 +64,7 @@ services:
 
   warehouse-service:
     build: ./warehouse-service
-    image: warehouse-service:last
+    image: warehouse-service:v1.0
     container_name: warehouse-service
     ports:
       - 8280:8280
@@ -47,7 +73,7 @@ services:
 
   warranty-service:
     build: ./warranty-service
-    image: warranty-service:last
+    image: warranty-service:v1.0
     container_name: warranty-service
     ports:
       - 8180:8180
@@ -56,3 +82,5 @@ services:
 
 volumes:
   db-data:
+  grafana-data:
+  prometheus-data:

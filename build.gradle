@@ -10,6 +10,12 @@ plugins {
 
 ext {
     springBootVersion = "2.3.4.RELEASE"
+    springSecurityVersion = "5.3.4.RELEASE"
+    springCloudVersion = "2020.0.0-M5"
+//    springCloudConsulVersion = "2.2.5.RELEASE"
+//    springCloudCircuitBreakerVersion = "2.0.0-M5"
+    resilience4jVersion = "1.6.1"
+
     kotlinVersion = "1.3.72"
     validationApiVersion = "2.0.1.Final"
     guavaVersion = "27.1-jre"
@@ -38,11 +44,16 @@ allprojects { project ->
 
     repositories {
         mavenCentral()
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/release" }
     }
 
     dependencyManagement {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+            mavenBom "org.springframework.security:spring-security-bom:$springSecurityVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+//            mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:$springCloudConsulVersion"
         }
     }
 
@@ -57,26 +68,5 @@ allprojects { project ->
         implementation "com.google.code.gson:gson:$gsonVersion"
 
         compileOnly "com.google.code.findbugs:jsr305:$fingBugsVersion"
-
-        if (project.name.endsWith("service")) {
-            implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
-
-            implementation "org.springframework.boot:spring-boot-starter-web"
-            implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-            implementation "org.springframework.boot:spring-boot-starter-actuator"
-            implementation "org.springframework.boot:spring-boot-starter-security"
-            implementation "org.springframework.boot:spring-boot-starter-validation"
-            implementation "org.springframework.boot:spring-boot-starter-logging"
-
-            implementation "org.postgresql:postgresql"
-            implementation "org.flywaydb:flyway-core"
-            implementation "io.micrometer:micrometer-registry-prometheus"
-            implementation "org.codehaus.janino:janino"
-
-            implementation "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"
-            implementation "org.springdoc:springdoc-openapi-kotlin:$openApiVersion"
-
-            annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-        }
     }
 }

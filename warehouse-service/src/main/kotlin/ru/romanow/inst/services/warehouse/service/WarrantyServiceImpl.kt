@@ -2,8 +2,12 @@ package ru.romanow.inst.services.warehouse.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import ru.romanow.inst.services.common.config.Fallback
 import ru.romanow.inst.services.common.utils.JsonSerializer.fromJson
 import ru.romanow.inst.services.common.utils.RestClient
 import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
@@ -19,7 +23,9 @@ class WarrantyServiceImpl(
     @Value("\${warranty.service.url}")
     private val warrantyServiceUrl: String,
     private val warehouseService: WarehouseService,
-    private val restClient: RestClient
+    private val restClient: RestClient,
+    private val fallback: Fallback,
+    private val factory: CircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
 
@@ -38,11 +44,15 @@ class WarrantyServiceImpl(
 
     private fun requestToWarranty(orderItemUid: UUID, request: ItemWarrantyRequest): Optional<OrderWarrantyResponse> {
         val url = "$warrantyServiceUrl/api/v1/warranty/$orderItemUid/warranty"
-        return restClient
-            .post(url, request, OrderWarrantyResponse::class.java)
-            .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("requestToWarranty")
+            .run({
+                restClient
+                    .post(url, request, OrderWarrantyResponse::class.java)
+                    .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.POST, url, throwable) })
     }
 
     private fun extractErrorMessage(errorResponse: String) =

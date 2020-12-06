@@ -1,9 +1,13 @@
 package ru.romanow.inst.services.store.service
 
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
+import ru.romanow.inst.services.common.config.Fallback
 import ru.romanow.inst.services.common.utils.JsonSerializer
 import ru.romanow.inst.services.common.utils.RestClient
 import ru.romanow.inst.services.order.model.CreateOrderResponse
@@ -22,50 +26,71 @@ import javax.persistence.EntityNotFoundException
 class OrderServiceImpl(
     @Value("\${order.service.url}")
     private val orderServiceUrl: String,
-    private val restClient: RestClient
+    private val restClient: RestClient,
+    private val fallback: Fallback,
+    private val factory: CircuitBreakerFactory<Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 ) : OrderService {
-    private val logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
-
     override fun getOrderInfo(userUid: UUID, orderUid: UUID): Optional<OrderInfoResponse> {
         val url = "$orderServiceUrl/api/v1/orders/$userUid/$orderUid"
-        return restClient.get(url, OrderInfoResponse::class.java)
-            .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("getOrderInfo")
+            .run({
+                restClient.get(url, OrderInfoResponse::class.java)
+                    .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.GET, url, throwable) })
     }
 
     override fun getOrderInfoByUser(userUid: UUID): Optional<OrdersInfoResponse> {
         val url = "$orderServiceUrl/api/v1/orders/$userUid"
-        return restClient.get(url, OrdersInfoResponse::class.java)
-            .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("getOrderInfoByUser")
+            .run({
+                restClient.get(url, OrdersInfoResponse::class.java)
+                    .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.GET, url, throwable) })
     }
 
     override fun makePurchase(userUid: UUID, request: PurchaseRequest): Optional<CreateOrderResponse> {
         val url = "$orderServiceUrl/api/v1/orders/$userUid"
-        return restClient.post(url, request, CreateOrderResponse::class.java)
-            .exceptionMapping(CONFLICT) { ItemNotAvailableException(extractErrorMessage(it)) }
-            .exceptionMapping(UNPROCESSABLE_ENTITY) { OrderProcessException(extractErrorMessage(it)) }
-            .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("makePurchase")
+            .run({
+                restClient.post(url, request, CreateOrderResponse::class.java)
+                    .exceptionMapping(CONFLICT) { ItemNotAvailableException(extractErrorMessage(it)) }
+                    .exceptionMapping(UNPROCESSABLE_ENTITY) { OrderProcessException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.POST, url, throwable) })
     }
 
     override fun refundPurchase(orderUid: UUID) {
         val url = "$orderServiceUrl/api/v1/orders/$orderUid"
-        restClient.delete(url, Void::class.java)
-            .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
-            .execute()
+        factory
+            .create("refundPurchase")
+            .run({
+                restClient.delete(url, Void::class.java)
+                    .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.DELETE, url, throwable) })
+
     }
 
     override fun warrantyRequest(orderUid: UUID, request: WarrantyRequest): Optional<OrderWarrantyResponse> {
         val url = "$orderServiceUrl/api/v1/orders/$orderUid/warranty"
-        return restClient
-            .post(url, request, OrderWarrantyResponse::class.java)
-            .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .exceptionMapping(UNPROCESSABLE_ENTITY) { EntityNotFoundException(extractErrorMessage(it)) }
-            .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
-            .execute()
+        return factory
+            .create("warrantyRequest")
+            .run({
+                restClient
+                    .post(url, request, OrderWarrantyResponse::class.java)
+                    .exceptionMapping(NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .exceptionMapping(UNPROCESSABLE_ENTITY) { EntityNotFoundException(extractErrorMessage(it)) }
+                    .commonExceptionMapping { OrderProcessException(extractErrorMessage(it)) }
+                    .execute()
+            }, { throwable -> fallback.apply(HttpMethod.POST, url, throwable) })
     }
 
     private fun extractErrorMessage(errorResponse: String) =
