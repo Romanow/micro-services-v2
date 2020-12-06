@@ -14,14 +14,12 @@ dependencies {
 
     api "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     api "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
-    api "org.springframework.cloud:spring-cloud-commons"
 
     api "org.postgresql:postgresql"
     api "org.flywaydb:flyway-core"
 
     api "io.micrometer:micrometer-registry-prometheus"
-    api "io.github.resilience4j:resilience4j-spring-boot2:$resilience4jVersion"
-    api "io.github.resilience4j:resilience4j-micrometer:$resilience4jVersion"
+    api "io.github.resilience4j:resilience4j-micrometer"
     api "org.codehaus.janino:janino"
 
     api "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"

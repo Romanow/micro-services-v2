@@ -1,7 +1,6 @@
 package ru.romanow.inst.services.common.config
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -29,10 +28,7 @@ class CircuitBreakerConfiguration {
     }
 
     @Bean
-    fun defaultCustomizer(
-        circuitBreakerRegistry: CircuitBreakerRegistry,
-        circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport
-    ): Customizer<Resilience4JCircuitBreakerFactory> {
+    fun defaultCustomizer(circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport): Customizer<Resilience4JCircuitBreakerFactory> {
         val timeLimiterConfig = TimeLimiterConfig
             .custom()
             .timeoutDuration(Duration.ofSeconds(defaultTimeout))
@@ -45,7 +41,6 @@ class CircuitBreakerConfiguration {
             .ignoreExceptions(*circuitBreakerConfigurationSupport.ignoredExceptions())
             .build()
         return Customizer { factory: Resilience4JCircuitBreakerFactory ->
-            factory.configureCircuitBreakerRegistry(circuitBreakerRegistry)
             factory.configureDefault { id: String ->
                 Resilience4JConfigBuilder(id)
                     .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())

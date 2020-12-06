@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./postgres/:/docker-entrypoint-initdb.d/
+      - ./docker/postgres/:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
 
@@ -20,7 +20,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -34,6 +34,7 @@ services:
     user: "104"
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./docker/grafana/:/etc/grafana/provisioning/
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
