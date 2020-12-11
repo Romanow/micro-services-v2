@@ -37,13 +37,11 @@ class CircuitBreakerConfiguration {
             .custom()
             .failureRateThreshold(10f)
             .slowCallRateThreshold(5f)
-            .slowCallRateThreshold(2f)
             .ignoreExceptions(*circuitBreakerConfigurationSupport.ignoredExceptions())
             .build()
         return Customizer { factory: Resilience4JCircuitBreakerFactory ->
             factory.configureDefault { id: String ->
                 Resilience4JConfigBuilder(id)
-                    .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
                     .timeLimiterConfig(timeLimiterConfig)
                     .circuitBreakerConfig(circuitBreakerConfig)
                     .build()

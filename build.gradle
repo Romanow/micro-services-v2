@@ -11,7 +11,9 @@ plugins {
 ext {
     springBootVersion = "2.3.4.RELEASE"
     springSecurityVersion = "5.3.4.RELEASE"
-    springCloudVersion = "Hoxton.SR9"
+    springConsulVersion = "2.2.5.RELEASE"
+    springSleuthVersion = "2.2.6.RELEASE"
+    springCircuitBreakerVersion = "1.0.4.RELEASE"
 
     kotlinVersion = "1.3.72"
     validationApiVersion = "2.0.1.Final"
@@ -47,7 +49,9 @@ allprojects { project ->
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
             mavenBom "org.springframework.security:spring-security-bom:$springSecurityVersion"
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:$springConsulVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-sleuth-dependencies:$springSleuthVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-circuitbreaker-dependencies:$springCircuitBreakerVersion"
         }
     }
 

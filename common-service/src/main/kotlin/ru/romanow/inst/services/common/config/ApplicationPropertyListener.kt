@@ -11,7 +11,7 @@ import java.util.*
 class ApplicationPropertyListener : ApplicationListener<ApplicationEnvironmentPreparedEvent> {
     private val logger = LoggerFactory.getLogger(ApplicationPropertyListener::class.java)
 
-    private val sources = arrayOf("common-configuration.properties")
+    private val sources = arrayOf("application-common.properties")
 
     override fun onApplicationEvent(event: ApplicationEnvironmentPreparedEvent) {
         val environment = event.environment

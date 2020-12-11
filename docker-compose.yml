@@ -1,5 +1,22 @@
 version: "3"
 services:
+  consul-server-1:
+    image: consul:latest
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-server-2:
+    image: consul:latest
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-server-bootstrap:
+    image: consul:latest
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+
   postgres:
     image: library/postgres:13
     container_name: postgres
@@ -41,45 +58,14 @@ services:
     depends_on:
       - prometheus
 
-  store-service:
-    build: ./store-service
-    image: store-service:v1.0
-    container_name: store-service
+  jaeger:
+    image: jaegertracing/all-in-one:1.8
+    container_name: jaeger
+    ports:
+      - 9411:9411
+      - 16686:16686
     environment:
-      PORT: 8480
-    ports:
-      - 8480:8480
-    depends_on:
-      - postgres
-
-  order-service:
-    build: ./order-service
-    image: order-service:v1.0
-    container_name: order-service
-    environment:
-      PORT: 8380
-    ports:
-      - 8380:8380
-    depends_on:
-      - postgres
-
-  warehouse-service:
-    build: ./warehouse-service
-    image: warehouse-service:v1.0
-    container_name: warehouse-service
-    ports:
-      - 8280:8280
-    depends_on:
-      - postgres
-
-  warranty-service:
-    build: ./warranty-service
-    image: warranty-service:v1.0
-    container_name: warranty-service
-    ports:
-      - 8180:8180
-    depends_on:
-      - postgres
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
 
 volumes:
   db-data:

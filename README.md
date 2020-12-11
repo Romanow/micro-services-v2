@@ -70,6 +70,17 @@ docker-compose up -d postgres
 ./gradlew store-service:bootRun
 ```
 
+### Service Discovery
+Для Service Discovery используется consul
+
+### Circuit Breaker
+
+### Prometheus и Grafana
+
+### Логирование Graylog
+
+### Трассировка запросов Jaeger
+
 ## Тестирование
 Для проверки работоспособности системы используются скрипты Postman.
 В папке [postman](postman) содержится [коллекция запросов](postman/postman-collection.json) к серверу и два enviroment'а:
