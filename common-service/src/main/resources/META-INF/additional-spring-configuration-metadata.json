@@ -19,6 +19,22 @@
       "name": "circuit.breaker.default.timeout",
       "type": "java.lang.String",
       "description": "Circuit breaker default timeout."
+    },
+    {
+      "name": "logging.graylog.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable sending logs to graylog.",
+      "defaultValue": false
+    },
+    {
+      "name": "logging.graylog.host",
+      "type": "java.lang.String",
+      "description": "Graylog GELF listener host."
+    },
+    {
+      "name": "logging.graylog.port",
+      "type": "java.lang.Integer",
+      "description": "Graylog GELF listener port."
     }
   ]
 }

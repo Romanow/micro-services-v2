@@ -12,6 +12,7 @@ import org.slf4j.MDC
 import java.util.*
 import kotlin.collections.HashMap
 
+
 class GraylogLayout : LayoutBase<ILoggingEvent>() {
     private val gson: Gson = GsonBuilder().create()
     private val hostName: String = NetworkUtils.hostName
@@ -36,7 +37,7 @@ class GraylogLayout : LayoutBase<ILoggingEvent>() {
         }
         map["message"] = message
         map["full_message"] = detailedMessage
-        map["timestamp"] = event.timeStamp
+        map["timestamp"] = event.timeStamp / 1000.0
         map["_thread_name"] = event.threadName
         map["_logger_name"] = event.loggerName
         Optional.ofNullable(MDC.getCopyOfContextMap()).ifPresent { m: Map<String, String?>? -> map.putAll(m!!) }

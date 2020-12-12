@@ -2,26 +2,29 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProperty name="APPLICATION_NAME" scope="context" source="spring.application.name"/>
-    <springProperty name="LOG_PATH" scope="context" source="logging.file.path"/>
+    <springProperty name="IS_GRYALOG_ENABLED" scope="context" source="logging.graylog.enabled"/>
+    <springProperty name="GRYALOG_HOST" scope="context" source="logging.graylog.host"/>
+    <springProperty name="GRYALOG_PORT" scope="context" source="logging.graylog.port"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <if condition='isDefined("LOG_PATH")'>
+    <if condition='property("IS_GRYALOG_ENABLED").equals("true")'>
         <then>
-            <appender name="GRAYLOG" class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <file>${LOG_PATH}/application.json</file>
-                <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-                    <layout class="ru.romanow.inst.services.common.utils.GraylogLayout">
-                        <applicationName>${APPLICATION_NAME}</applicationName>
-                    </layout>
-                </encoder>
+            <appender name="GRAYLOG" class="net.logstash.logback.appender.LogstashUdpSocketAppender">
+                <host>${GRYALOG_HOST}</host>
+                <port>${GRYALOG_PORT}</port>
+                <layout class="ru.romanow.inst.services.common.utils.GraylogLayout">
+                    <applicationName>${APPLICATION_NAME}</applicationName>
+                </layout>
             </appender>
         </then>
     </if>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
-        <if condition='isDefined("LOG_PATH")'>
-            <then><appender-ref ref="GRAYLOG"/></then>
+        <if condition='property("IS_GRYALOG_ENABLED").equals("true")'>
+            <then>
+                <appender-ref ref="GRAYLOG"/>
+            </then>
         </if>
     </root>
 </configuration>

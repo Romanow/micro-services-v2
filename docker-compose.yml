@@ -67,7 +67,46 @@ services:
     environment:
       - COLLECTOR_ZIPKIN_HTTP_PORT=9411
 
+  mongodb:
+    image: mongo:4.2
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.0
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - "http.host=0.0.0.0"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+
+  graylog:
+    image: graylog/graylog:4.0
+    container_name: graylog
+    ports:
+      - 9000:9000
+      - 1514:1514
+      - 12201:12201
+      - 12201:12201/udp
+    environment:
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
+    volumes:
+      - mongodb-data:/data/db
+    depends_on:
+      - mongodb
+      - elasticsearch
+
 volumes:
   db-data:
+  elastic-data:
+  mongodb-data:
   grafana-data:
   prometheus-data:
