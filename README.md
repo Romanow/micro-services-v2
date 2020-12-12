@@ -48,9 +48,9 @@ docker run -p 8010:8080 swaggerapi/swagger-ui
 ### Профили
 | Профиль | Приложения | 
 |---------|---------------|
-| local   | <ul><li>[x] postgres</li><li>[ ] prometheus, grafana</li></ul><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li> |
-| heroku  | <ul><li>[ ] postgres</li><li>[ ] prometheus, grafana</li></ul><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li> |
-| docker  | <ul><li>[x] postgres</li><li>[x] prometheus, grafana</li></ul><li>[x] graylog</li><li>[x] consul</li><li>[x] jaeger</li> |
+| local   | <ul><li>[x] postgres</li><li>[ ] prometheus, grafana</li><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li></ul> |
+| heroku  | <ul><li>[ ] postgres</li><li>[ ] prometheus, grafana</li><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li></ul> |
+| docker  | <ul><li>[x] postgres</li><li>[x] prometheus, grafana</li><li>[x] graylog</li><li>[x] consul</li><li>[x] jaeger</li></ul> |
 
 ### Локальная сборка
 ```shell script
