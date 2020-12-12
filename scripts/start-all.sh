@@ -3,7 +3,7 @@
 cd ..
 (
   trap 'kill 0' SIGINT;
-  export SPRING_PROFILES_ACTIVE=local &
+  export SPRING_PROFILES_ACTIVE=docker &
   java -jar warranty-service/build/libs/warranty-service.jar &
   java -jar warehouse-service/build/libs/warehouse-service.jar &
   java -jar order-service/build/libs/order-service.jar &
