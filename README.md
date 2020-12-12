@@ -45,33 +45,58 @@ docker run -p 8010:8080 swaggerapi/swagger-ui
 ```
 
 ## Сборка и запуск
+### Профили
+| Профиль | Приложения | 
+|---------|---------------|
+| local   | <ul><li>[x] postgres</li><li>[ ] prometheus, grafana</li></ul><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li> |
+| heroku  | <ul><li>[ ] postgres</li><li>[ ] prometheus, grafana</li></ul><li>[ ] graylog</li><li>[ ] consul</li><li>[ ] jaeger</li> |
+| docker  | <ul><li>[x] postgres</li><li>[x] prometheus, grafana</li></ul><li>[x] graylog</li><li>[x] consul</li><li>[x] jaeger</li> |
+
+### Локальная сборка
 ```shell script
-# установить gradle wrapper
+# Установить gradle wrapper
 ./gradlew wrapper
-
-# сборка проектов
+# Сборка проектов
 ./gradlew clean build
-
-# в /etc/hosts добавить ссылки на localhost
-sudo tee -a /etc/hosts > /dev/null <<EOT
-127.0.0.1     postgres
-127.0.0.1     store-service
-127.0.0.1     order-service
-127.0.0.1     warehouse-service
-127.0.0.1     warranty-service
-EOT
-
-# Запуск проектов через Docker Compose
-docker-compose build
-dcoker-compose up -d
-
-# Запуск проектов локально, PostgreSQL в контейнере
+# Для запуска требуется Postgres 13, с пользователем program:test, базой services и схемами под каждый модуль.
+# Можно использовать либо локальную базу, либо развернуть через docker. 
 docker-compose up -d postgres
+# Запуск проектов с профилем local
 ./gradlew store-service:bootRun
 ```
 
+### Запуск через docker-compose
+```shell script
+# Сборка проектов
+./gradlew clean build
+# Сборка образов docker (версия v1.0)
+docker-compose -f docker-compose.services.yml -f docker-compose.yml build
+# Запуск окружения
+docker-compose -f docker-compose.services.yml -f docker-compose.yml up -d
+# Для просмотра логов конкретного сервиса используется
+docker-compose logs -f <service-name>
+
+# Для локальной работы можно запустить сервисные приложения без приложений системы,
+# тогда в приложениях использовать профиль 'docker'
+docker-compose up -d
+./scripts/start-all.sh
+```
+
+## Используемые системы
+
 ### Service Discovery
-Для Service Discovery используется consul
+Для Service Discovery используется consul. Кластер развернут из трех машин в режиме server,
+на главной (consul-server-bootstrap) открыты порты:
+* 8400 – взаимодействие через командную строку;
+* 8500 – HTTP API;
+* 8600/udp – DNS.
+
+Внутреннее взаимодействие выполняется через порт 8301: взаимодействие по протоколу gossip.
+
+Веб интерфейс доступен по адресу `http://localhost:8500/ui/`
+
+Приложение при старте регистрируется в Consul, регистрирует свои health-чеки. Consul _самостоятельно_
+проверяет состояние сервисов.
 
 ### Circuit Breaker
 
