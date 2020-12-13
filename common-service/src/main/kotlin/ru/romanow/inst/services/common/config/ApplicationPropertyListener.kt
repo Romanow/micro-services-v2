@@ -11,19 +11,23 @@ import java.util.*
 class ApplicationPropertyListener : ApplicationListener<ApplicationEnvironmentPreparedEvent> {
     private val logger = LoggerFactory.getLogger(ApplicationPropertyListener::class.java)
 
+    private val sources = arrayOf("application-common.properties")
+
     override fun onApplicationEvent(event: ApplicationEnvironmentPreparedEvent) {
         val environment = event.environment
         val props = Properties()
-        val classPathResource = ClassPathResource("common-configuration.properties")
-        try {
-            classPathResource.inputStream.use { stream ->
-                props.load(stream)
-                environment
-                    .propertySources
-                    .addFirst(PropertiesPropertySource("myProps", props))
+        for (source in sources) {
+            val classPathResource = ClassPathResource(source)
+            try {
+                classPathResource.inputStream.use { stream ->
+                    props.load(stream)
+                    environment
+                        .propertySources
+                        .addLast(PropertiesPropertySource("props-${source}", props))
+                }
+            } catch (exception: IOException) {
+                logger.error("", exception)
             }
-        } catch (exception: IOException) {
-            logger.error("", exception)
         }
     }
 }

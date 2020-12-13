@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "management.credentials.user",
+      "type": "java.lang.String",
+      "description": "Management user."
+    },
+    {
+      "name": "management.credentials.passwd",
+      "type": "java.lang.String",
+      "description": "Management password."
+    },
+    {
+      "name": "management.credentials.role",
+      "type": "java.lang.String",
+      "description": "Management role."
+    }
+  ]
+}

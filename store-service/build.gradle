@@ -11,6 +11,11 @@ dependencies {
     implementation project(":warranty-api")
     implementation project(":warehouse-api")
     implementation project(":common-service")
+
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.security:spring-security-oauth2-resource-server"
+    implementation "org.springframework.security:spring-security-oauth2-jose"
+    implementation "org.springframework.security:spring-security-oauth2-client"
 }
 
 bootJar {

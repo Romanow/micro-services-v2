@@ -1,0 +1,41 @@
+version: "3"
+services:
+  store-service:
+    build: ./store-service
+    image: store-service:v1.0
+    container_name: store-service
+    environment:
+      PORT: 8480
+    ports:
+      - 8480:8480
+    depends_on:
+      - postgres
+
+  order-service:
+    build: ./order-service
+    image: order-service:v1.0
+    container_name: order-service
+    environment:
+      PORT: 8380
+    ports:
+      - 8380:8380
+    depends_on:
+      - postgres
+
+  warehouse-service:
+    build: ./warehouse-service
+    image: warehouse-service:v1.0
+    container_name: warehouse-service
+    ports:
+      - 8280:8280
+    depends_on:
+      - postgres
+
+  warranty-service:
+    build: ./warranty-service
+    image: warranty-service:v1.0
+    container_name: warranty-service
+    ports:
+      - 8180:8180
+    depends_on:
+      - postgres
