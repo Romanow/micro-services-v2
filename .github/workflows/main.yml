@@ -76,6 +76,7 @@ jobs:
           reporters: cli
 
       - name: Run Warehouse and Warranty service
+        if: always()
         run: |
           heroku maintenance:off --app=warehouse-service-app
           heroku maintenance:off --app=warranty-service-app
