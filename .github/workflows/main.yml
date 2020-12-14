@@ -68,7 +68,6 @@ jobs:
           heroku maintenance:on --app=warranty-service-app
 
       - name: Run API Tests
-        id: run-newman
         uses: anthonyvscode/newman-action@v1
         with:
           collection: postman/postman-collection.json
@@ -82,7 +81,6 @@ jobs:
           heroku maintenance:off --app=warranty-service-app
 
       - name: Run API Tests
-        id: run-newman
         uses: anthonyvscode/newman-action@v1
         with:
           collection: postman/postman-collection.json
