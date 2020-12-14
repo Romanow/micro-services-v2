@@ -83,6 +83,7 @@ jobs:
 
       - name: Run API Tests
         uses: anthonyvscode/newman-action@v1
+        if: always()
         with:
           collection: postman/postman-collection.json
           environment: postman/postman-heroku-environment.json
