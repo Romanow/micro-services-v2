@@ -26,6 +26,8 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: store-service
+          healthcheck: https://management:passwd@store-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Warranty Service
         uses: akhileshns/heroku-deploy@v3.4.6
@@ -35,6 +37,8 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: warranty-service
+          healthcheck: https://management:passwd@warranty-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Warehouse Service
         uses: akhileshns/heroku-deploy@v3.4.6
@@ -44,6 +48,8 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: warehouse-service
+          healthcheck: https://management:passwd@warehouse-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Order Service
         uses: akhileshns/heroku-deploy@v3.4.6
@@ -53,6 +59,27 @@ jobs:
           heroku_email: romanowalex@mail.ru
           usedocker: true
           appdir: order-service
+          healthcheck: https://management:passwd@order-service-app.herokuapp.com/manage/health
+          delay: 20
+
+      - name: Stop Warehouse and Warranty service
+        run: |
+          heroku maintenance:on --app=warehouse-service-app
+          heroku maintenance:on --app=warranty-service-app
+
+      - name: Run API Tests
+        id: run-newman
+        uses: anthonyvscode/newman-action@v1
+        with:
+          collection: postman/postman-collection.json
+          environment: postman/postman-heroku-environment.json
+          delayRequest: 50
+          reporters: cli
+
+      - name: Run Warehouse and Warranty service
+        run: |
+          heroku maintenance:off --app=warehouse-service-app
+          heroku maintenance:off --app=warranty-service-app
 
       - name: Run API Tests
         id: run-newman
