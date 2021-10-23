@@ -1,12 +1,14 @@
+FROM openjdk:11-jdk as builder
+WORKDIR application
+ARG JAR_FILE=build/libs/warranty-service.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
 FROM openjdk:11-jdk
-
-VOLUME /tmp
-
 ENV PORT=8180
-EXPOSE 8180
-
-ADD build/libs/warranty-service.jar warranty-service.jar
-
-RUN bash -c 'touch /warranty-service.jar'
-
-ENTRYPOINT ["java","-Dserver.port=${PORT:-8180}","-Djava.security.egd=file:/dev/./urandom","-XX:+UseContainerSupport","-Xmx512m","-Xms128m","-jar","/warranty-service.jar"]
+WORKDIR application
+COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/application/ ./
+ENTRYPOINT ["java", "-Dserver.port=${PORT:-8180}", "-Xms128m", "-Xmx512m", "org.springframework.boot.loader.JarLauncher"]

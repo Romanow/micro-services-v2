@@ -12,4 +12,7 @@ dependencies {
 
 bootJar {
     archiveFileName = "${project.name}.jar"
+    layered {
+        enabled = true
+    }
 }
