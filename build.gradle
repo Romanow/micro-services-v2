@@ -1,28 +1,24 @@
 plugins {
     id "idea"
     id "java-library"
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
-    id "org.jetbrains.kotlin.plugin.jpa" version "1.4.10" apply false
-    id "org.jetbrains.kotlin.plugin.spring" version "1.4.10" apply false
-    id "com.gorylenko.gradle-git-properties" version "2.2.2" apply false
-    id "org.springframework.boot" version "2.4.5" apply false
+    id "org.jetbrains.kotlin.jvm" version "1.5.31"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.5.31" apply false
+    id "org.jetbrains.kotlin.plugin.spring" version "1.5.31" apply false
+    id "com.gorylenko.gradle-git-properties" version "2.3.1" apply false
+    id "org.springframework.boot" version "2.5.0" apply false
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
 ext {
-    springBootVersion = "2.4.5"
-    kotlinVersion = "1.4.10"
+    springBootVersion = "2.5.0"
+    kotlinVersion = "1.5.31"
     validationApiVersion = "2.0.1.Final"
-    tracingVersion = "3.3.1"
-    tracingResolverVersion = "1.6.0"
-    guavaVersion = "27.1-jre"
     gsonVersion = "2.8.5"
-    openApiVersion = "1.4.8"
-    fingBugsVersion = "3.0.2"
-    lombokVersion = "1.18.2"
+    openApiVersion = "1.5.9"
+    postgresContainerVersion = "1.16.0"
 }
 
-allprojects { project ->
+subprojects { ->
     apply plugin: "idea"
     apply plugin: "kotlin"
     apply plugin: "io.spring.dependency-management"
@@ -56,9 +52,6 @@ allprojects { project ->
 
         implementation "javax.validation:validation-api:$validationApiVersion"
         implementation "org.apache.commons:commons-lang3"
-        implementation "com.google.guava:guava:$guavaVersion"
         implementation "com.google.code.gson:gson:$gsonVersion"
-
-        compileOnly "com.google.code.findbugs:jsr305:$fingBugsVersion"
     }
 }

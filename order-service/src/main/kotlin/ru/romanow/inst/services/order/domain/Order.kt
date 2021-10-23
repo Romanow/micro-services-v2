@@ -1,6 +1,5 @@
 package ru.romanow.inst.services.order.domain
 
-import com.google.common.base.Objects
 import ru.romanow.inst.services.order.model.PaymentStatus
 import java.time.LocalDateTime
 import java.util.*
@@ -18,13 +17,13 @@ class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column(name = "user_uid", nullable = false, length = 40)
+    @Column(name = "user_uid", nullable = false)
     var userUid: UUID? = null,
 
-    @Column(name = "order_uid", nullable = false, unique = true, length = 40)
+    @Column(name = "order_uid", nullable = false, unique = true)
     var orderUid: UUID? = null,
 
-    @Column(name = "item_uid", nullable = false, length = 40)
+    @Column(name = "item_uid", nullable = false)
     var itemUid: UUID? = null,
 
     @Column(name = "order_date", nullable = false)
@@ -40,13 +39,13 @@ class Order(
 
         other as Order
 
-        return Objects.equal(orderUid, other.orderUid) &&
-            Objects.equal(itemUid, other.itemUid) &&
+        return Objects.equals(orderUid, other.orderUid) &&
+            Objects.equals(itemUid, other.itemUid) &&
             status === other.status
     }
 
     override fun hashCode(): Int {
-        return Objects.hashCode(orderUid, itemUid, status)
+        return Objects.hash(orderUid, itemUid, status)
     }
 
     override fun toString(): String {

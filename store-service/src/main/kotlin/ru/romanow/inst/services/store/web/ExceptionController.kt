@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.store.web
 
+import io.swagger.v3.oas.annotations.Hidden
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
@@ -8,13 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.store.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.store.exceptions.OrderProcessException
 import ru.romanow.inst.services.store.exceptions.WarehouseProcessException
 import ru.romanow.inst.services.store.exceptions.WarrantyProcessException
-import ru.romanow.inst.services.warranty.model.ErrorResponse
 import javax.persistence.EntityNotFoundException
 
+@Hidden
 @RestControllerAdvice(annotations = [RestController::class])
 class ExceptionController {
     private val logger = LoggerFactory.getLogger(ExceptionController::class.java)
@@ -42,11 +44,13 @@ class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(value = [
-        OrderProcessException::class,
-        WarehouseProcessException::class,
-        WarrantyProcessException::class
-    ])
+    @ExceptionHandler(
+        value = [
+            OrderProcessException::class,
+            WarehouseProcessException::class,
+            WarrantyProcessException::class
+        ]
+    )
     fun conflict(exception: RuntimeException): ErrorResponse {
         return ErrorResponse(exception.message)
     }

@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import ru.romanow.inst.services.warranty.model.ErrorResponse
+import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.warranty.model.ItemWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
@@ -24,10 +24,16 @@ class WarrantyController(
 ) {
 
     @Operation(summary = "Check warranty status")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Warranty information"),
-        ApiResponse(responseCode = "404", description = "Warranty info not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Warranty information"),
+            ApiResponse(
+                responseCode = "404",
+                description = "Warranty info not found",
+                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+            )
+        ]
+    )
     @GetMapping(value = ["/{itemUid}"], produces = ["application/json"])
     fun warrantyInfo(@PathVariable itemUid: UUID): WarrantyInfoResponse {
         return warrantyService.getWarrantyInfo(itemUid)
@@ -50,13 +56,26 @@ class WarrantyController(
     }
 
     @Operation(summary = "Request warranty decision")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Warranty decision"),
-        ApiResponse(responseCode = "400", description = "Bad request format", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Warranty not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Warranty decision"),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad request format",
+                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Warranty not found",
+                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+            )
+        ]
+    )
     @PostMapping(value = ["/{itemUid}/warranty"], consumes = ["application/json"], produces = ["application/json"])
-    fun warrantyRequest(@PathVariable itemUid: UUID, @Valid @RequestBody request: ItemWarrantyRequest): OrderWarrantyResponse {
+    fun warrantyRequest(
+        @PathVariable itemUid: UUID,
+        @Valid @RequestBody request: ItemWarrantyRequest
+    ): OrderWarrantyResponse {
         return warrantyService.warrantyRequest(itemUid, request)
     }
 }

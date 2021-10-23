@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.order.model.*
 import ru.romanow.inst.services.order.service.OrderManagementService
 import ru.romanow.inst.services.order.service.OrderService

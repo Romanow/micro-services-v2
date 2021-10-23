@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.warehouse.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
-import ru.romanow.inst.services.warranty.model.ErrorResponse
 import javax.persistence.EntityNotFoundException
 
 @Hidden

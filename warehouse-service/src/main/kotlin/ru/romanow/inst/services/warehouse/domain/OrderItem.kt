@@ -1,25 +1,26 @@
 package ru.romanow.inst.services.warehouse.domain
 
-import com.google.common.base.Objects
 import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "order_item", indexes = [
-    Index(name = "idx_order_item_item_id", columnList = "item_id"),
-    Index(name = "idx_order_item_order_uid", columnList = "order_uid"),
-    Index(name = "idx_order_item_item_uid", columnList = "order_item_uid", unique = true)
-])
+@Table(
+    name = "order_item", indexes = [
+        Index(name = "idx_order_item_item_id", columnList = "item_id"),
+        Index(name = "idx_order_item_order_uid", columnList = "order_uid"),
+        Index(name = "idx_order_item_item_uid", columnList = "order_item_uid", unique = true)
+    ]
+)
 class OrderItem(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column(name = "order_uid", nullable = false, length = 40)
+    @Column(name = "order_uid", nullable = false)
     var orderUid: UUID? = null,
 
-    @Column(name = "order_item_uid", nullable = false, length = 40, unique = true)
+    @Column(name = "order_item_uid", nullable = false, unique = true)
     var orderItemUid: UUID? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,12 +36,12 @@ class OrderItem(
 
         other as OrderItem
 
-        return Objects.equal(orderUid, other.orderUid) &&
-            Objects.equal(orderItemUid, other.orderItemUid)
+        return Objects.equals(orderUid, other.orderUid) &&
+            Objects.equals(orderItemUid, other.orderItemUid)
     }
 
     override fun hashCode(): Int {
-        return Objects.hashCode(orderUid, orderItemUid)
+        return Objects.hash(orderUid, orderItemUid)
     }
 
     override fun toString(): String {

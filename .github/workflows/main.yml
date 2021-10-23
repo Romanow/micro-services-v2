@@ -19,40 +19,48 @@ jobs:
           arguments: clean build
 
       - name: Deploy Store Service
-        uses: akhileshns/heroku-deploy@v3.4.6
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: store-service-app
           heroku_email: romanowalex@mail.ru
-          usedocker: true
           appdir: store-service
+          usedocker: true
+          healthcheck: https://management:passwd@store-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Warranty Service
-        uses: akhileshns/heroku-deploy@v3.4.6
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: warranty-service-app
           heroku_email: romanowalex@mail.ru
-          usedocker: true
           appdir: warranty-service
+          usedocker: true
+          healthcheck: https://management:passwd@warranty-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Warehouse Service
-        uses: akhileshns/heroku-deploy@v3.4.6
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: warehouse-service-app
           heroku_email: romanowalex@mail.ru
-          usedocker: true
           appdir: warehouse-service
+          usedocker: true
+          healthcheck: https://management:passwd@warehouse-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Deploy Order Service
-        uses: akhileshns/heroku-deploy@v3.4.6
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: order-service-app
           heroku_email: romanowalex@mail.ru
-          usedocker: true
           appdir: order-service
+          usedocker: true
+          healthcheck: https://management:passwd@order-service-app.herokuapp.com/manage/health
+          delay: 20
 
       - name: Run API Tests
         id: run-newman

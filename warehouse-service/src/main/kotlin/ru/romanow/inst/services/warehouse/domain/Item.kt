@@ -1,7 +1,7 @@
 package ru.romanow.inst.services.warehouse.domain
 
-import com.google.common.base.Objects
 import ru.romanow.inst.services.warehouse.model.SizeChart
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -28,11 +28,11 @@ class Item(
 
         other as Item
 
-        return Objects.equal(model, other.model) && size === other.size
+        return Objects.equals(model, other.model) && size === other.size
     }
 
     override fun hashCode(): Int {
-        return Objects.hashCode(model, size)
+        return Objects.hash(model, size)
     }
 
     override fun toString(): String {

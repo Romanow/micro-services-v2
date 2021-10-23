@@ -9,11 +9,11 @@ dependencies {
     implementation project(":warehouse-api")
     implementation project(":warranty-api")
     implementation project(":common-service")
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
 }
 
 bootJar {
     archiveFileName = "${project.name}.jar"
-    layered {
-        enabled = true
-    }
 }

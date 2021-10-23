@@ -1,13 +1,12 @@
 package ru.romanow.inst.services.warehouse.service
 
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import ru.romanow.inst.services.common.utils.JsonSerializer.fromJson
-import ru.romanow.inst.services.common.utils.RestClient
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.WebClient
+import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
-import ru.romanow.inst.services.warranty.model.ErrorResponse
 import ru.romanow.inst.services.warranty.model.ItemWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
@@ -16,10 +15,8 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(
-    @Value("\${warranty.service.url}")
-    private val warrantyServiceUrl: String,
     private val warehouseService: WarehouseService,
-    private val restClient: RestClient
+    private val warrantyWebClient: WebClient
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
 
@@ -37,14 +34,14 @@ class WarrantyServiceImpl(
     }
 
     private fun requestToWarranty(orderItemUid: UUID, request: ItemWarrantyRequest): Optional<OrderWarrantyResponse> {
-        val url = "$warrantyServiceUrl/api/v1/warranty/$orderItemUid/warranty"
-        return restClient
-            .post(url, request, OrderWarrantyResponse::class.java)
-            .exceptionMapping(HttpStatus.NOT_FOUND) { EntityNotFoundException(extractErrorMessage(it)) }
-            .commonExceptionMapping { WarrantyProcessException(extractErrorMessage(it)) }
-            .execute()
+        return warrantyWebClient
+            .post()
+            .uri("/{orderItemUid}/warranty", orderItemUid)
+            .body(BodyInserters.fromValue(request))
+            .retrieve()
+            .onStatus({ it == HttpStatus.NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
+            .onStatus({ it.isError }, { response -> buildEx(response) { WarrantyProcessException(it) } })
+            .bodyToMono(OrderWarrantyResponse::class.java)
+            .blockOptional()
     }
-
-    private fun extractErrorMessage(errorResponse: String) =
-        fromJson(errorResponse, ErrorResponse::class.java).message
 }
