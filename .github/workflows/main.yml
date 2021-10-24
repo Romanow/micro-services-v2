@@ -26,7 +26,7 @@ jobs:
           heroku_email: romanowalex@mail.ru
           appdir: store-service
           usedocker: true
-          healthcheck: https://management:passwd@store-service-app.herokuapp.com/manage/health
+          healthcheck: https://store-service-app.herokuapp.com/manage/health
           delay: 20
 
       - name: Deploy Warranty Service
@@ -37,7 +37,7 @@ jobs:
           heroku_email: romanowalex@mail.ru
           appdir: warranty-service
           usedocker: true
-          healthcheck: https://management:passwd@warranty-service-app.herokuapp.com/manage/health
+          healthcheck: https://warranty-service-app.herokuapp.com/manage/health
           delay: 20
 
       - name: Deploy Warehouse Service
@@ -48,7 +48,7 @@ jobs:
           heroku_email: romanowalex@mail.ru
           appdir: warehouse-service
           usedocker: true
-          healthcheck: https://management:passwd@warehouse-service-app.herokuapp.com/manage/health
+          healthcheck: https://warehouse-service-app.herokuapp.com/manage/health
           delay: 20
 
       - name: Deploy Order Service
@@ -59,7 +59,7 @@ jobs:
           heroku_email: romanowalex@mail.ru
           appdir: order-service
           usedocker: true
-          healthcheck: https://management:passwd@order-service-app.herokuapp.com/manage/health
+          healthcheck: https://order-service-app.herokuapp.com/manage/health
           delay: 20
 
       - name: Run API Tests
