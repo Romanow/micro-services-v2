@@ -19,7 +19,7 @@ services:
     image: romanowalex/store-service:v1.0.1
     container_name: store-service
     environment:
-      PORT: 8480
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - 8480:8480
     depends_on:
@@ -30,7 +30,7 @@ services:
     image: romanowalex/order-service:v1.0.1
     container_name: order-service
     environment:
-      PORT: 8380
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - 8380:8380
     depends_on:
@@ -40,6 +40,8 @@ services:
     build: ./warehouse-service
     image: romanowalex/warehouse-service:v1.0.1
     container_name: warehouse-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - 8280:8280
     depends_on:
@@ -49,6 +51,8 @@ services:
     build: ./warranty-service
     image: romanowalex/warranty-service:v1.0.1
     container_name: warranty-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - 8180:8180
     depends_on:
