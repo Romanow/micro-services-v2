@@ -47,6 +47,7 @@ class WarehouseServiceImpl(
         return warehouseWebClient
             .post()
             .uri("/{itemUid}/warranty", itemUid)
+            .body(BodyInserters.fromValue(request))
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
             .onStatus({ it == UNPROCESSABLE_ENTITY }, { response -> buildEx(response) { WarehouseProcessException(it) } })

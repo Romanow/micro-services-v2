@@ -68,8 +68,9 @@ class OrderServiceImpl(
 
     override fun warrantyRequest(orderUid: UUID, request: WarrantyRequest): Optional<OrderWarrantyResponse> {
         return orderWebClient
-            .delete()
+            .post()
             .uri("/{orderUid}/warranty", orderUid)
+            .body(BodyInserters.fromValue(request))
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
             .onStatus({ it == UNPROCESSABLE_ENTITY }, { response -> buildEx(response) { OrderProcessException(it) } })
