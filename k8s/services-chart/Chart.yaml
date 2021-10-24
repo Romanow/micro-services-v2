@@ -1,0 +1,17 @@
+apiVersion: v2
+name: services-chart
+type: application
+version: 1.0.0
+dependencies:
+  - name: service-chart
+    version: 1.0.0
+    alias: order
+  - name: service-chart
+    version: 1.0.0
+    alias: store
+  - name: service-chart
+    version: 1.0.0
+    alias: warranty
+  - name: service-chart
+    version: 1.0.0
+    alias: warehouse

@@ -1,0 +1,6 @@
+port: 8080
+profile: k8s
+
+image:
+  name:
+  version:
