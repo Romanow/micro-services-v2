@@ -6,11 +6,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app.kubernetes.io/name: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/component: spring
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}

@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Chart.Name }}-service
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-service
 spec:
   selector:
     app: {{ .Chart.Name }}
