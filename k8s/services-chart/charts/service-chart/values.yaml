@@ -1,5 +1,9 @@
 port: 8080
 profile: k8s
+metrics:
+  path: "/manage/prometheus"
+  username: management
+  password: passwd
 
 image:
   name:

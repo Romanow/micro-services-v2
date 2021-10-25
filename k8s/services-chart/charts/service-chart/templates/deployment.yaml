@@ -9,11 +9,14 @@ spec:
       app.kubernetes.io/name: {{ .Chart.Name }}
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "{{ .Values.metrics.path }}"
+        prometheus.io/port: "{{ .Values.port }}"
       labels:
         app.kubernetes.io/name: {{ .Chart.Name }}
         app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: spring
-        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}

@@ -1,21 +1,3 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: node-exporter-service
-  labels:
-    app.kubernetes.io/name: node-exporter-service
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9100"
-spec:
-  selector:
-    app.kubernetes.io/name: node-exporter
-  ports:
-    - name: node-exporter
-      protocol: TCP
-      port: 9100
-      targetPort: 9100
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:

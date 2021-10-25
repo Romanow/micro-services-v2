@@ -1,0 +1,4 @@
+apiVersion: v2
+name: node-exporter
+type: application
+version: 1.0.0

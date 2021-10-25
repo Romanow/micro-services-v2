@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app.kubernetes.io/name: grafana
+        app.kubernetes.io/version: "8.2.2"
+        app.kubernetes.io/component: monitoring
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:8.2.2
+          ports:
+            - name: grafana
+              containerPort: 3000
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-storage
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: grafana-datasources
+              readOnly: false
+      volumes:
+        - name: grafana-storage
+        - name: grafana-datasources
+          configMap:
+            defaultMode: 420
+            name: grafana-datasource-config-map
