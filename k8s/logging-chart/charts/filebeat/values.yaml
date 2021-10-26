@@ -1,0 +1,3 @@
+version: 7.2.0
+port: 4560
+protocol: TCP

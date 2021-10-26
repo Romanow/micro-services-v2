@@ -1,0 +1,7 @@
+filebeat.inputs:
+  - type: tcp
+    max_message_size: 1MiB
+    host: "localhost:4560"
+
+output.elasticsearch:
+  hosts: [ 'elasticsearch-service:9200' ]

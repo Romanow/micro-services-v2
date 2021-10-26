@@ -4,10 +4,9 @@
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <springProfile name="local">
-        <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashUdpSocketAppender">
-            <host>localhost</host>
-            <port>514</port>
-            <layout class="net.logstash.logback.layout.LogstashLayout"/>
+        <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>127.0.0.1:4560</destination>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
         </appender>
         <root level="info">
             <appender-ref ref="LOGSTASH"/>

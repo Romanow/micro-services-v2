@@ -1,4 +1,4 @@
 apiVersion: v2
-name: logstash
+name: filebeat
 type: application
 version: 1.0.0

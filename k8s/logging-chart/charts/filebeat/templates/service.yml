@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Chart.Name }}-service
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-service
+spec:
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+  ports:
+    - name: {{ .Chart.Name }}
+      protocol: {{ .Values.protocol }}
+      port: {{ .Values.port }}
+      targetPort: {{ .Values.port }}

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Chart.Name }}-daemonset
   namespace: {{ .Values.global.namespace }}
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-daemon-set
+    app.kubernetes.io/name: {{ .Chart.Name }}-daemonset
 spec:
   selector:
     matchLabels:

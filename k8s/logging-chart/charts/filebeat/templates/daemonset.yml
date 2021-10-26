@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Chart.Name }}-daemonset
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-daemonset
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/component: logging
+    spec:
+      containers:
+        - name: filebeat
+          image: "docker.elastic.co/beats/filebeat:{{ .Values.version }}"
+          args: [ "-c", "/etc/filebeat/filebeat.yml", "-e" ]
+          ports:
+            - name: listener
+              containerPort: {{ .Values.port }}
+              protocol: {{ .Values.protocol }}
+          volumeMounts:
+            - name: {{ .Chart.Name }}-config-volume
+              mountPath: /etc/filebeat/
+            - name: {{ .Chart.Name }}-data-volume
+              mountPath: /usr/share/filebeat/data
+      volumes:
+        - name: {{ .Chart.Name }}-data-volume
+        - name: {{ .Chart.Name }}-config-volume
+          configMap:
+            defaultMode: 420
+            name: {{ .Chart.Name }}-configmap
