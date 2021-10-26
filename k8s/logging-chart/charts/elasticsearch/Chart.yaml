@@ -1,0 +1,4 @@
+apiVersion: v2
+name: elasticsearch
+type: application
+version: 1.0.0

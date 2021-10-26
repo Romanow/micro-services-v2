@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-datasource-config-map
+  name: {{ .Chart.Name }}-datasource-config-map
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app.kubernetes.io/name: grafana-datasource-config-map
+    app.kubernetes.io/name: {{ .Chart.Name }}-datasource-config-map
 data:
   prometheus.yaml: |-
   {{- .Files.Get "config/datasource-config.yaml" | nindent 4 }}

@@ -8,8 +8,13 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/name: {{ .Chart.Name }}
+  clusterIP: None
   ports:
-    - name: {{ .Chart.Name }}
+    - name: http
       protocol: TCP
-      port: {{ .Values.port }}
-      targetPort: {{ .Values.port }}
+      port: {{ .Values.ports.http }}
+      targetPort: {{ .Values.ports.http }}
+    - name: communication
+      protocol: TCP
+      port: {{ .Values.ports.communication }}
+      targetPort: {{ .Values.ports.communication }}

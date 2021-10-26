@@ -1,18 +1,19 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: node-exporter-daemonset
+  name: {{ .Chart.Name }}-daemonset
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app.kubernetes.io/name: node-exporter-daemon-set
+    app.kubernetes.io/name: {{ .Chart.Name }}-daemon-set
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: node-exporter
+      app.kubernetes.io/name: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: node-exporter
-        app.kubernetes.io/version: "v1.2.2"
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: monitoring
     spec:
       containers:
@@ -23,10 +24,10 @@ spec:
             - --no-collector.hwmon
             - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
             - --collector.netclass.ignored-devices=^(veth.*)$
-          name: node-exporter
-          image: prom/node-exporter:v1.2.2
+          name: {{ .Chart.Name }}
+          image: "prom/node-exporter:{{ .Values.version }}"
           ports:
-            - containerPort: 9100
+            - containerPort: {{ .Values.port }}
               protocol: TCP
           volumeMounts:
             - mountPath: /host/sys

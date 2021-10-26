@@ -15,6 +15,7 @@ ext {
     validationApiVersion = "2.0.1.Final"
     gsonVersion = "2.8.5"
     openApiVersion = "1.5.9"
+    logstashEncoderVersion = "6.6"
     postgresContainerVersion = "1.16.0"
 }
 
