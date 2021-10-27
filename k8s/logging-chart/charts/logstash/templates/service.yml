@@ -10,6 +10,6 @@ spec:
     app.kubernetes.io/name: {{ .Chart.Name }}
   ports:
     - name: {{ .Chart.Name }}
-      protocol: {{ .Values.protocol }}
+      protocol: TCP
       port: {{ .Values.port }}
       targetPort: {{ .Values.port }}

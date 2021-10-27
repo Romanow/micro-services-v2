@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-pipeline-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-pipeline-configmap
+data:
+  pipeline.conf: |-
+    input {
+      tcp {
+        port => 4560
+        codec => json_lines
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => "elasticsearch-service:9200"
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-config-configmap
+data:
+  logstash.yml: |-
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline

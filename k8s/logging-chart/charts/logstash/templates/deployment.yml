@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/component: logging
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "docker.elastic.co/logstash/logstash:{{ .Values.version }}"
+          volumeMounts:
+            - name: {{ .Chart.Name }}-config-volume
+              mountPath: /usr/share/logstash/config
+            - name: {{ .Chart.Name }}-pipeline-volume
+              mountPath: /usr/share/logstash/pipeline
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.port }}
+      volumes:
+        - name: {{ .Chart.Name }}-config-volume
+          configMap:
+            name: {{ .Chart.Name }}-config-configmap
+        - name: {{ .Chart.Name }}-pipeline-volume
+          configMap:
+            name: {{ .Chart.Name }}-pipeline-configmap

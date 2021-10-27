@@ -32,4 +32,4 @@ spec:
         - name: {{ .Chart.Name }}-config-volume
           configMap:
             defaultMode: 420
-            name: {{ .Chart.Name }}-config-map
+            name: {{ .Chart.Name }}-configmap
