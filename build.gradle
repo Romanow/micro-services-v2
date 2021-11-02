@@ -13,6 +13,7 @@ ext {
     springBootVersion = "2.5.6"
     kotlinVersion = "1.5.31"
     validationApiVersion = "2.0.1.Final"
+    tracingVersion = "3.3.1"
     gsonVersion = "2.8.5"
     openApiVersion = "1.5.9"
     logstashEncoderVersion = "6.6"
