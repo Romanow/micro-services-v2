@@ -1,0 +1,4 @@
+apiVersion: v2
+name: tracing
+type: application
+version: 1.0.0
