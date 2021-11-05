@@ -3,4 +3,4 @@ ports:
   http: 9200
   communication: 9300
 java:
-  memory: 512m
+  memory: 756m

@@ -14,3 +14,5 @@ data:
           - '/var/log/{{ .Chart.Name }}/*.log'
     output.elasticsearch:
       hosts: [ 'logstash-service.logging.svc.cluster.local:4560' ]
+      username: "{{ .Values.filebeat.elasticsearch.username }}"
+      password: "{{ .Values.filebeat.elasticsearch.password }}"

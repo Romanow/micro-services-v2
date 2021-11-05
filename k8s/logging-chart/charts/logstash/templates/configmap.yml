@@ -24,6 +24,8 @@ data:
     output {
       elasticsearch {
         hosts => "elasticsearch-service:9200"
+        user => "{{ .Values.global.username }}"
+        password => "{{ .Values.global.password }}"
       }
     }
 ---

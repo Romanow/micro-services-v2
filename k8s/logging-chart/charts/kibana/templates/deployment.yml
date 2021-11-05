@@ -23,6 +23,10 @@ spec:
           env:
             - name: ELASTICSEARCH_HOSTS
               value: http://elasticsearch-service:9200
+            - name: ELASTICSEARCH_USERNAME
+              value: "{{ .Values.global.username }}"
+            - name: ELASTICSEARCH_PASSWORD
+              value: "{{ .Values.global.password }}"
           ports:
             - name: {{ .Chart.Name }}
               containerPort: {{ .Values.port }}

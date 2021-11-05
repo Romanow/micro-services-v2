@@ -58,12 +58,16 @@ spec:
               containerPort: {{ .Values.ports.http }}
             - name: communication
               containerPort: {{ .Values.ports.communication }}
-          resources:
-            limits:
-              memory: "{{ .Values.java.memory }}Mi"
-            requests:
-              memory: "{{ .Values.java.memory }}Mi"
           volumeMounts:
+            - name: {{ .Chart.Name }}-configmap-volume
+              mountPath: /usr/share/elasticsearch/config/roles.yml
+              subPath: roles.yml
+            - name: {{ .Chart.Name }}-configmap-volume
+              mountPath: /usr/share/elasticsearch/config/users
+              subPath: users
+            - name: {{ .Chart.Name }}-configmap-volume
+              mountPath: /usr/share/elasticsearch/config/users_roles
+              subPath: users_roles
             - name: {{ .Chart.Name }}-volume-claim
               mountPath: /usr/share/elasticsearch/data
           env:
@@ -77,5 +81,11 @@ spec:
               value: "{{ .Chart.Name }}-cluster-0.{{ .Chart.Name }}-service,{{ .Chart.Name }}-cluster-1.{{ .Chart.Name }}-service,{{ .Chart.Name }}-cluster-2.{{ .Chart.Name }}-service"
             - name: cluster.initial_master_nodes
               value: "{{ .Chart.Name }}-cluster-0,{{ .Chart.Name }}-cluster-1,{{ .Chart.Name }}-cluster-2"
+            - name: xpack.security.enabled
+              value: "true"
             - name: ES_JAVA_OPTS
               value: "-Xms{{ .Values.java.memory }} -Xmx{{ .Values.java.memory }}"
+      volumes:
+        - name: {{ .Chart.Name }}-configmap-volume
+          configMap:
+            name: {{ .Chart.Name }}-configmap

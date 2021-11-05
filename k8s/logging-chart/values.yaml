@@ -1,2 +1,4 @@
 global:
   namespace: logging
+  username: user
+  password: qwerty
