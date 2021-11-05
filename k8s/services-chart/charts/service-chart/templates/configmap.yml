@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-filebeat-configmap
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-filebeat-configmap
+data:
+  filebeat.yml: |-
+    monitoring:
+      enabled: false
+    filebeat.inputs:
+      - type: log
+        paths:
+          - '/var/log/{{ .Chart.Name }}/*.log'
+    output.elasticsearch:
+      hosts: [ 'logstash-service.logging.svc.cluster.local:4560' ]

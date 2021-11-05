@@ -1,10 +1,16 @@
-port: 8080
-profile: k8s
-metrics:
-  path: "/manage/prometheus"
-  username: management
-  password: passwd
+service:
+  port: 8080
+  profile: k8s
+  image:
+    name:
+    version:
+  memory:
+    requested: 768
+    limit: 768
+  metrics:
+    path: "/manage/prometheus"
+    username: management
+    password: passwd
 
-image:
-  name:
-  version:
+filebeat:
+  version: 7.15.0

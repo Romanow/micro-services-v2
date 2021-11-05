@@ -11,7 +11,7 @@ spec:
     service:
       name: {{ .Chart.Name }}-service
       port:
-        number: {{ .Values.port }}
+        number: {{ .Values.service.port }}
   rules:
     - host: {{ .Chart.Name }}.romanow-alex.ru
       http:
@@ -22,4 +22,4 @@ spec:
               service:
                 name: {{ .Chart.Name }}-service
                 port:
-                  number: {{ .Values.port }}
+                  number: {{ .Values.service.port }}

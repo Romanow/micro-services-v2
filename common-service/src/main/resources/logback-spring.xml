@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="true">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <springProperty scope="context" name="APPLICATION_NAME" source="spring.application.name"/>
 
     <springProfile name="!local">
-        <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-            <destination>logstash-service.logging.svc.cluster.local:4560</destination>
+        <appender name="LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/var/log/${APPLICATION_NAME}/application.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>application.%d{yyyy-MM-dd}.log}</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
                 <providers>
                     <timestamp>
@@ -18,7 +22,7 @@
                             {
                             "timestamp": "@timestamp",
                             "severity": "%level",
-                            "service": "${springAppName:-}",
+                            "service": "${APPLICATION_NAME:-}",
                             "trace": "%X{traceId:-}",
                             "span": "%X{spanId:-}",
                             "pid": "${PID:-}",

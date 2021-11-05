@@ -58,6 +58,11 @@ spec:
               containerPort: {{ .Values.ports.http }}
             - name: communication
               containerPort: {{ .Values.ports.communication }}
+          resources:
+            limits:
+              memory: "{{ .Values.java.memory }}Mi"
+            requests:
+              memory: "{{ .Values.java.memory }}Mi"
           volumeMounts:
             - name: {{ .Chart.Name }}-volume-claim
               mountPath: /usr/share/elasticsearch/data
