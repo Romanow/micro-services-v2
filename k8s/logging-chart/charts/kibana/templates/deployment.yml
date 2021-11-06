@@ -22,11 +22,11 @@ spec:
           image: "docker.elastic.co/kibana/kibana:{{ .Values.version }}"
           env:
             - name: ELASTICSEARCH_HOSTS
-              value: http://elasticsearch-service:9200
+              value: {{ .Values.elasticsearch.url }}
             - name: ELASTICSEARCH_USERNAME
-              value: "{{ .Values.global.username }}"
+              value: "{{ .Values.elasticsearch.username }}"
             - name: ELASTICSEARCH_PASSWORD
-              value: "{{ .Values.global.password }}"
+              value: "{{ .Values.elasticsearch.password }}"
           ports:
             - name: {{ .Chart.Name }}
               containerPort: {{ .Values.port }}

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Chart.Name }}-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Values.namespace }}
 spec:
   serviceName: {{ .Chart.Name }}-service
   replicas: 3
@@ -28,7 +28,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Chart.Name }}
         app.kubernetes.io/version: "{{ .Values.version }}"
-        app.kubernetes.io/component: logging
+        app.kubernetes.io/component: elasticsearch
     spec:
       terminationGracePeriodSeconds: 10
       initContainers:

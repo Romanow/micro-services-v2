@@ -14,9 +14,8 @@ service:
 
 filebeat:
   version: 7.15.0
-  elasticsearch:
-    username: logging
-    password: qwerty
+  logstash:
+    port: 5044
 
 jaeger:
   version: 1.22.0

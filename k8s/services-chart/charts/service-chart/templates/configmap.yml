@@ -6,13 +6,14 @@ metadata:
     app.kubernetes.io/name: {{ .Chart.Name }}-filebeat-configmap
 data:
   filebeat.yml: |-
-    monitoring:
-      enabled: false
+    monitoring.enabled: false
     filebeat.inputs:
       - type: log
+        json:
+          add_error_key: true
+          keys_under_root: true
+          overwrite_keys: true
         paths:
-          - '/var/log/{{ .Chart.Name }}/*.log'
-    output.elasticsearch:
-      hosts: [ 'logstash-service.logging.svc.cluster.local:4560' ]
-      username: "{{ .Values.filebeat.elasticsearch.username }}"
-      password: "{{ .Values.filebeat.elasticsearch.password }}"
+          - '/var/log/{{ .Chart.Name }}-service/*.log'
+    output.logstash:
+      hosts: [ 'logstash-service.logging.svc.cluster.local:{{ .Values.filebeat.logstash.port }}' ]

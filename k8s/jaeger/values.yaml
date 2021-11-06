@@ -9,6 +9,6 @@ jaeger:
     query_admin: 16687
     collector_admin: 14269
   elasticsearch:
-    url: http://elasticsearch-service.logging.svc.cluster.local:9200
+    url: http://elasticsearch-service.elastic.svc.cluster.local:9200
     username: logging
     password: qwerty

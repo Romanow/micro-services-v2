@@ -3,9 +3,7 @@ name: logging
 type: application
 version: 1.0.0
 dependencies:
-  - name: elasticsearch
+  - name: kibana
     version: 1.0.0
   - name: logstash
-    version: 1.0.0
-  - name: kibana
     version: 1.0.0

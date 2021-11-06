@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
@@ -9,7 +9,7 @@
         <appender name="LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/var/log/${APPLICATION_NAME}/application.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>application.%d{yyyy-MM-dd}.log}</fileNamePattern>
+                <fileNamePattern>application.%d{yyyy-MM-dd}.log.gz}</fileNamePattern>
                 <maxHistory>7</maxHistory>
             </rollingPolicy>
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -21,14 +21,14 @@
                         <pattern>
                             {
                             "timestamp": "@timestamp",
-                            "severity": "%level",
-                            "service": "${APPLICATION_NAME:-}",
+                            "level": "%level",
+                            "application": "${APPLICATION_NAME:-}",
                             "trace": "%X{traceId:-}",
                             "span": "%X{spanId:-}",
                             "pid": "${PID:-}",
                             "thread": "%thread",
                             "class": "%logger{40}",
-                            "rest": "%message"
+                            "message": "%message"
                             }
                         </pattern>
                     </pattern>
