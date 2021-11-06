@@ -60,9 +60,6 @@ spec:
               containerPort: {{ .Values.ports.communication }}
           volumeMounts:
             - name: {{ .Chart.Name }}-configmap-volume
-              mountPath: /usr/share/elasticsearch/config/roles.yml
-              subPath: roles.yml
-            - name: {{ .Chart.Name }}-configmap-volume
               mountPath: /usr/share/elasticsearch/config/users
               subPath: users
             - name: {{ .Chart.Name }}-configmap-volume

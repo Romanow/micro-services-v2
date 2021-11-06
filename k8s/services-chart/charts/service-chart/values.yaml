@@ -15,5 +15,5 @@ service:
 filebeat:
   version: 7.15.0
   elasticsearch:
-    username: user
+    username: logging
     password: qwerty
