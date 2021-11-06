@@ -17,3 +17,7 @@ filebeat:
   elasticsearch:
     username: logging
     password: qwerty
+
+jaeger:
+  version: 1.22.0
+  port: 6831

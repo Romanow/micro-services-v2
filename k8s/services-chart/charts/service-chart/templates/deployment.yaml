@@ -26,6 +26,15 @@ spec:
               mountPath: "/var/log/{{ .Chart.Name }}/"
             - name: filebeat-config-volume
               mountPath: /etc/filebeat/
+        - name: "{{ .Chart.Name }}"-jaeger-agent-sidecar
+          image: "jaegertracing/jaeger-agent:{{ .Values.jaeger.version }}"
+          env:
+            - name: REPORTER_GRPC_HOST_PORT
+              value: jaeger-collector-service.tracing.svc.cluster.local:14250
+          ports:
+            - name: jaeger
+              containerPort: {{ .Values.jaeger.port }}
+              protocol: UDP
         - name: {{ .Chart.Name }}
           imagePullPolicy: Always
           image: {{ .Values.service.image.name }}:{{ .Values.service.image.version }}

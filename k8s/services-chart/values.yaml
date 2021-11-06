@@ -3,25 +3,25 @@ order:
     port: 8380
     image:
       name: romanowalex/order-service
-      version: v1.4
+      version: v1.5
 
 store:
   service:
     port: 8480
     image:
       name: romanowalex/store-service
-      version: v1.4
+      version: v1.5
 
 warranty:
   service:
     port: 8180
     image:
       name: romanowalex/warranty-service
-      version: v1.4
+      version: v1.5
 
 warehouse:
   service:
     port: 8280
     image:
       name: romanowalex/warehouse-service
-      version: v1.4
+      version: v1.5

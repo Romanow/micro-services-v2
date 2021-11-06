@@ -1,17 +1,17 @@
 {
   "properties": [
     {
-      "name": "order.service.url",
+      "name": "services.order-url",
       "type": "java.lang.String",
       "description": "Order url."
     },
     {
-      "name": "warranty.service.url",
+      "name": "services.warranty-url",
       "type": "java.lang.String",
       "description": "Warranty url."
     },
     {
-      "name": "warehouse.service.url",
+      "name": "services.warehouse-url",
       "type": "java.lang.String",
       "description": "Warehouse url."
     }

@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-query
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-query
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}-query
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}-query
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/component: tracing
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-query
+          image: "jaegertracing/jaeger-query:{{ .Values.jaeger.version }}"
+          env:
+            - name: SPAN_STORAGE_TYPE
+              value: elasticsearch
+            - name: ES_SERVER_URLS
+              value: {{ .Values.jaeger.elasticsearch.url }}
+            - name: ES_USERNAME
+              value: {{ .Values.jaeger.elasticsearch.username }}
+            - name: ES_PASSWORD
+              value: {{ .Values.jaeger.elasticsearch.password }}
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+          ports:
+            - name: query
+              containerPort: {{ .Values.jaeger.ports.query }}
+              protocol: TCP
+            - name: admin
+              containerPort: {{ .Values.jaeger.ports.query_admin }}
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-collector
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}-collector
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}-collector
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/component: tracing
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-collector
+          image: "jaegertracing/jaeger-collector:{{ .Values.jaeger.version }}"
+          env:
+            - name: SPAN_STORAGE_TYPE
+              value: elasticsearch
+            - name: ES_SERVER_URLS
+              value: {{ .Values.jaeger.elasticsearch.url }}
+            - name: ES_USERNAME
+              value: {{ .Values.jaeger.elasticsearch.username }}
+            - name: ES_PASSWORD
+              value: {{ .Values.jaeger.elasticsearch.password }}
+          ports:
+            - containerPort: {{ .Values.jaeger.ports.grpc }}
+              name: grpc
+              protocol: TCP
+            - containerPort: {{ .Values.jaeger.ports.http }}
+              name: http
+              protocol: TCP
+            - containerPort: {{ .Values.jaeger.ports.collector_admin }}
+              name: admin
+              protocol: TCP
