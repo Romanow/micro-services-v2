@@ -10,18 +10,6 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ .Chart.Name }}
-  volumeClaimTemplates:
-    - metadata:
-        name: {{ .Chart.Name }}-volume-claim
-        labels:
-          app.kubernetes.io/name: {{ .Chart.Name }}-volume-claim
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        storageClassName: do-block-storage
-        resources:
-          requests:
-            storage: 1Gi
   template:
     metadata:
       name: {{ .Chart.Name }}
@@ -38,7 +26,7 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: {{ .Chart.Name }}-volume-claim
+            - name: {{ .Chart.Name }}-data-volume
               mountPath: /usr/share/elasticsearch/data
         - name: increase-vm-max-map
           image: busybox
@@ -65,7 +53,7 @@ spec:
             - name: {{ .Chart.Name }}-configmap-volume
               mountPath: /usr/share/elasticsearch/config/users_roles
               subPath: users_roles
-            - name: {{ .Chart.Name }}-volume-claim
+            - name: {{ .Chart.Name }}-data-volume
               mountPath: /usr/share/elasticsearch/data
           env:
             - name: cluster.name
@@ -83,6 +71,7 @@ spec:
             - name: ES_JAVA_OPTS
               value: "-Xms{{ .Values.java.memory }} -Xmx{{ .Values.java.memory }}"
       volumes:
+        - name: {{ .Chart.Name }}-data-volume
         - name: {{ .Chart.Name }}-configmap-volume
           configMap:
             name: {{ .Chart.Name }}-configmap
