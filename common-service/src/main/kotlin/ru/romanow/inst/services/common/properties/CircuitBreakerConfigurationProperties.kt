@@ -5,6 +5,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "circuit.breaker")
-data class CircuitBreakerTimeoutProperties(
+data class CircuitBreakerConfigurationProperties(
     val defaultTimeout: Long
 )

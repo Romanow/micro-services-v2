@@ -1,9 +1,16 @@
 package ru.romanow.inst.services.order.service
 
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
+import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpMethod.DELETE
+import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import ru.romanow.inst.services.common.config.Fallback
+import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.order.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.order.exceptions.WarehouseProcessException
@@ -17,7 +24,10 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarehouseServiceImpl(
-    private val warehouseWebClient: WebClient
+    private val fallback: Fallback,
+    private val warehouseWebClient: WebClient,
+    private val properties: ServerUrlProperties,
+    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 ) : WarehouseService {
 
     override fun takeItem(orderUid: UUID, model: String, size: SizeChart): Optional<OrderItemResponse> {
@@ -30,6 +40,12 @@ class WarehouseServiceImpl(
             .onStatus({ it == CONFLICT }, { response -> buildEx(response) { ItemNotAvailableException(it) } })
             .onStatus({ it.isError }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .bodyToMono(OrderItemResponse::class.java)
+            .transform {
+                factory.create("takeItem")
+                    .run(it) { throwable ->
+                        fallback.apply(POST, "${properties.warehouseUrl}/api/v1/warehouse", throwable, request)
+                    }
+            }
             .blockOptional()
     }
 
@@ -40,6 +56,12 @@ class WarehouseServiceImpl(
             .retrieve()
             .onStatus({ it.isError }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .toBodilessEntity()
+            .transform {
+                factory.create("returnItem")
+                    .run(it) { throwable ->
+                        fallback.apply(DELETE, "${properties.warehouseUrl}/api/v1/warehouse/$itemUid", throwable)
+                    }
+            }
             .block()
     }
 
@@ -53,6 +75,12 @@ class WarehouseServiceImpl(
             .onStatus({ it == UNPROCESSABLE_ENTITY }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .onStatus({ it.isError }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .bodyToMono(OrderWarrantyResponse::class.java)
+            .transform {
+                factory.create("useWarrantyItem")
+                    .run(it) { throwable ->
+                        fallback.apply(POST, "${properties.warehouseUrl}/api/v1/warehouse/$itemUid/warranty", throwable, request)
+                    }
+            }
             .blockOptional()
     }
 }

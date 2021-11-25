@@ -3,17 +3,19 @@ package ru.romanow.inst.services.common.config
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.Customizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import ru.romanow.inst.services.common.properties.CircuitBreakerTimeoutProperties
+import reactor.core.publisher.Mono
+import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 import java.time.Duration
 import java.util.*
+import java.util.Optional.empty
 
 @Configuration
 class CircuitBreakerConfiguration {
@@ -28,19 +30,19 @@ class CircuitBreakerConfiguration {
     @Bean
     fun defaultCustomizer(
         circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport,
-        properties: CircuitBreakerTimeoutProperties
-    ): Customizer<Resilience4JCircuitBreakerFactory> {
+        properties: CircuitBreakerConfigurationProperties
+    ): Customizer<ReactiveResilience4JCircuitBreakerFactory> {
         val timeLimiterConfig = TimeLimiterConfig
             .custom()
             .timeoutDuration(Duration.ofSeconds(properties.defaultTimeout))
             .build()
         val circuitBreakerConfig = CircuitBreakerConfig
             .custom()
-            .failureRateThreshold(10f)
-            .slowCallRateThreshold(5f)
+            .failureRateThreshold(20f)
+            .slowCallRateThreshold(50f)
             .ignoreExceptions(*circuitBreakerConfigurationSupport.ignoredExceptions())
             .build()
-        return Customizer { factory: Resilience4JCircuitBreakerFactory ->
+        return Customizer { factory: ReactiveResilience4JCircuitBreakerFactory ->
             factory.configureDefault { id: String ->
                 Resilience4JConfigBuilder(id)
                     .timeLimiterConfig(timeLimiterConfig)
@@ -58,7 +60,7 @@ class CircuitBreakerConfiguration {
                 url: String,
                 throwable: Throwable,
                 vararg params: Any
-            ): Optional<T> {
+            ): Mono<T> {
                 logger.warn(
                     "Request to {} '{}' failed with exception: {}. (params: '{}')",
                     method.name,
@@ -69,7 +71,7 @@ class CircuitBreakerConfiguration {
                 if (throwable.javaClass in circuitBreakerConfigurationSupport.ignoredExceptions()) {
                     throw (throwable as RuntimeException)
                 }
-                return Optional.empty()
+                return Mono.empty()
             }
         }
     }
