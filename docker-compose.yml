@@ -1,5 +1,29 @@
 version: "3"
 services:
+  consul-server-1:
+    image: hashicorp/consul:1.10.4
+    container_name: consul-server-1
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+
+  consul-server-2:
+    image: hashicorp/consul:1.10.4
+    container_name: consul-server-2
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+    depends_on:
+      - consul-server-1
+
+  consul-server-3:
+    image: hashicorp/consul:1.10.4
+    container_name: consul-server-3
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+    depends_on:
+      - consul-server-1
+
   postgres:
     image: library/postgres:13
     container_name: postgres
@@ -10,11 +34,37 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./postgres/:/docker-entrypoint-initdb.d/
+      - ./docker/postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
 
-  store-service:
+  prometheus:
+    image: prom/prometheus:v2.31.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/data'
+
+  grafana:
+    image: grafana/grafana:8.2.5
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
+  store:
     build: ./store-service
     image: romanowalex/store-service:v1.0
     container_name: store-service
@@ -24,8 +74,11 @@ services:
       - "8480:8480"
     depends_on:
       - postgres
+      - consul-server-1
+      - consul-server-2
+      - consul-server-3
 
-  order-service:
+  order:
     build: ./order-service
     image: romanowalex/order-service:v1.0
     container_name: order-service
@@ -35,8 +88,11 @@ services:
       - "8380:8380"
     depends_on:
       - postgres
+      - consul-server-1
+      - consul-server-2
+      - consul-server-3
 
-  warehouse-service:
+  warehouse:
     build: ./warehouse-service
     image: romanowalex/warehouse-service:v1.0
     container_name: warehouse-service
@@ -46,8 +102,11 @@ services:
       - "8280:8280"
     depends_on:
       - postgres
+      - consul-server-1
+      - consul-server-2
+      - consul-server-3
 
-  warranty-service:
+  warranty:
     build: ./warranty-service
     image: romanowalex/warranty-service:v1.0
     container_name: warranty-service
@@ -57,6 +116,11 @@ services:
       - "8180:8180"
     depends_on:
       - postgres
+      - consul-server-1
+      - consul-server-2
+      - consul-server-3
 
 volumes:
   db-data:
+  prometheus-data:
+  grafana-data:

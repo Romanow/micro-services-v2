@@ -1,0 +1,45 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'services-monitor'
+
+scrape_configs:
+  - job_name: 'Order Service'
+    metrics_path: '/manage/prometheus'
+    basic_auth:
+      username: management
+      password: 'passwd'
+    static_configs:
+      - targets: ['host.docker.internal:8380']
+
+  - job_name: 'Store Service'
+    metrics_path: '/manage/prometheus'
+    basic_auth:
+      username: management
+      password: 'passwd'
+    static_configs:
+      - targets: ['host.docker.internal:8480']
+
+  - job_name: 'Warehouse Service'
+    metrics_path: '/manage/prometheus'
+    basic_auth:
+      username: management
+      password: 'passwd'
+    static_configs:
+      - targets: ['host.docker.internal:8280']
+
+  - job_name: 'Warranty Service'
+    metrics_path: '/manage/prometheus'
+    basic_auth:
+      username: management
+      password: 'passwd'
+    static_configs:
+      - targets: ['host.docker.internal:8180']
+
+  - job_name: 'Example'
+    metrics_path: '/management/prometheus'
+    basic_auth:
+      username: management
+      password: 'passwd'
+    static_configs:
+      - targets: ['host.docker.internal:9080']

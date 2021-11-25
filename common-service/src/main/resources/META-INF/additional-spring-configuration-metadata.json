@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "name": "services",
+      "type": "ru.romanow.inst.services.common.properties.ServerUrlProperties",
+      "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "circuit.breaker.default-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "ru.romanow.inst.services.common.properties.CircuitBreakerTimeoutProperties",
+      "description": "Default timeout for circuit breaker.",
+      "defaultValue": 100
+    },
+    {
+      "name": "services.order-url",
+      "type": "java.lang.String",
+      "description": "Order url.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    },
+    {
+      "name": "services.warranty-url",
+      "type": "java.lang.String",
+      "description": "Warranty url.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    },
+    {
+      "name": "services.warehouse-url",
+      "type": "java.lang.String",
+      "description": "Warehouse url.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    }
+  ]
+}

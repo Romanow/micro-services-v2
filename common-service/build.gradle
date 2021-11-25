@@ -16,9 +16,13 @@ dependencies {
     api "org.springframework:spring-webflux"
     api "io.projectreactor.netty:reactor-netty-http"
 
+    api "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    api "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+
     api "org.postgresql:postgresql"
     api "org.flywaydb:flyway-core"
     api "io.micrometer:micrometer-registry-prometheus"
+    api "io.github.resilience4j:resilience4j-micrometer"
 
     api "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"
     api "org.springdoc:springdoc-openapi-ui:$openApiVersion"
