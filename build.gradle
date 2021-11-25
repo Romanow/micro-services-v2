@@ -5,12 +5,12 @@ plugins {
     id "org.jetbrains.kotlin.plugin.jpa" version "1.5.31" apply false
     id "org.jetbrains.kotlin.plugin.spring" version "1.5.31" apply false
     id "com.gorylenko.gradle-git-properties" version "2.3.1" apply false
-    id "org.springframework.boot" version "2.5.0" apply false
+    id "org.springframework.boot" version "2.5.6" apply false
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
 ext {
-    springBootVersion = "2.5.0"
+    springBootVersion = "2.5.6"
     kotlinVersion = "1.5.31"
     validationApiVersion = "2.0.1.Final"
     gsonVersion = "2.8.5"

@@ -12,49 +12,49 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   store-service:
     build: ./store-service
-    image: romanowalex/store-service:v1.0.1
+    image: romanowalex/store-service:v1.0
     container_name: store-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8480:8480
+      - "8480:8480"
     depends_on:
       - postgres
 
   order-service:
     build: ./order-service
-    image: romanowalex/order-service:v1.0.1
+    image: romanowalex/order-service:v1.0
     container_name: order-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8380:8380
+      - "8380:8380"
     depends_on:
       - postgres
 
   warehouse-service:
     build: ./warehouse-service
-    image: romanowalex/warehouse-service:v1.0.1
+    image: romanowalex/warehouse-service:v1.0
     container_name: warehouse-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8280:8280
+      - "8280:8280"
     depends_on:
       - postgres
 
   warranty-service:
     build: ./warranty-service
-    image: romanowalex/warranty-service:v1.0.1
+    image: romanowalex/warranty-service:v1.0
     container_name: warranty-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8180:8180
+      - "8180:8180"
     depends_on:
       - postgres
 
