@@ -24,7 +24,7 @@ services:
   consul-server-2:
     image: hashicorp/consul:1.10.4
     container_name: consul-server-2
-    hostname: consul-server-1
+    hostname: consul-server-2
     command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
     networks:
       - common
@@ -58,6 +58,10 @@ services:
       - '--storage.tsdb.path=/prometheus/data'
     networks:
       - common
+    depends_on:
+      - consul-server-bootstrap
+      - consul-server-1
+      - consul-server-2
 
   grafana:
     image: grafana/grafana:8.2.5

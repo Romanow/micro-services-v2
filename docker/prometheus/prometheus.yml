@@ -9,29 +9,11 @@ scrape_configs:
     basic_auth:
       username: management
       password: 'passwd'
-    static_configs:
-      - targets: ['order-service:8380']
-
-  - job_name: 'Store Service'
-    metrics_path: '/manage/prometheus'
-    basic_auth:
-      username: management
-      password: 'passwd'
-    static_configs:
-      - targets: ['store-service:8480']
-
-  - job_name: 'Warehouse Service'
-    metrics_path: '/manage/prometheus'
-    basic_auth:
-      username: management
-      password: 'passwd'
-    static_configs:
-      - targets: ['warehouse-service:8280']
-
-  - job_name: 'Warranty Service'
-    metrics_path: '/manage/prometheus'
-    basic_auth:
-      username: management
-      password: 'passwd'
-    static_configs:
-      - targets: ['warranty-service:8180']
+    consul_sd_configs:
+      - server: "consul-server-bootstrap:8500"
+        refresh_interval: 10s
+        services:
+          - store-service
+          - order-service
+          - warehouse-service
+          - warranty-service
