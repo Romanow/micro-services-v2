@@ -4,9 +4,9 @@ providers:
   - name: 'Resilience4j'
     type: file
     options:
-      path: /etc/grafana/provisioning/dashboards/dashboards
+      path: /etc/grafana/provisioning/dashboards/dashboards/resilience4j.json
 
   - name: 'Spring Boot Statistics'
     type: file
     options:
-      path: /etc/grafana/provisioning/dashboards/dashboards
+      path: /etc/grafana/provisioning/dashboards/dashboards/spring-boot-2-1.json

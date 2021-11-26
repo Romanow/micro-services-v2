@@ -1,6 +1,7 @@
 package ru.romanow.inst.services.common.config
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
+import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -23,7 +24,7 @@ class SecurityConfiguration(
 
     override fun configure(http: HttpSecurity) {
         // @formatter:off
-        http.requestMatcher(EndpointRequest.toAnyEndpoint())
+        http.requestMatcher(EndpointRequest.toAnyEndpoint().excluding(HealthEndpoint::class.java))
             .authorizeRequests()
             .anyRequest()
             .hasRole(actuatorSecurityProperties.role)

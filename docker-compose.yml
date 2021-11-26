@@ -1,28 +1,33 @@
 version: "3"
 services:
-  consul-server-1:
+  consul-server-bootstrap:
     image: hashicorp/consul:1.10.4
-    container_name: consul-server-1
+    container_name: consul-server-bootstrap
+    hostname: consul-server-bootstrap
     command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
     ports:
       - "8400:8400"
       - "8500:8500"
       - "8600:8600"
       - "8600:8600/udp"
+    networks:
+      - consul
+
+  consul-server-1:
+    image: hashicorp/consul:1.10.4
+    container_name: consul-server-1
+    hostname: consul-server-1
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+    networks:
+      - consul
 
   consul-server-2:
     image: hashicorp/consul:1.10.4
     container_name: consul-server-2
+    hostname: consul-server-2
     command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
-    depends_on:
-      - consul-server-1
-
-  consul-server-3:
-    image: hashicorp/consul:1.10.4
-    container_name: consul-server-3
-    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
-    depends_on:
-      - consul-server-1
+    networks:
+      - consul
 
   postgres:
     image: library/postgres:13
@@ -37,6 +42,8 @@ services:
       - ./docker/postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
+    networks:
+      - postgres
 
   prometheus:
     image: prom/prometheus:v2.31.1
@@ -49,6 +56,8 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus/data'
+    networks:
+      - monitoring
 
   grafana:
     image: grafana/grafana:8.2.5
@@ -63,64 +72,91 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+    networks:
+      - monitoring
 
   store:
     build: ./store-service
-    image: romanowalex/store-service:v1.0
+    image: romanowalex/store-service:v1.0-circuit-breaker
     container_name: store-service
+    hostname: store
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8480:8480"
     depends_on:
       - postgres
+      - consul-server-bootstrap
       - consul-server-1
       - consul-server-2
-      - consul-server-3
+    networks:
+      - consul
+      - postgres
+      - monitoring
 
   order:
     build: ./order-service
-    image: romanowalex/order-service:v1.0
+    image: romanowalex/order-service:v1.0-circuit-breaker
     container_name: order-service
+    hostname: order
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8380:8380"
     depends_on:
       - postgres
+      - consul-server-bootstrap
       - consul-server-1
       - consul-server-2
-      - consul-server-3
+    networks:
+      - consul
+      - postgres
+      - monitoring
 
   warehouse:
     build: ./warehouse-service
-    image: romanowalex/warehouse-service:v1.0
+    image: romanowalex/warehouse-service:v1.0-circuit-breaker
     container_name: warehouse-service
+    hostname: warehouse
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8280:8280"
     depends_on:
       - postgres
+      - consul-server-bootstrap
       - consul-server-1
       - consul-server-2
-      - consul-server-3
+    networks:
+      - consul
+      - postgres
+      - monitoring
 
   warranty:
     build: ./warranty-service
-    image: romanowalex/warranty-service:v1.0
+    image: romanowalex/warranty-service:v1.0-circuit-breaker
     container_name: warranty-service
+    hostname: warranty
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8180:8180"
     depends_on:
       - postgres
+      - consul-server-bootstrap
       - consul-server-1
       - consul-server-2
-      - consul-server-3
+    networks:
+      - consul
+      - postgres
+      - monitoring
 
 volumes:
   db-data:
   prometheus-data:
   grafana-data:
+
+networks:
+  consul:
+  postgres:
+  monitoring:
