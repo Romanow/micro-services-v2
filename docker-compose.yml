@@ -11,7 +11,7 @@ services:
       - "8600:8600"
       - "8600:8600/udp"
     networks:
-      - consul
+      - common
 
   consul-server-1:
     image: hashicorp/consul:1.10.4
@@ -19,15 +19,15 @@ services:
     hostname: consul-server-1
     command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
     networks:
-      - consul
+      - common
 
   consul-server-2:
     image: hashicorp/consul:1.10.4
     container_name: consul-server-2
-    hostname: consul-server-2
+    hostname: consul-server-1
     command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
     networks:
-      - consul
+      - common
 
   postgres:
     image: library/postgres:13
@@ -43,7 +43,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - common
 
   prometheus:
     image: prom/prometheus:v2.31.1
@@ -57,7 +57,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus/data'
     networks:
-      - monitoring
+      - common
 
   grafana:
     image: grafana/grafana:8.2.5
@@ -73,13 +73,12 @@ services:
     depends_on:
       - prometheus
     networks:
-      - monitoring
+      - common
 
   store:
     build: ./store-service
     image: romanowalex/store-service:v1.0-circuit-breaker
-    container_name: store-service
-    hostname: store
+    container_name: store
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
@@ -90,15 +89,12 @@ services:
       - consul-server-1
       - consul-server-2
     networks:
-      - consul
-      - postgres
-      - monitoring
+      - common
 
   order:
     build: ./order-service
     image: romanowalex/order-service:v1.0-circuit-breaker
-    container_name: order-service
-    hostname: order
+    container_name: order
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
@@ -109,15 +105,12 @@ services:
       - consul-server-1
       - consul-server-2
     networks:
-      - consul
-      - postgres
-      - monitoring
+      - common
 
   warehouse:
     build: ./warehouse-service
     image: romanowalex/warehouse-service:v1.0-circuit-breaker
-    container_name: warehouse-service
-    hostname: warehouse
+    container_name: warehouse
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
@@ -128,15 +121,12 @@ services:
       - consul-server-1
       - consul-server-2
     networks:
-      - consul
-      - postgres
-      - monitoring
+      - common
 
   warranty:
     build: ./warranty-service
     image: romanowalex/warranty-service:v1.0-circuit-breaker
-    container_name: warranty-service
-    hostname: warranty
+    container_name: warranty
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
@@ -147,9 +137,7 @@ services:
       - consul-server-1
       - consul-server-2
     networks:
-      - consul
-      - postgres
-      - monitoring
+      - common
 
 volumes:
   db-data:
@@ -157,6 +145,4 @@ volumes:
   grafana-data:
 
 networks:
-  consul:
-  postgres:
-  monitoring:
+  common:

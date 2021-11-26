@@ -11,6 +11,7 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 class WebClientConfiguration {
 
     @Bean
+    @LoadBalanced
     fun orderWebClient(properties: ServerUrlProperties): WebClient.Builder =
         WebClient.builder()
             .baseUrl("${properties.orderUrl}/api/v1/orders")
