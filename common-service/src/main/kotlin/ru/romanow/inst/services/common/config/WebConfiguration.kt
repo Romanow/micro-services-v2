@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.common.config
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -7,6 +8,8 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import javax.servlet.Filter
+
 
 @EnableWebMvc
 @Configuration
@@ -24,7 +27,7 @@ class WebConfiguration : WebMvcConfigurer {
     }
 
     @Bean
-    fun logFilter(): CommonsRequestLoggingFilter {
+    fun loggingFilter(): CommonsRequestLoggingFilter {
         val filter = CommonsRequestLoggingFilter()
         filter.setIncludeQueryString(true)
         filter.setIncludePayload(true)
@@ -32,5 +35,12 @@ class WebConfiguration : WebMvcConfigurer {
         filter.setIncludeHeaders(false)
         filter.setAfterMessagePrefix("REQUEST DATA: ")
         return filter
+    }
+
+    @Bean
+    fun loggingFilterRegistration(): FilterRegistrationBean<Filter> {
+        val registration = FilterRegistrationBean<Filter>(loggingFilter())
+        registration.addUrlPatterns("/api/*")
+        return registration
     }
 }

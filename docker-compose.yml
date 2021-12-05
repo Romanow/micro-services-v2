@@ -10,14 +10,37 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./postgres/:/docker-entrypoint-initdb.d/
+      - ./docker/postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
+
+  keycloak:
+    image: jboss/keycloak:15.0.1
+    container_name: keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_SCHEMA: keycloak
+      DB_DATABASE: services
+      DB_USER: program
+      DB_PASSWORD: test
+      KEYCLOAK_IMPORT: /tmp/realm.json
+      JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.upload_scripts=enabled"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/keycloak/services-realm.json:/tmp/realm.json
+      - ./docker/keycloak/data:/tmp/data
+    depends_on:
+      - postgres
 
   store-service:
     build: ./store-service
     image: romanowalex/store-service:v1.0
     container_name: store-service
+    restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
