@@ -6,14 +6,18 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.store.model.*
 import ru.romanow.inst.services.store.service.StoreService
 import java.util.*
+import java.util.UUID.fromString
+import java.util.UUID.randomUUID
 import javax.validation.Valid
 
 @Tag(name = "Store API")
@@ -22,7 +26,6 @@ import javax.validation.Valid
 class StoreController(
     private val storeService: StoreService
 ) {
-
     @Operation(summary = "List user orders")
     @ApiResponses(
         value = [
@@ -39,8 +42,9 @@ class StoreController(
             )
         ]
     )
-    @GetMapping("/{userUid}/orders", produces = ["application/json"])
-    fun orders(@PathVariable userUid: UUID): UserOrdersResponse {
+    @GetMapping("/orders", produces = ["application/json"])
+    fun orders(authenticationToken: JwtAuthenticationToken): UserOrdersResponse {
+        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
         return storeService.findUserOrders(userUid)
     }
 
@@ -60,8 +64,9 @@ class StoreController(
             )
         ]
     )
-    @GetMapping("/{userUid}/{orderUid}", produces = ["application/json"])
-    fun orders(@PathVariable userUid: UUID, @PathVariable orderUid: UUID): UserOrderResponse {
+    @GetMapping("/{orderUid}", produces = ["application/json"])
+    fun orders(authenticationToken: JwtAuthenticationToken, @PathVariable orderUid: UUID): UserOrderResponse {
+        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
         return storeService.findUserOrder(userUid, orderUid)
     }
 
@@ -91,8 +96,9 @@ class StoreController(
             )
         ]
     )
-    @PostMapping("/{userUid}/purchase", consumes = ["application/json"])
-    fun purchase(@PathVariable userUid: UUID, @Valid @RequestBody request: PurchaseRequest): ResponseEntity<Void> {
+    @PostMapping("/purchase", consumes = ["application/json"])
+    fun purchase(@Valid @RequestBody request: PurchaseRequest, authenticationToken: JwtAuthenticationToken): ResponseEntity<Void> {
+        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
         val orderUid: UUID = storeService.makePurchase(userUid, request)
         val uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -120,8 +126,9 @@ class StoreController(
         ]
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{userUid}/{orderUid}/refund")
-    fun refund(@PathVariable userUid: UUID, @PathVariable orderUid: UUID) {
+    @DeleteMapping("/{orderUid}/refund")
+    fun refund(@PathVariable orderUid: UUID, authenticationToken: JwtAuthenticationToken) {
+        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
         storeService.refundPurchase(userUid, orderUid)
     }
 
@@ -146,12 +153,13 @@ class StoreController(
             )
         ]
     )
-    @PostMapping("/{userUid}/{orderUid}/warranty", consumes = ["application/json"], produces = ["application/json"])
+    @PostMapping("/{orderUid}/warranty", consumes = ["application/json"], produces = ["application/json"])
     fun warranty(
-        @PathVariable userUid: UUID,
         @PathVariable orderUid: UUID,
-        @Valid @RequestBody request: WarrantyRequest
+        @Valid @RequestBody request: WarrantyRequest,
+        authenticationToken: JwtAuthenticationToken
     ): WarrantyResponse {
+        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
         return storeService.warrantyRequest(userUid, orderUid, request)
     }
 }

@@ -15,9 +15,16 @@ class OAuth2AuthorizationConfiguration : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http
             .authorizeHttpRequests {
-                it.antMatchers("/api/**", "/oauth2/**")
-                    .authenticated()
+                it.antMatchers("/api/v1/store/**").authenticated()
+                    .and()
+                    .oauth2ResourceServer { r ->
+                        r.jwt()
+                    }
             }
-            .oauth2Login {}
+            .authorizeHttpRequests {
+                it.antMatchers("/api/v1/authorization", "/oauth2/**").authenticated()
+                    .and()
+                    .oauth2Login()
+            }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "keycloak.url",
+      "type": "java.lang.String",
+      "description": "Keycloak base url."
+    },
+    {
+      "name": "keycloak.realm-name",
+      "type": "java.lang.String",
+      "description": "Keycloak Realm name."
+    }
+  ]
+}

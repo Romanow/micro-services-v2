@@ -14,6 +14,7 @@ ext {
     kotlinVersion = "1.5.31"
     validationApiVersion = "2.0.1.Final"
     gsonVersion = "2.8.5"
+    jwtVersion = "3.18.2"
     openApiVersion = "1.5.9"
     postgresContainerVersion = "1.16.0"
 }
