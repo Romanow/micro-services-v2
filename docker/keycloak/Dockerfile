@@ -6,6 +6,7 @@ ENV KEYCLOAK_USER=admin
 ENV KEYCLOAK_PASSWORD=admin
 ENV KEYCLOAK_IMPORT=/tmp/realm.json
 ENV DB_VENDOR=postgres
+ENV JAVA_OPTS="-server -Xms512m -Xmx512m"
 
 COPY ./docker-entrypoint.sh /opt/jboss/tools
 
