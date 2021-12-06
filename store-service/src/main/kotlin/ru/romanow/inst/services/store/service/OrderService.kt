@@ -9,9 +9,9 @@ import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 
 interface OrderService {
-    fun getOrderInfo(userUid: UUID, orderUid: UUID): Optional<OrderInfoResponse>
-    fun getOrderInfoByUser(userUid: UUID): Optional<OrdersInfoResponse>
-    fun makePurchase(userUid: UUID, request: PurchaseRequest): Optional<CreateOrderResponse>
+    fun getOrderInfo(userId: String, orderUid: UUID): Optional<OrderInfoResponse>
+    fun getOrderInfoByUser(userId: String): Optional<OrdersInfoResponse>
+    fun makePurchase(userId: String, request: PurchaseRequest): Optional<CreateOrderResponse>
     fun refundPurchase(orderUid: UUID)
     fun warrantyRequest(orderUid: UUID, request: WarrantyRequest): Optional<OrderWarrantyResponse>
 }

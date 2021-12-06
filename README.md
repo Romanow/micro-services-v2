@@ -82,8 +82,8 @@ GET http://localhost:8080/auth/realms/auth-realm/.well-known/openid-configuratio
 
 `Client` -> `Create` ->
 `Client ID: store-service` ->
-`Client Protocol: OpenID Connect` -> 
-`Access Type: confidential` -> 
+`Client Protocol: OpenID Connect` ->
+`Access Type: confidential` ->
 `Credentials`
 
 ## Тестирование

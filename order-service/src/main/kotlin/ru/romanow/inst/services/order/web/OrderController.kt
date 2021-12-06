@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import ru.romanow.inst.services.common.model.ErrorResponse
-import ru.romanow.inst.services.order.model.*
+import ru.romanow.inst.services.order.model.CreateOrderRequest
+import ru.romanow.inst.services.order.model.CreateOrderResponse
+import ru.romanow.inst.services.order.model.OrderInfoResponse
+import ru.romanow.inst.services.order.model.OrdersInfoResponse
 import ru.romanow.inst.services.order.service.OrderManagementService
 import ru.romanow.inst.services.order.service.OrderService
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
@@ -30,16 +33,16 @@ class OrderController(
         ApiResponse(responseCode = "200", description = "Order info"),
         ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
     ])
-    @GetMapping("/{userUid}/{orderUid}", produces = ["application/json"])
-    fun userOrder(@PathVariable userUid: UUID, @PathVariable orderUid: UUID): OrderInfoResponse {
-        return orderService.getUserOrder(userUid, orderUid)
+    @GetMapping("/{userId}/{orderUid}", produces = ["application/json"])
+    fun userOrder(@PathVariable userId: String, @PathVariable orderUid: UUID): OrderInfoResponse {
+        return orderService.getUserOrder(userId, orderUid)
     }
 
     @Operation(summary = "User orders info")
     @ApiResponse(responseCode = "200", description = "Orders info")
-    @GetMapping("/{userUid}", produces = ["application/json"])
-    fun userOrders(@PathVariable userUid: UUID): OrdersInfoResponse {
-        return orderService.getUserOrders(userUid)
+    @GetMapping("/{userId}", produces = ["application/json"])
+    fun userOrders(@PathVariable userId: String): OrdersInfoResponse {
+        return orderService.getUserOrders(userId)
     }
 
     @Operation(summary = "Create order")
@@ -49,9 +52,9 @@ class OrderController(
         ApiResponse(responseCode = "409", description = "Item not available", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
         ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
     ])
-    @PostMapping(value = ["/{userUid}"], consumes = ["application/json"], produces = ["application/json"])
-    fun makeOrder(@PathVariable userUid: UUID, @Valid @RequestBody request: CreateOrderRequest): CreateOrderResponse {
-        return orderManagementService.makeOrder(userUid, request)
+    @PostMapping(value = ["/{userId}"], consumes = ["application/json"], produces = ["application/json"])
+    fun makeOrder(@PathVariable userId: String, @Valid @RequestBody request: CreateOrderRequest): CreateOrderResponse {
+        return orderManagementService.makeOrder(userId, request)
     }
 
     @Operation(summary = "Return order")

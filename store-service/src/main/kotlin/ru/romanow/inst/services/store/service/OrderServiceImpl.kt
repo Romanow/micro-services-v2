@@ -21,10 +21,10 @@ class OrderServiceImpl(
     private val orderWebClient: WebClient
 ) : OrderService {
 
-    override fun getOrderInfo(userUid: UUID, orderUid: UUID): Optional<OrderInfoResponse> {
+    override fun getOrderInfo(userId: String, orderUid: UUID): Optional<OrderInfoResponse> {
         return orderWebClient
             .get()
-            .uri("/{userUid}/{orderUid}", userUid, orderUid)
+            .uri("/{userId}/{orderUid}", userId, orderUid)
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
@@ -32,20 +32,20 @@ class OrderServiceImpl(
             .blockOptional()
     }
 
-    override fun getOrderInfoByUser(userUid: UUID): Optional<OrdersInfoResponse> {
+    override fun getOrderInfoByUser(userId: String): Optional<OrdersInfoResponse> {
         return orderWebClient
             .get()
-            .uri("/{userUid}", userUid)
+            .uri("/{userId}", userId)
             .retrieve()
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .bodyToMono(OrdersInfoResponse::class.java)
             .blockOptional()
     }
 
-    override fun makePurchase(userUid: UUID, request: PurchaseRequest): Optional<CreateOrderResponse> {
+    override fun makePurchase(userId: String, request: PurchaseRequest): Optional<CreateOrderResponse> {
         return orderWebClient
             .post()
-            .uri("/{userUid}", userUid)
+            .uri("/{userId}", userId)
             .body(BodyInserters.fromValue(request))
             .retrieve()
             .onStatus({ it == CONFLICT }, { response -> buildEx(response) { ItemNotAvailableException(it) } })

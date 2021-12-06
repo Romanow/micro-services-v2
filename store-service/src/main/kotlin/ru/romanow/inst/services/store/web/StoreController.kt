@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
@@ -16,8 +15,6 @@ import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.store.model.*
 import ru.romanow.inst.services.store.service.StoreService
 import java.util.*
-import java.util.UUID.fromString
-import java.util.UUID.randomUUID
 import javax.validation.Valid
 
 @Tag(name = "Store API")
@@ -44,8 +41,8 @@ class StoreController(
     )
     @GetMapping("/orders", produces = ["application/json"])
     fun orders(authenticationToken: JwtAuthenticationToken): UserOrdersResponse {
-        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
-        return storeService.findUserOrders(userUid)
+        val userId = authenticationToken.token.claims["sid"] as String
+        return storeService.findUserOrders(userId)
     }
 
     @Operation(summary = "User order info")
@@ -66,8 +63,8 @@ class StoreController(
     )
     @GetMapping("/{orderUid}", produces = ["application/json"])
     fun orders(authenticationToken: JwtAuthenticationToken, @PathVariable orderUid: UUID): UserOrderResponse {
-        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
-        return storeService.findUserOrder(userUid, orderUid)
+        val userId = authenticationToken.token.claims["sid"] as String
+        return storeService.findUserOrder(userId, orderUid)
     }
 
     @Operation(summary = "Purchase item")
@@ -98,8 +95,8 @@ class StoreController(
     )
     @PostMapping("/purchase", consumes = ["application/json"])
     fun purchase(@Valid @RequestBody request: PurchaseRequest, authenticationToken: JwtAuthenticationToken): ResponseEntity<Void> {
-        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
-        val orderUid: UUID = storeService.makePurchase(userUid, request)
+        val userId = authenticationToken.token.claims["sid"] as String
+        val orderUid: UUID = storeService.makePurchase(userId, request)
         val uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{orderUid}")
@@ -128,8 +125,8 @@ class StoreController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{orderUid}/refund")
     fun refund(@PathVariable orderUid: UUID, authenticationToken: JwtAuthenticationToken) {
-        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
-        storeService.refundPurchase(userUid, orderUid)
+        val userId = authenticationToken.token.claims["sid"] as String
+        storeService.refundPurchase(userId, orderUid)
     }
 
     @Operation(summary = "Request warranty")
@@ -159,7 +156,7 @@ class StoreController(
         @Valid @RequestBody request: WarrantyRequest,
         authenticationToken: JwtAuthenticationToken
     ): WarrantyResponse {
-        val userUid = fromString(authenticationToken.token.claims["sid"] as String)
-        return storeService.warrantyRequest(userUid, orderUid, request)
+        val userId = authenticationToken.token.claims["sid"] as String
+        return storeService.warrantyRequest(userId, orderUid, request)
     }
 }

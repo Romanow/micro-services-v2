@@ -17,20 +17,20 @@ class OrderManagementServiceImpl(
 ) : OrderManagementService {
     private val logger = LoggerFactory.getLogger(OrderManagementServiceImpl::class.java)
 
-    override fun makeOrder(userUid: UUID, request: CreateOrderRequest): CreateOrderResponse {
+    override fun makeOrder(userId: String, request: CreateOrderRequest): CreateOrderResponse {
         val model = request.model
         val size = request.size
-        logger.info("Create order (model: $model, sie: $size) for user '$userUid'")
+        logger.info("Create order (model: $model, sie: $size) for user '$userId'")
 
         val orderUid = UUID.randomUUID()
         logger.info("Request to WH to take item (model: $model, size: $size) for order '$orderUid'")
         val orderItemResponse = warehouseService.takeItem(orderUid, model, size)
-            .orElseThrow { WarrantyProcessException("Can't take item from Warehouse for user '$userUid'") }
+            .orElseThrow { WarrantyProcessException("Can't take item from Warehouse for user '$userId'") }
         val orderItemUid = orderItemResponse.orderItemUid
 
-        logger.info("Request to WarrantyService to start warranty on item '$orderItemUid' for user '$userUid'")
+        logger.info("Request to WarrantyService to start warranty on item '$orderItemUid' for user '$userId'")
         warrantyService.startWarranty(orderItemUid)
-        orderService.createOrder(orderUid, userUid, orderItemUid)
+        orderService.createOrder(orderUid, userId, orderItemUid)
 
         return CreateOrderResponse(orderUid)
     }

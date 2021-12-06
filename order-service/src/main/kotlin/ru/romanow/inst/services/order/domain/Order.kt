@@ -7,9 +7,9 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "orders", indexes = [
-    Index(name = "idx_orders_user_uid", columnList = "user_uid"),
+    Index(name = "idx_orders_user_id", columnList = "user_id"),
     Index(name = "idx_orders_order_uid", columnList = "order_uid", unique = true),
-    Index(name = "idx_orders_user_uid_and_order_uid", columnList = "user_uid, order_uid")
+    Index(name = "idx_orders_user_id_and_order_uid", columnList = "user_id, order_uid")
 ])
 class Order(
 
@@ -17,8 +17,8 @@ class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column(name = "user_uid", nullable = false)
-    var userUid: UUID? = null,
+    @Column(name = "user_id", nullable = false)
+    var userId: String? = null,
 
     @Column(name = "order_uid", nullable = false, unique = true)
     var orderUid: UUID? = null,
@@ -49,6 +49,6 @@ class Order(
     }
 
     override fun toString(): String {
-        return "Order(id=$id, userUid=$userUid, orderUid=$orderUid, itemUid=$itemUid, orderDate=$orderDate, status=$status)"
+        return "Order(id=$id, userId=$userId, orderUid=$orderUid, itemUid=$itemUid, orderDate=$orderDate, status=$status)"
     }
 }
