@@ -16,6 +16,10 @@ dependencies {
     api "org.springframework:spring-webflux"
     api "io.projectreactor.netty:reactor-netty-http"
 
+    api "org.springframework.security:spring-security-oauth2-resource-server"
+    api "org.springframework.security:spring-security-oauth2-jose"
+    api "com.auth0:java-jwt:$jwtVersion"
+
     api "org.postgresql:postgresql"
     api "org.flywaydb:flyway-core"
     api "io.micrometer:micrometer-registry-prometheus"

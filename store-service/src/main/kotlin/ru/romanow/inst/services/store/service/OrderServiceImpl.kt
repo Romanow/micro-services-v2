@@ -1,6 +1,7 @@
 package ru.romanow.inst.services.store.service
 
 import org.springframework.http.HttpStatus.*
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
@@ -25,6 +26,7 @@ class OrderServiceImpl(
         return orderWebClient
             .get()
             .uri("/{userId}/{orderUid}", userId, orderUid)
+            .attributes(clientRegistrationId("keycloak"))
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })

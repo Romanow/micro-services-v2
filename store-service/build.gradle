@@ -13,9 +13,6 @@ dependencies {
     implementation project(":common-service")
 
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
-    implementation "org.springframework.security:spring-security-oauth2-resource-server"
-    implementation "org.springframework.security:spring-security-oauth2-jose"
-    implementation "com.auth0:java-jwt:$jwtVersion"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
