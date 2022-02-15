@@ -18,6 +18,8 @@ spec:
         app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: spring
     spec:
+      imagePullSecrets:
+        - name: private-registry
       containers:
         - name: {{ .Chart.Name }}-filebeat-sidecar
           image: "docker.elastic.co/beats/filebeat:{{ .Values.filebeat.version }}"
@@ -32,7 +34,7 @@ spec:
           image: "jaegertracing/jaeger-agent:{{ .Values.jaeger.version }}"
           env:
             - name: REPORTER_GRPC_HOST_PORT
-              value: jaeger-collector-service.tracing.svc.cluster.local:14250
+              value: jaeger-collector-service:14250
           ports:
             - name: jaeger
               containerPort: {{ .Values.jaeger.port }}

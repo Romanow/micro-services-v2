@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Chart.Name }}-cluster
-  namespace: {{ .Values.namespace }}
 spec:
   serviceName: {{ .Chart.Name }}-service
   replicas: 3
@@ -31,13 +30,9 @@ spec:
         - name: increase-vm-max-map
           image: busybox
           command: [ "sysctl", "-w", "vm.max_map_count=262144" ]
-          securityContext:
-            privileged: true
         - name: increase-fd-ulimit
           image: busybox
           command: [ "sh", "-c", "ulimit -n 65536" ]
-          securityContext:
-            privileged: true
       containers:
         - name: {{ .Chart.Name }}
           image: "docker.elastic.co/elasticsearch/elasticsearch:{{ .Values.version }}"

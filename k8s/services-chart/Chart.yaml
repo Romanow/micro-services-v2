@@ -5,16 +5,25 @@ version: 1.0.0
 dependencies:
   - name: postgres-chart
     version: 1.0.0
-    alias: postgres
+    alias: postgres-order
   - name: service-chart
     version: 1.0.0
     alias: order
+  - name: postgres-chart
+    version: 1.0.0
+    alias: postgres-store
   - name: service-chart
     version: 1.0.0
     alias: store
+  - name: postgres-chart
+    version: 1.0.0
+    alias: postgres-warranty
   - name: service-chart
     version: 1.0.0
     alias: warranty
+  - name: postgres-chart
+    version: 1.0.0
+    alias: postgres-warehouse
   - name: service-chart
     version: 1.0.0
     alias: warehouse

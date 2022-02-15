@@ -16,11 +16,11 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.name }}:{{ .Values.image.version }}
           env:
-            - name: POSTGRES_USER
+            - name: POSTGRESQL_USER
               value: {{ .Values.database.default.user }}
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               value: "{{ .Values.database.default.password }}"
-            - name: POSTGRES_DB
+            - name: POSTGRESQL_DATABASE
               value: {{ .Values.database.default.name }}
           ports:
             - name: postgres
@@ -28,10 +28,6 @@ spec:
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/postgresql/data
-            - name: postgres-config-map
-              mountPath: /docker-entrypoint-initdb.d/
       volumes:
         - name: db-data
-        - name: postgres-config-map
-          configMap:
-            name: {{ .Chart.Name }}-configmap
+          emptyDir: { }

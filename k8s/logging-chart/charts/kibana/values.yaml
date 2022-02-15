@@ -1,7 +1,8 @@
 version: 7.15.0
 port: 5601
+domain: apps.edu.inno.tech
 
 elasticsearch:
-  url: http://elasticsearch-service.elastic.svc.cluster.local:9200
+  url: http://elasticsearch-service:9200
   username: logging
   password: qwerty

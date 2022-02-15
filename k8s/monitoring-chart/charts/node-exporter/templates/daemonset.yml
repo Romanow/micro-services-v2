@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ .Chart.Name }}-daemonset
-  namespace: {{ .Values.global.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-daemonset
 spec:

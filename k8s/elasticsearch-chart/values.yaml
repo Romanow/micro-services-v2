@@ -1,6 +1,4 @@
 version: 7.15.0
-namespace: elastic
-
 username: logging
 password: qwerty
 

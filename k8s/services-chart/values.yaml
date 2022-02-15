@@ -1,27 +1,54 @@
+postgres-order:
+  database:
+    default:
+      name: order
+
 order:
   service:
     port: 8380
+    profile: os
     image:
-      name: romanowalex/order-service
-      version: v1.0-lecture
+      name: nexus.edu.inno.tech/order-service
+      version: v1.0-openshift
+
+
+postgres-store:
+  database:
+    default:
+      name: store
 
 store:
   service:
     port: 8480
+    profile: os
     image:
-      name: romanowalex/store-service
-      version: v1.0-lecture
+      name: nexus.edu.inno.tech/store-service
+      version: v1.0-openshift
 
-warranty:
-  service:
-    port: 8180
-    image:
-      name: romanowalex/warranty-service
-      version: v1.0-lecture
+
+postgres-warehouse:
+  database:
+    default:
+      name: warehouse
 
 warehouse:
   service:
     port: 8280
+    profile: os
     image:
-      name: romanowalex/warehouse-service
-      version: v1.0-lecture
+      name: nexus.edu.inno.tech/warehouse-service
+      version: v1.0-openshift
+
+
+postgres-warranty:
+  database:
+    default:
+      name: warranty
+
+warranty:
+  service:
+    port: 8180
+    profile: os
+    image:
+      name: nexus.edu.inno.tech/warranty-service
+      version: v1.0-openshift

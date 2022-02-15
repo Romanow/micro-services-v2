@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-query
-  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-query
 spec:
@@ -43,7 +42,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-collector
-  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-collector
 spec:

@@ -16,4 +16,4 @@ data:
         paths:
           - '/var/log/{{ .Chart.Name }}-service/*.log'
     output.logstash:
-      hosts: [ 'logstash-service.logging.svc.cluster.local:{{ .Values.filebeat.logstash.port }}' ]
+      hosts: [ 'logstash-service:{{ .Values.filebeat.logstash.port }}' ]

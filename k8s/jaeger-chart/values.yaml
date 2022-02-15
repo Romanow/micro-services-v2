@@ -1,5 +1,4 @@
-namespace: tracing
-
+domain: apps.edu.inno.tech
 jaeger:
   version: 1.22.0
   ports:
@@ -9,6 +8,6 @@ jaeger:
     query_admin: 16687
     collector_admin: 14269
   elasticsearch:
-    url: http://elasticsearch-service.elastic.svc.cluster.local:9200
+    url: http://elasticsearch-service:9200
     username: logging
     password: qwerty

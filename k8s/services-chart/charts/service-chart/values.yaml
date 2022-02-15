@@ -1,9 +1,11 @@
+domain: apps.edu.inno.tech
 service:
   port: 8080
   profile: k8s
   image:
     name:
     version:
+    private: false
   memory:
     requested: 768
     limit: 768

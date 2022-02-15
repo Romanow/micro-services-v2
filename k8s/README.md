@@ -56,6 +56,19 @@ Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
         * Condition: `Evaluate every 10s for 0, when avg() of query(A, 10s, now) is above 10`
         * Send to: `Telegram bot`, message: `Too many requests`
 
+## Деплой в OpenShift
+
+Для использования Nexus (Private Docker Registry) нужно в OS создать secret:
+
+```shell
+oc create secret docker-registry \
+  --docker-server=nexus.edu.inno.tech \
+  --docker-username=<username> \
+  --docker-password=<password> \
+  --docker-email=unused \
+  private-registry
+```
+
 ## Ссылки
 
 1. [Config Telegrambot for grafana's alerts.](https://gist.github.com/ilap/cb6d512694c3e4f2427f85e4caec8ad7)
