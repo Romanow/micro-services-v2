@@ -12,7 +12,7 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   store-service:
     build: ./store-service
@@ -21,7 +21,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8480:8480
+      - "8480:8480"
     depends_on:
       - postgres
 
@@ -32,7 +32,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8380:8380
+      - "8380:8380"
     depends_on:
       - postgres
 
@@ -43,7 +43,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8280:8280
+      - "8280:8280"
     depends_on:
       - postgres
 
@@ -54,7 +54,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - 8180:8180
+      - "8180:8180"
     depends_on:
       - postgres
 
