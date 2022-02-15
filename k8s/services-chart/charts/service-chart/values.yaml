@@ -5,7 +5,6 @@ service:
   image:
     name:
     version:
-    private: false
   memory:
     requested: 768
     limit: 768
