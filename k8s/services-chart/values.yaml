@@ -1,8 +1,3 @@
-postgres-order:
-  database:
-    default:
-      name: order
-
 order:
   service:
     port: 8380
@@ -10,12 +5,9 @@ order:
     image:
       name: nexus.edu.inno.tech/order-service
       version: v1.0-openshift
-
-
-postgres-store:
-  database:
-    default:
-      name: store
+  postgres:
+    database:
+      name: order
 
 store:
   service:
@@ -24,12 +16,9 @@ store:
     image:
       name: nexus.edu.inno.tech/store-service
       version: v1.0-openshift
-
-
-postgres-warehouse:
-  database:
-    default:
-      name: warehouse
+  postgres:
+    database:
+      name: store
 
 warehouse:
   service:
@@ -38,12 +27,9 @@ warehouse:
     image:
       name: nexus.edu.inno.tech/warehouse-service
       version: v1.0-openshift
-
-
-postgres-warranty:
-  database:
-    default:
-      name: warranty
+  postgres:
+    database:
+      name: warehouse
 
 warranty:
   service:
@@ -52,3 +38,6 @@ warranty:
     image:
       name: nexus.edu.inno.tech/warranty-service
       version: v1.0-openshift
+  postgres:
+    database:
+      name: warranty

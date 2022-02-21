@@ -17,11 +17,11 @@ spec:
           image: {{ .Values.image.name }}:{{ .Values.image.version }}
           env:
             - name: POSTGRESQL_USER
-              value: {{ .Values.database.default.user }}
+              value: {{ .Values.database.user }}
             - name: POSTGRESQL_PASSWORD
-              value: "{{ .Values.database.default.password }}"
+              value: "{{ .Values.database.password }}"
             - name: POSTGRESQL_DATABASE
-              value: {{ .Values.database.default.name }}
+              value: {{ .Values.database.name }}
           ports:
             - name: postgres
               containerPort: {{ .Values.port }}

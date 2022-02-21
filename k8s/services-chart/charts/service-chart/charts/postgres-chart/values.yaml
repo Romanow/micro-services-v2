@@ -4,7 +4,6 @@ image:
   version: latest
 
 database:
-  default:
-    name: services
-    user: program
-    password: test
+  name: services
+  user: program
+  password: test
