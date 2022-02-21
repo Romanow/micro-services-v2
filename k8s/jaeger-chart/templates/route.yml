@@ -12,6 +12,6 @@ spec:
   host: {{ .Chart.Name }}.{{ .Values.domain }}
   to:
     kind: Service
-    name: {{ .Chart.Name }}-service
+    name: {{ .Chart.Name }}-query-service
   port:
-    targetPort: {{ .Values.port }}
+    targetPort: {{ .Values.jaeger.ports.query }}

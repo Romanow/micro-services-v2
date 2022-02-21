@@ -1,0 +1,366 @@
+{
+  "info": {
+    "_postman_id": "f4e7fbec-3189-4058-a115-c7b4b5c9a7b7",
+    "name": "Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Store service",
+      "item": [
+        {
+          "name": "[store] Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c0f83dca-41f1-4e5a-a6b8-76ac4e6f3363",
+                "exec": [
+                  "pm.test(\"Health check\", function() {",
+                  "    pm.response.to.have.status(200)",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "passwd",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "management",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{storeUrl}}/manage/health",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "manage",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[store] Purchase item",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "351d3d5b-ec39-44fa-a129-1c5e27b557b6",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "03b1d327-32b2-4e70-8e1b-a02c06296af5",
+                "exec": [
+                  "pm.test(\"Purchase item\", function() {",
+                  "    pm.response.to.have.status(201)",
+                  "    var location = pm.response.headers.get(\"Location\")",
+                  "    pm.expect(location).to.not.empty;",
+                  "    var orderUid = location.split(\"/\").pop()",
+                  "    pm.environment.set(\"orderUid\", orderUid)",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"model\": \"Lego 8880\",\n    \"size\": \"L\"\n}"
+            },
+            "url": {
+              "raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/purchase",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "{{apiPath}}",
+                "store",
+                "{{mainUserUid}}",
+                "purchase"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[store] User order info",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "80a7b373-4dfd-4d68-b3cd-4cbe72aa94dc",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "a2de3fd5-4955-4221-a560-b6de068a32a1",
+                "exec": [
+                  "pm.test(\"User order info\", function() {",
+                  "    pm.response.to.have.status(200)",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    const orderUid = pm.variables.get(\"orderUid\")",
+                  "    ",
+                  "    pm.expect(response.orderUid).to.eq(orderUid)",
+                  "    pm.expect(response.date).to.not.empty",
+                  "    pm.expect(response.model).to.eq(\"Lego 8880\")",
+                  "    pm.expect(response.size).to.eq(\"L\")",
+                  "    pm.expect(response.warrantyDate).to.not.empty",
+                  "    pm.expect(response.warrantyStatus).to.eq(\"ON_WARRANTY\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "{{apiPath}}",
+                "store",
+                "{{mainUserUid}}",
+                "{{orderUid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[store] User orders",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "9a4a807f-aa2a-4e03-b6de-4486833d2e95",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "22d6af19-ea59-4120-8ef0-1a934a94f754",
+                "exec": [
+                  "pm.test(\"User orders\", function() {",
+                  "    pm.response.to.have.status(200)",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.length).to.greaterThan(0)",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/orders",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "{{apiPath}}",
+                "store",
+                "{{mainUserUid}}",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[store] Warranty request",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "b1265b3e-d89b-4ac7-bb4c-d7460e46ab4b",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "cdc8e1b4-ce31-44f2-85b1-25cc95c5d424",
+                "exec": [
+                  "pm.test(\"Warranty request\", function() {",
+                  "    pm.response.to.have.status(200)",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    const orderUid = pm.variables.get(\"orderUid\")",
+                  "    ",
+                  "    pm.expect(response.orderUid).to.eq(orderUid)",
+                  "    pm.expect(response.warrantyDate).to.not.empty",
+                  "    pm.expect(response.decision).to.eq(\"RETURN\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reason\": \"It drowned\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/warranty",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "{{apiPath}}",
+                "store",
+                "{{mainUserUid}}",
+                "{{orderUid}}",
+                "warranty"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[store] Return order",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "f3c85975-331a-47e9-8ae0-9b5456feb8ce",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "363474c7-7c9b-4696-b10a-e857789be766",
+                "exec": [
+                  "pm.test(\"Return order\", function() {",
+                  "    pm.response.to.have.status(204)",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{storeUrl}}/{{apiPath}}/store/{{mainUserUid}}/{{orderUid}}/refund",
+              "host": [
+                "{{storeUrl}}"
+              ],
+              "path": [
+                "{{apiPath}}",
+                "store",
+                "{{mainUserUid}}",
+                "{{orderUid}}",
+                "refund"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

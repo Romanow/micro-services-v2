@@ -1,0 +1,44 @@
+{
+	"id": "babf0d32-d252-4c82-af48-0c1214bc5dae",
+	"name": "services",
+	"values": [
+		{
+			"key": "storeUrl",
+			"value": "http://store.apps.edu.inno.tech",
+			"enabled": true
+		},
+		{
+			"key": "apiPath",
+			"value": "api/v1",
+			"enabled": true
+		},
+		{
+			"key": "mainUserUid",
+			"value": "6D2CB5A0-943C-4B96-9AA6-89EAC7BDFD2B",
+			"enabled": true
+		},
+		{
+			"key": "itemUid",
+			"value": "6aca78cd-2bc7-4f4e-8bab-a243392fb058",
+			"enabled": true
+		},
+		{
+			"key": "orderUid",
+			"value": "f5de0ed8-bb96-4b46-8491-f850b2ef1849",
+			"enabled": true
+		},
+		{
+			"key": "orderItemUid",
+			"value": "193e0208-3bbb-47bd-a934-70b414548290",
+			"enabled": true
+		},
+		{
+			"key": "userUid",
+			"value": "cb7fc736-71c1-4de8-8a09-045c336a1181",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2021-11-11T13:52:38.171Z",
+	"_postman_exported_using": "Postman/9.1.3"
+}

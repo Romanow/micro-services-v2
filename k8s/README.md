@@ -67,8 +67,8 @@ http_server_requests_seconds_count{application="store-service",exception="None",
 http_server_requests_seconds_sum{application="store-service",exception="None",method="GET",outcome="CLIENT_ERROR",status="401",uri="root"} 0.003124419
 http_server_requests_seconds_count{application="store-service",exception="None",method="GET",outcome="SUCCESS",status="200",uri="/manage/prometheus"} 38.0
 http_server_requests_seconds_sum{application="store-service",exception="None",method="GET",outcome="SUCCESS",status="200",uri="/manage/prometheus"} 8.092993196
-# TYPE logback_events counter
-# HELP logback_events Number of error level events that made it to the logs
+  # TYPE logback_events counter
+  # HELP logback_events Number of error level events that made it to the logs
 logback_events_total{application="store-service",level="info"} 32.0
 logback_events_total{application="store-service",level="trace"} 0.0
 logback_events_total{application="store-service",level="warn"} 1.0
@@ -77,9 +77,9 @@ logback_events_total{application="store-service",level="debug"} 78.0
 
 ...
 
-# TYPE jdbc_connections_max gauge
-# HELP jdbc_connections_max Maximum number of active connections that can be allocated at the same time.
-jdbc_connections_max{application="store-service",name="dataSource"} 10.0
+  # TYPE jdbc_connections_max gauge
+  # HELP jdbc_connections_max Maximum number of active connections that can be allocated at the same time.
+  jdbc_connections_max{application="store-service",name="dataSource"} 10.0
 # EOF
 ```
 
@@ -156,6 +156,12 @@ cd examples/postman && bash run_script.sh
 Создание индекса для логгирования: `Management` -> `Stack Management` -> `Kibana` -> `Index Pattern`
 -> `Create index pattern` -> Name: `logstash-*`, Timestamp field: `@timestamp`.
 
+Создание Dashboard: `Dashboard` -> `Create Visualization`:
+
+* Horizontal Axis: `@timestamp`;
+* Vertical Axis: Count of records;
+* Break down by: `level.keyword`.
+
 ![ELK](images/elk.png)
 
 Поиск по полям:
@@ -184,17 +190,23 @@ Jaeger – это система трассировки распределенн
 
 ![Jaeger](images/jaeger.png)
 
-## Деплой в OpenShift
+## Deploy to OpenShift
 
 Для использования Nexus (Private Docker Registry) нужно в OS создать secret:
 
 ```shell
-oc create secret docker-registry \
-  --docker-server=nexus.edu.inno.tech \
-  --docker-username=<username> \
-  --docker-password=<password> \
-  --docker-email=unused \
-  private-registry
+$ oc create secret docker-registry \
+    --docker-server=nexus.edu.inno.tech \
+    --docker-username=<username> \
+    --docker-password=<password> \
+    --docker-email=unused \
+    private-registry
+```
+
+```shell
+$ oc config set-context --current --namespace romanowalex-os
+
+$ oc adm policy add-scc-to-user privileged -z default
 ```
 
 ## Литература
