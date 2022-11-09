@@ -38,3 +38,8 @@ jobs:
           environment: postman/environment.json
           delayRequest: 100
           reporters: '[ "cli" ]'
+
+      - name: Stop containers
+        if: always()
+        continue-on-error: true
+        run: docker compose down -v
