@@ -1,0 +1,11 @@
+apiVersion: v2
+name: monitoring
+type: application
+version: 1.0.0
+dependencies:
+  - name: node-exporter
+    version: 1.0.0
+  - name: prometheus
+    version: 1.0.0
+  - name: grafana
+    version: 1.0.0

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/component: monitoring
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "grafana/grafana:{{ .Values.version }}"
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.port }}
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: {{ .Chart.Name }}-storage
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: {{ .Chart.Name }}-datasources
+              readOnly: false
+      volumes:
+        - name: {{ .Chart.Name }}-storage
+        - name: {{ .Chart.Name }}-datasources
+          configMap:
+            defaultMode: 420
+            name: {{ .Chart.Name }}-datasource-configmap

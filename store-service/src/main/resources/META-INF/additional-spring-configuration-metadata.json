@@ -1,14 +1,19 @@
 {
   "properties": [
     {
-      "name": "keycloak.url",
+      "name": "services.order-url",
       "type": "java.lang.String",
-      "description": "Keycloak base url."
+      "description": "Order url."
     },
     {
-      "name": "keycloak.realm-name",
+      "name": "services.warranty-url",
       "type": "java.lang.String",
-      "description": "Keycloak Realm name."
+      "description": "Warranty url."
+    },
+    {
+      "name": "services.warehouse-url",
+      "type": "java.lang.String",
+      "description": "Warehouse url."
     }
   ]
 }

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-collector-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-collector-service
+spec:
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}-collector
+  ports:
+    - name: grpc
+      port: {{ .Values.jaeger.ports.grpc }}
+      protocol: TCP
+      targetPort: grpc
+    - name: http
+      port: {{ .Values.jaeger.ports.http }}
+      protocol: TCP
+      targetPort: http
+    - name: admin
+      port: {{ .Values.jaeger.ports.collector_admin }}
+      targetPort: admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-query-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-query-service
+spec:
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}-query
+  ports:
+    - name: query
+      port: {{ .Values.jaeger.ports.query }}
+      protocol: TCP
+      targetPort: query
+    - name: admin
+      port: {{ .Values.jaeger.ports.collector_admin }}
+      protocol: TCP
+      targetPort: admin

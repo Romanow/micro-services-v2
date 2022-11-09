@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "{{ .Values.service.metrics.path }}"
+        prometheus.io/port: "{{ .Values.service.port }}"
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/component: spring
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-filebeat-sidecar
+          image: "docker.elastic.co/beats/filebeat:{{ .Values.filebeat.version }}"
+          volumeMounts:
+            - name: {{ .Chart.Name }}-logs
+              mountPath: "/var/log/{{ .Chart.Name }}-service/"
+            - name: {{ .Chart.Name }}-filebeat-config-volume
+              mountPath: /usr/share/filebeat/filebeat.yml
+              subPath: filebeat.yml
+
+        - name: {{ .Chart.Name }}-jaeger-agent-sidecar
+          image: "jaegertracing/jaeger-agent:{{ .Values.jaeger.version }}"
+          env:
+            - name: REPORTER_GRPC_HOST_PORT
+              value: jaeger-collector-service.tracing.svc.cluster.local:14250
+          ports:
+            - name: jaeger
+              containerPort: {{ .Values.jaeger.port }}
+              protocol: UDP
+
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: Always
+          image: {{ .Values.service.image.name }}:{{ .Values.service.image.version }}
+          resources:
+            requests:
+              memory: "{{ .Values.service.memory.requested }}Mi"
+            limits:
+              memory: "{{ .Values.service.memory.limit }}Mi"
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.service.profile }}
+          ports:
+            - name: web
+              containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: {{ .Chart.Name }}-logs
+              mountPath: "/var/log/{{ .Chart.Name }}-service/"
+      volumes:
+        - name: {{ .Chart.Name }}-logs
+        - name: {{ .Chart.Name }}-filebeat-config-volume
+          configMap:
+            name: {{ .Chart.Name }}-filebeat-configmap
+            defaultMode: 420

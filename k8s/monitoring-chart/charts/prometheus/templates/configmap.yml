@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-configmap
+data:
+  prometheus.yml: |-
+  {{- .Files.Get "config/prometheus.yml" | nindent 4 }}

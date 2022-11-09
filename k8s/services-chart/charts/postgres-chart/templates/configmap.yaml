@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+data:
+  10-create-user-and-db.sql: |
+    CREATE DATABASE {{ .Values.database.main.name }};
+    CREATE ROLE {{ .Values.database.main.user }} WITH PASSWORD '{{ .Values.database.main.password }}';
+    GRANT ALL PRIVILEGES ON DATABASE {{ .Values.database.main.name }} TO {{ .Values.database.main.user }};
+    ALTER ROLE {{ .Values.database.main.user }} WITH LOGIN;
+  20-create-schemas.sh: |
+    #!/bin/bash
+    set -e
+    export PGPASSWORD={{ .Values.database.main.password }}
+    psql -U {{ .Values.database.main.user }} -d {{ .Values.database.main.name }} <<-EOSQL
+    CREATE SCHEMA IF NOT EXISTS store;
+    CREATE SCHEMA IF NOT EXISTS orders;
+    CREATE SCHEMA IF NOT EXISTS warehouse;
+    CREATE SCHEMA IF NOT EXISTS warranty;
+    EOSQL

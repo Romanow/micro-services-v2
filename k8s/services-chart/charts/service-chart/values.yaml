@@ -1,0 +1,22 @@
+service:
+  port: 8080
+  profile: k8s
+  image:
+    name:
+    version:
+  memory:
+    requested: 768
+    limit: 768
+  metrics:
+    path: "/manage/prometheus"
+    username: management
+    password: passwd
+
+filebeat:
+  version: 7.15.0
+  logstash:
+    port: 5044
+
+jaeger:
+  version: 1.22.0
+  port: 6831

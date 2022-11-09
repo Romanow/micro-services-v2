@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-pipeline-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-pipeline-configmap
+data:
+  pipeline.conf: |-
+    input {
+      beats {
+        port => {{ .Values.port }}
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => "{{ .Values.elasticsearch.url }}"
+        user => "{{ .Values.elasticsearch.username }}"
+        password => "{{ .Values.elasticsearch.password }}"
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-config-configmap
+data:
+  logstash.yml: |-
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline

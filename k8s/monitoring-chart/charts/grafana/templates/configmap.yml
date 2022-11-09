@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-datasource-configmap
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-datasource-configmap
+data:
+  prometheus.yaml: |-
+  {{- .Files.Get "config/datasource-config.yaml" | nindent 4 }}

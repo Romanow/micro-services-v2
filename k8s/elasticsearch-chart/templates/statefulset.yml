@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Chart.Name }}-cluster
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: {{ .Chart.Name }}-service
+  replicas: 3
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/component: elasticsearch
+    spec:
+      terminationGracePeriodSeconds: 10
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: [ "sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data" ]
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: {{ .Chart.Name }}-data-volume
+              mountPath: /usr/share/elasticsearch/data
+        - name: increase-vm-max-map
+          image: busybox
+          command: [ "sysctl", "-w", "vm.max_map_count=262144" ]
+          securityContext:
+            privileged: true
+        - name: increase-fd-ulimit
+          image: busybox
+          command: [ "sh", "-c", "ulimit -n 65536" ]
+          securityContext:
+            privileged: true
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "docker.elastic.co/elasticsearch/elasticsearch:{{ .Values.version }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.ports.http }}
+            - name: communication
+              containerPort: {{ .Values.ports.communication }}
+          volumeMounts:
+            - name: {{ .Chart.Name }}-configmap-volume
+              mountPath: /usr/share/elasticsearch/config/users
+              subPath: users
+            - name: {{ .Chart.Name }}-configmap-volume
+              mountPath: /usr/share/elasticsearch/config/users_roles
+              subPath: users_roles
+            - name: {{ .Chart.Name }}-data-volume
+              mountPath: /usr/share/elasticsearch/data
+          env:
+            - name: cluster.name
+              value: k8s-logs
+            - name: node.name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: discovery.seed_hosts
+              value: "{{ .Chart.Name }}-cluster-0.{{ .Chart.Name }}-service,{{ .Chart.Name }}-cluster-1.{{ .Chart.Name }}-service,{{ .Chart.Name }}-cluster-2.{{ .Chart.Name }}-service"
+            - name: cluster.initial_master_nodes
+              value: "{{ .Chart.Name }}-cluster-0,{{ .Chart.Name }}-cluster-1,{{ .Chart.Name }}-cluster-2"
+            - name: xpack.security.enabled
+              value: "true"
+            - name: ES_JAVA_OPTS
+              value: "-Xms{{ .Values.java.memory }} -Xmx{{ .Values.java.memory }}"
+      volumes:
+        - name: {{ .Chart.Name }}-data-volume
+        - name: {{ .Chart.Name }}-configmap-volume
+          configMap:
+            name: {{ .Chart.Name }}-configmap
