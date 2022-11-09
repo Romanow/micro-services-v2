@@ -5,10 +5,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Install Java
-        uses: actions/setup-java@v1
+      - uses: docker/setup-buildx-action@v2
+
+      - uses: actions/setup-java@v1
         with:
           java-version: 11
 
@@ -24,11 +25,11 @@ jobs:
 
       - name: Run containers
         timeout-minutes: 5
-        run: |
+        run: |-
           docker compose up -d
           ./scripts/wait-script.sh
         env:
-          - WAIT_PORTS=8080,8070,8060,8050
+          - WAIT_PORTS=8180,8280,8380,8180
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
