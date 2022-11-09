@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-service:5432/warehouse
+    username: program
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+services:
+  warranty-url: http://warranty-service:8180
+
+opentracing:
+  jaeger:
+    enabled: true

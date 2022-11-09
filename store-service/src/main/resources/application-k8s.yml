@@ -1,0 +1,8 @@
+services:
+  warranty-url: http://warranty-service:8180
+  warehouse-url: http://warehouse-service:8280
+  order-url: http://order-service:8380
+
+opentracing:
+  jaeger:
+    enabled: true

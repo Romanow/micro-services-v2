@@ -12,8 +12,6 @@ dependencies {
     implementation project(":warehouse-api")
     implementation project(":common-service")
 
-    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
-
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"

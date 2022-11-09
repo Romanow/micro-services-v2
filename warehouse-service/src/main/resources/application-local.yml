@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/warehouse
+    username: program
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+services:
+  warranty-url: http://localhost:8180

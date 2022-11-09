@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure.include: info,health,loggers,prometheus
+  metrics.tags.application: ${spring.application.name}
+  health.diskspace.enabled: false
+  endpoint.health.show-details: always
+  info.git.mode: simple
+  credentials:
+    user: management
+    passwd: passwd
+    role: MANAGEMENT
+
+springdoc:
+  paths-to-match: /api/v1/**
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    path: /api-docs
+
+opentracing:
+  jaeger:
+    enable-b3-propagation: true
+    log-spans: false
+    udp-sender.host: localhost
+    udp-sender.port: 6831
+    enabled: false
+
+logging:
+  level:
+    org.zalando.logbook: TRACE

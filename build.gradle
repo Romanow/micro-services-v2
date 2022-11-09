@@ -15,10 +15,11 @@ ext {
     validationApiVersion = "2.0.1.Final"
     tracingVersion = "3.3.1"
     gsonVersion = "2.8.5"
-    jwtVersion = "3.18.2"
+    jwtVersion = "4.2.1"
     openApiVersion = "1.6.12"
+    logbookVersion = "2.14.0"
     logstashEncoderVersion = "6.6"
-    postgresContainerVersion = "1.16.0"
+    postgresContainerVersion = "1.17.5"
 }
 
 subprojects { ->

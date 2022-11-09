@@ -1,0 +1,14 @@
+server:
+  port: 8380
+
+spring:
+  profiles:
+    active: local
+    include: common
+  application.name: order-service
+  main.banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://romanowalex.eu.auth0.com/

@@ -4,6 +4,11 @@
       "name": "services",
       "type": "ru.romanow.inst.services.common.properties.ServerUrlProperties",
       "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    },
+    {
+      "name": "management.credentials",
+      "type": "ru.romanow.inst.services.common.properties.ActuatorSecurityProperties",
+      "sourceType": "ru.romanow.inst.services.common.properties.ActuatorSecurityProperties"
     }
   ],
   "properties": [
@@ -24,6 +29,24 @@
       "type": "java.lang.String",
       "description": "Warehouse url.",
       "sourceType": "ru.romanow.inst.services.common.properties.ServerUrlProperties"
+    },
+    {
+      "name": "management.credentials.user",
+      "type": "java.lang.String",
+      "description": "User for management endpoints.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ActuatorSecurityProperties"
+    },
+    {
+      "name": "management.credentials.passwd",
+      "type": "java.lang.String",
+      "description": "Password for management endpoints.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ActuatorSecurityProperties"
+    },
+    {
+      "name": "management.credentials.role",
+      "type": "java.lang.String",
+      "description": "Role for management endpoints.",
+      "sourceType": "ru.romanow.inst.services.common.properties.ActuatorSecurityProperties"
     }
   ]
 }

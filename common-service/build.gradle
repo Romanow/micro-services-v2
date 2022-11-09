@@ -25,6 +25,7 @@ dependencies {
     api "org.postgresql:postgresql"
     api "org.flywaydb:flyway-core"
     api "io.micrometer:micrometer-registry-prometheus"
+    api "org.zalando:logbook-core:$logbookVersion"
 
     api "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"
     api "org.springdoc:springdoc-openapi-ui:$openApiVersion"

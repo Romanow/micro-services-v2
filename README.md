@@ -19,56 +19,11 @@ graph TD
   C[Warehouse Service] --> D[Warranty Service]
 ```
 
-## Общая конфигурация
-
-Все сервисы имеют health-чеки:
-
-```shell
-curl http://localhost:8480/manage/health --user management:passwd | jq
-{
-  "status": "UP",
-  "components": {
-    "db": {
-      "status": "UP",
-      "details": {
-        "database": "PostgreSQL",
-        "validationQuery": "isValid()"
-      }
-    },
-    "ping": {
-      "status": "UP"
-    }
-  }
-}
-```
-
-Для каждого модуля отдается OpenAPI спецификация в формате json, для просмотра можно использовать Swagger UI
-
-```http request
-http://{{baseUrl}}/swagger-ui.html
-```
-
 ## Сборка и запуск
 
 ```shell
-# установить gradle wrapper
-$ ./gradlew wrapper
-
-# сборка проектов
 $ ./gradlew clean build
-```
 
-Запуск проектов локально, PostgreSQL в контейнере:
-
-```shell
-$ docker compose up -d postgres
-
-$ ./gradlew store-service:bootRun
-```
-
-Запуск проектов через Docker Compose:
-
-```shell
 $ docker compose build
 
 $ dcoker compose up -d
@@ -76,15 +31,48 @@ $ dcoker compose up -d
 
 ## Авторизация
 
-```http request
-GET http://localhost:8080/auth/realms/auth-realm/.well-known/openid-configuration
+### Настройка Auth0
+
+1. Регистрируемся на [Auth0](https://auth0.com).
+2. Создаем приложение: `Applications` -> `Create Application`: `Native`, заходим в созданное приложение и
+   копируем `Client ID` и `Client Secret`.
+3. Переходим в `Advanced Settings` -> `Grant Types`: только `Password` (Resource Owner Password Flow).
+4. Переходим в `API` -> `Create API`:
+    * Name: `Cinema Aggregator Service`;
+    * Identifier: `http://store-service.romanow-alex.ru`;
+    * Signing Algorithm: RS256.
+5. Настраиваем хранилище паролей: `Settings` -> `Tenant Settings` -> `API Authorization Settings`:
+    * Default Audience: `http://store-service.romanow-alex.ru`;
+    * Default Directory: `Username-Password-Authentication`.
+6. Создаем тестового пользователя: `User Management` -> `Users` -> `Create User`:
+    * Email: `ronin@romanow-alex.ru`;
+    * Password: `Qwerty123`;
+    * Connection: `Username-Password-Authentication`.
+
+После настройки у вас должен успешно выполняться запрос на проверку получение токена (подставить свои настройки):
+
+```shell
+curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=password' \
+  --data-urlencode 'username=ronin@romanow-alex.ru' \
+  --data-urlencode 'password=Qwerty123' \
+  --data-urlencode 'scope=openid' \
+  --data-urlencode 'client_id=<Client ID>' \
+  --data-urlencode 'client_secret=<Client Secret>'
 ```
 
-`Client` -> `Create` ->
-`Client ID: store-service` ->
-`Client Protocol: OpenID Connect` ->
-`Access Type: confidential` ->
-`Credentials`
+В ответ получаем токен:
+
+```json
+{
+  "access_token": "...",
+  "id_token": "...",
+  "scope": "openid profile email ...",
+  "expires_in": 86400,
+  "token_type": "Bearer"
+}
+```
 
 ## Тестирование
 

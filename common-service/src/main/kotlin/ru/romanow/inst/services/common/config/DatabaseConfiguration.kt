@@ -12,6 +12,7 @@ import javax.sql.DataSource
 @ConditionalOnBean(DataSource::class)
 @EnableJpaAuditing(dateTimeProviderRef = "dateTimeProvider")
 class DatabaseConfiguration {
+
     @Bean
     fun dateTimeProvider(): DateTimeProvider {
         return CurrentDateTimeProvider.INSTANCE

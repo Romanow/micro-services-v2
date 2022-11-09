@@ -5,7 +5,7 @@
 
     <springProperty scope="context" name="APPLICATION_NAME" source="spring.application.name"/>
 
-    <springProfile name="!local">
+    <springProfile name="k8s">
         <appender name="LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/var/log/${APPLICATION_NAME}/application.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
