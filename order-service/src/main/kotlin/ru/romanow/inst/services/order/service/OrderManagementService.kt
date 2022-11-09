@@ -7,7 +7,7 @@ import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import java.util.*
 
 interface OrderManagementService {
-    fun makeOrder(userUid: UUID, request: CreateOrderRequest): CreateOrderResponse
+    fun makeOrder(userId: String, request: CreateOrderRequest): CreateOrderResponse
     fun refundOrder(orderUid: UUID)
     fun useWarranty(orderUid: UUID, request: OrderWarrantyRequest): OrderWarrantyResponse
 }

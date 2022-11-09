@@ -74,6 +74,18 @@ $ docker compose build
 $ dcoker compose up -d
 ```
 
+## Авторизация
+
+```http request
+GET http://localhost:8080/auth/realms/auth-realm/.well-known/openid-configuration
+```
+
+`Client` -> `Create` ->
+`Client ID: store-service` ->
+`Client Protocol: OpenID Connect` ->
+`Access Type: confidential` ->
+`Credentials`
+
 ## Тестирование
 
 Для проверки работоспособности системы используются скрипты Postman. В папке [postman](postman)

@@ -26,6 +26,6 @@ CREATE TABLE orders
     order_uid  uuid         NOT NULL
         CONSTRAINT idx_orders_order_uid UNIQUE,
     status     VARCHAR(255) NOT NULL,
-    user_uid   uuid         NOT NULL
+    user_id    VARCHAR(80)  NOT NULL
 );
 ```

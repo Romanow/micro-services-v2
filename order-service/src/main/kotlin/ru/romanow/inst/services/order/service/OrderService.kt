@@ -7,9 +7,9 @@ import java.util.*
 
 interface OrderService {
     fun getOrderByUid(orderUid: UUID): Order
-    fun getUserOrder(userUid: UUID, orderUid: UUID): OrderInfoResponse
-    fun getUserOrders(userUid: UUID): OrdersInfoResponse
-    fun createOrder(orderUid: UUID, userUid: UUID, itemUid: UUID)
+    fun getUserOrder(userId: String, orderUid: UUID): OrderInfoResponse
+    fun getUserOrders(userId: String): OrdersInfoResponse
+    fun createOrder(orderUid: UUID, userId: String, itemUid: UUID)
     fun cancelOrder(orderUid: UUID)
     fun checkOrder(orderUid: UUID): Boolean
 }

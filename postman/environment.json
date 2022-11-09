@@ -28,11 +28,6 @@
 			"enabled": true
 		},
 		{
-			"key": "mainUserUid",
-			"value": "6D2CB5A0-943C-4B96-9AA6-89EAC7BDFD2B",
-			"enabled": true
-		},
-		{
 			"key": "itemUid",
 			"value": "752d8aa1-1b1f-4c3c-8a05-ff02e08de399",
 			"enabled": true
@@ -45,11 +40,6 @@
 		{
 			"key": "orderItemUid",
 			"value": "3fdfe916-fc69-49df-a1d0-9762925bc2cf",
-			"enabled": true
-		},
-		{
-			"key": "userUid",
-			"value": "b39c3fbb-0f0a-4635-8957-86646721cb7b",
 			"enabled": true
 		}
 	],

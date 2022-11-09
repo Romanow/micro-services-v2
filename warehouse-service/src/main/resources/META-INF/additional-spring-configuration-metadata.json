@@ -1,9 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "services.warranty-url",
-      "type": "java.lang.String",
-      "description": "Warranty url."
-    }
-  ]
-}

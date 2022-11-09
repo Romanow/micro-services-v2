@@ -28,24 +28,24 @@ class OrderServiceImpl(
             .orElseThrow { EntityNotFoundException("Order '$orderUid' not found") }
 
     @Transactional(readOnly = true)
-    override fun getUserOrder(userUid: UUID, orderUid: UUID): OrderInfoResponse =
+    override fun getUserOrder(userId: String, orderUid: UUID): OrderInfoResponse =
         orderRepository
-            .findByUserUidAndOrderUid(userUid, orderUid)
+            .findByUserIdAndOrderUid(userId, orderUid)
             .map { buildOrderInfo(it) }
-            .orElseThrow { EntityNotFoundException("Not found order '$orderUid' for user '$userUid'") }
+            .orElseThrow { EntityNotFoundException("Not found order '$orderUid' for user '$userId'") }
 
     @Transactional(readOnly = true)
-    override fun getUserOrders(userUid: UUID): OrdersInfoResponse =
+    override fun getUserOrders(userId: String): OrdersInfoResponse =
         orderRepository
-            .findByUserUid(userUid)
+            .findByUserId(userId)
             .stream()
             .map { buildOrderInfo(it) }
             .collect(toCollection { OrdersInfoResponse() })
 
     @Transactional
-    override fun createOrder(orderUid: UUID, userUid: UUID, itemUid: UUID) {
+    override fun createOrder(orderUid: UUID, userId: String, itemUid: UUID) {
         val order = Order(
-            userUid = userUid,
+            userId = userId,
             orderUid = orderUid,
             orderDate = now(),
             status = PaymentStatus.PAID,
@@ -53,7 +53,7 @@ class OrderServiceImpl(
         )
 
         orderRepository.save(order)
-        logger.debug("Create order '$orderUid' for user '$userUid' and item '$itemUid'")
+        logger.debug("Create order '$orderUid' for user '$userId' and item '$itemUid'")
     }
 
     @Transactional

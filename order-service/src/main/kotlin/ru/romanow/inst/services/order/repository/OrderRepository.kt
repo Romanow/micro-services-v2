@@ -10,9 +10,9 @@ import java.util.*
 interface OrderRepository : JpaRepository<Order, Int> {
     fun findByOrderUid(orderUid: UUID): Optional<Order>
 
-    fun findByUserUidAndOrderUid(userUid: UUID, orderUid: UUID): Optional<Order>
+    fun findByUserIdAndOrderUid(userId: String, orderUid: UUID): Optional<Order>
 
-    fun findByUserUid(userUid: UUID): List<Order>
+    fun findByUserId(userId: String): List<Order>
 
     @Modifying
     @Query("delete from Order p where p.orderUid = :orderUid")
