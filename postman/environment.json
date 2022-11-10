@@ -38,6 +38,11 @@
 			"enabled": true
 		},
 		{
+			"key": "userUid",
+			"value": "636c12c8fbc9a92736a6557f",
+			"enabled": true
+		},
+		{
 			"key": "username",
 			"value": "ronin@romanow-alex.ru",
 			"enabled": true
