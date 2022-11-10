@@ -17,9 +17,7 @@ import ru.romanow.inst.services.common.properties.ActuatorSecurityProperties
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration(
-    private val properties: ActuatorSecurityProperties,
-) {
+class SecurityConfiguration {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -39,7 +37,7 @@ class SecurityConfiguration(
     }
 
     @Bean
-    fun managementSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         // @formatter:off
         http.requestMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
                 .authorizeRequests().anyRequest().hasRole(properties.role)
@@ -55,10 +53,10 @@ class SecurityConfiguration(
     }
 
     @Bean
-    fun users(passwordEncoder: PasswordEncoder): UserDetailsService {
+    fun users(properties: ActuatorSecurityProperties): UserDetailsService {
         val user = User.builder()
             .username(properties.user)
-            .password(passwordEncoder.encode(properties.passwd))
+            .password(passwordEncoder().encode(properties.passwd))
             .roles(properties.role)
             .build()
         return InMemoryUserDetailsManager(user)

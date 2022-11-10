@@ -1,25 +1,33 @@
 package ru.romanow.inst.services.store.config
 
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
+import org.springframework.security.core.context.SecurityContextHolder.getContext
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
+import org.springframework.security.oauth2.server.resource.web.reactive.function.client.ServletBearerExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
+
 
 @Configuration
 class WebClientConfiguration {
 
     @Bean
-    fun orderWebClient(properties: ServerUrlProperties): WebClient =
-        WebClient.builder()
+    fun orderWebClient(properties: ServerUrlProperties): WebClient {
+        return WebClient.builder()
             .baseUrl("${properties.orderUrl}/api/v1/orders")
+            .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
+    }
 
     @Bean
     fun warehouseWebClient(properties: ServerUrlProperties): WebClient =
         WebClient.builder()
             .baseUrl("${properties.warehouseUrl}/api/v1/warehouse")
+            .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
 
@@ -27,6 +35,7 @@ class WebClientConfiguration {
     fun warrantyWebClient(properties: ServerUrlProperties): WebClient =
         WebClient.builder()
             .baseUrl("${properties.warrantyUrl}/api/v1/warranty")
+            .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
 }

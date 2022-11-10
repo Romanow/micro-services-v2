@@ -20,6 +20,7 @@ dependencies {
 
     api "org.springframework.security:spring-security-oauth2-resource-server"
     api "org.springframework.security:spring-security-oauth2-jose"
+
     api "com.auth0:java-jwt:$jwtVersion"
 
     api "org.postgresql:postgresql"
