@@ -1,39 +1,23 @@
 # Deploy microservices to k8s
 
-Бдуем использовать managed kubernetes on DigitalOcean. Развертывание с
-помощью [terraform](https://github.com/Romanow/ansible-kubernetes):
-
 ```shell
-# Устанавливаем Elasticsearch (нужен для Jaeger и ELK)
-helm install elasticsearch elasticsearch-chart/
+$ helm install elasticsearch elasticsearch-chart/
 
-# Устанавливаем монитоинг Prometheus, Grafana и NodeExporter
-helm install monitoring monitoring-chart/
+$ helm install monitoring monitoring-chart/
 
-# Устанавливаем ELK stack (ElasticSearch установлен выше)
-helm install logging logging-chart/
+$ helm install logging logging-chart/
 
-# Устанавливаем Jaeger
-helm install logging logging-chart/
+$ helm install logging logging-chart/
 
-# Устанавливаем базу данных и сервисы
-helm install services services-chart/
+$ helm install postgres postgres-chart/
+
+$ helm install services services-chart/
 ```
 
 Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
 
 * Node Exporter – 1860
 * Spring Boot – 10280
-
-Адреса сервисов:
-
-* Store Service: https://store.romanow-alex.ru
-* Order Service: https://order.romanow-alex.ru
-* Warehouse Service: https://warehouse.romanow-alex.ru
-* Warranty Service: https://warranty.romanow-alex.ru
-* Prometheus: https://prometheus.romanow-alex.ru
-* Grafana: https://grafana.romanow-alex.ru
-* Jaeger: https://jaeger.romanow-alex.ru
 
 ## Grafana alerting
 
@@ -44,7 +28,7 @@ Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
   name: k8s_monitoring
   id: k8s_monitoring_bot
   ```
-* Создать канал K8S Monitoring, добавить @k8s_monitoring_bot как администратора. Отправить хотя бы одно сообщение в
+* Создать канал K8S Monitoring, добавить `@k8s_monitoring_bot` как администратора. Отправить хотя бы одно сообщение в
   группу.
 * После этого через Telegram API получить chart ID: `https://api.telegram.org/bot<token>/getUpdates`.
 * `Grafana` -> `Alerting` -> `Notification Channels` -> `Telegram Bot`.
@@ -58,4 +42,4 @@ Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
 
 ## Ссылки
 
-1. [Config Telegrambot for grafana's alerts.](https://gist.github.com/ilap/cb6d512694c3e4f2427f85e4caec8ad7)
+1. [Config Telegram bot for Grafana alerts.](https://gist.github.com/ilap/cb6d512694c3e4f2427f85e4caec8ad7)

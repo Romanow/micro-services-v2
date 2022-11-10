@@ -6,7 +6,10 @@ jaeger:
     grpc: 14250
     http: 14268
     query: 16686
+    agent_thrift_compact: 6831
+    agent_thrift_binary: 6832
     query_admin: 16687
+    agent_admin: 14271
     collector_admin: 14269
   elasticsearch:
     url: http://elasticsearch-service.elastic.svc.cluster.local:9200

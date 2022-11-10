@@ -37,6 +37,29 @@ spec:
       protocol: TCP
       targetPort: query
     - name: admin
-      port: {{ .Values.jaeger.ports.collector_admin }}
+      port: {{ .Values.jaeger.ports.query_admin }}
       protocol: TCP
+      targetPort: admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-agent-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-agent-service
+spec:
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}-agent
+  ports:
+    - name: compact-thrift
+      port: {{ .Values.jaeger.ports.agent_thrift_compact }}
+      targetPort: compact-thrift
+      protocol: UDP
+    - name: binary-thrift
+      port: {{ .Values.jaeger.ports.agent_thrift_binary }}
+      targetPort: binary
+      protocol: UDP
+    - name: admin
+      port: {{ .Values.jaeger.ports.agent_admin }}
       targetPort: admin

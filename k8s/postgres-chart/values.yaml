@@ -1,0 +1,21 @@
+port: 5432
+image:
+  name: postgres
+  version: 13
+
+default_database:
+  name: postgres
+  user: postgres
+  password: postgres
+
+users:
+  - name: program
+    password: test
+
+datases:
+  - name: orders
+    user: program
+  - name: warehouse
+    user: program
+  - name: warranty
+    user: program

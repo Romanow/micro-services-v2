@@ -16,7 +16,3 @@ filebeat:
   version: 7.15.0
   logstash:
     port: 5044
-
-jaeger:
-  version: 1.22.0
-  port: 6831

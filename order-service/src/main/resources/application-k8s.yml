@@ -12,3 +12,6 @@ services:
 opentracing:
   jaeger:
     enabled: true
+    udp-sender:
+      host: jaeger-agent-service.tracing.svc.cluster.local
+      port: 6831

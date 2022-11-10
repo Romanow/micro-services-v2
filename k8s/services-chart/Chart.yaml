@@ -3,9 +3,6 @@ name: services-chart
 type: application
 version: 1.0.0
 dependencies:
-  - name: postgres-chart
-    version: 1.0.0
-    alias: postgres
   - name: service-chart
     version: 1.0.0
     alias: order
