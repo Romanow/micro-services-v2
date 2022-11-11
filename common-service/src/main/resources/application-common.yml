@@ -7,7 +7,7 @@ management:
   endpoints:
     web:
       base-path: /manage
-      exposure.include: info,health,loggers,prometheus
+      exposure.include: info,health,loggers,prometheus,liveness,readiness
   metrics.tags.application: ${spring.application.name}
   health.diskspace.enabled: false
   endpoint.health.show-details: always
@@ -16,6 +16,9 @@ management:
     user: management
     passwd: passwd
     role: MANAGEMENT
+  health:
+    readinessstate.enabled: true
+    livenessstate.enabled: true
 
 springdoc:
   paths-to-match: /api/v1/**

@@ -4,9 +4,13 @@ service:
   image:
     name:
     version:
-  memory:
-    requested: 768
-    limit: 768
+  resources:
+    requests:
+      cpu: 100m
+      memory: 768Mi
+    limits:
+      cpu: 100m
+      memory: 1024Mi
   metrics:
     path: "/manage/prometheus"
     username: management
@@ -16,3 +20,10 @@ filebeat:
   version: 7.15.0
   logstash:
     port: 5044
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 50m
+      memory: 128Mi

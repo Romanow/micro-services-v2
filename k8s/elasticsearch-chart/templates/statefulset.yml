@@ -3,20 +3,29 @@ kind: StatefulSet
 metadata:
   name: {{ .Chart.Name }}-cluster
   namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-cluster
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: elasticsearch
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   serviceName: {{ .Chart.Name }}-service
   replicas: 3
   podManagementPolicy: Parallel
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Chart.Name }}
+      app: {{ .Chart.Name }}
   template:
     metadata:
       name: {{ .Chart.Name }}
       labels:
+        app: {{ .Chart.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
-        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: elasticsearch
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       terminationGracePeriodSeconds: 10
       initContainers:
@@ -28,16 +37,19 @@ spec:
           volumeMounts:
             - name: {{ .Chart.Name }}-data-volume
               mountPath: /usr/share/elasticsearch/data
+
         - name: increase-vm-max-map
           image: busybox
           command: [ "sysctl", "-w", "vm.max_map_count=262144" ]
           securityContext:
             privileged: true
+
         - name: increase-fd-ulimit
           image: busybox
           command: [ "sh", "-c", "ulimit -n 65536" ]
           securityContext:
             privileged: true
+
       containers:
         - name: {{ .Chart.Name }}
           image: "docker.elastic.co/elasticsearch/elasticsearch:{{ .Values.version }}"
@@ -46,6 +58,13 @@ spec:
               containerPort: {{ .Values.ports.http }}
             - name: communication
               containerPort: {{ .Values.ports.communication }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
           volumeMounts:
             - name: {{ .Chart.Name }}-configmap-volume
               mountPath: /usr/share/elasticsearch/config/users
@@ -68,8 +87,6 @@ spec:
               value: "{{ .Chart.Name }}-cluster-0,{{ .Chart.Name }}-cluster-1,{{ .Chart.Name }}-cluster-2"
             - name: xpack.security.enabled
               value: "true"
-            - name: ES_JAVA_OPTS
-              value: "-Xms{{ .Values.java.memory }} -Xmx{{ .Values.java.memory }}"
       volumes:
         - name: {{ .Chart.Name }}-data-volume
         - name: {{ .Chart.Name }}-configmap-volume

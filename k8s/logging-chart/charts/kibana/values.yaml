@@ -5,3 +5,11 @@ elasticsearch:
   url: http://elasticsearch-service.elastic.svc.cluster.local:9200
   username: logging
   password: qwerty
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 768Mi
+  limits:
+    cpu: 200m
+    memory: 1024Mi

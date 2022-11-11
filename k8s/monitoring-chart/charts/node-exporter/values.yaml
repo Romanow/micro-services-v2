@@ -1,2 +1,10 @@
 version: v1.2.2
 port: 9100
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 100m
+    memory: 512Mi

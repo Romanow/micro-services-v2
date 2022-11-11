@@ -2,6 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-deployment
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-deployment
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   replicas: 1
   selector:
@@ -11,6 +17,11 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}

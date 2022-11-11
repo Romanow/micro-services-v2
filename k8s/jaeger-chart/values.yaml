@@ -2,15 +2,20 @@ namespace: tracing
 
 jaeger:
   version: 1.22.0
-  ports:
-    grpc: 14250
-    http: 14268
-    query: 16686
-    agent_thrift_compact: 6831
-    agent_thrift_binary: 6832
-    query_admin: 16687
-    agent_admin: 14271
-    collector_admin: 14269
+  collector:
+    ports:
+      grpc: 14250
+      http: 14268
+      admin: 14269
+  query:
+    ports:
+      query: 16686
+      admin: 16687
+  agent:
+    ports:
+      thrift_compact: 6831
+      thrift_binary: 6832
+      admin: 14271
   elasticsearch:
     url: http://elasticsearch-service.elastic.svc.cluster.local:9200
     username: logging

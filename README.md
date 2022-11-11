@@ -29,9 +29,7 @@ $ docker compose build
 $ dcoker compose up -d
 ```
 
-## Авторизация
-
-### Настройка Auth0
+## Настройка Auth0
 
 1. Регистрируемся на [Auth0](https://auth0.com).
 2. Создаем приложение: `Applications` -> `Create Application`: `Native`, заходим в созданное приложение и
@@ -86,3 +84,15 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 * сборка;
 * запуск в docker compose;
 * прогон скриптов postman через newman.
+
+## TODO
+
+1. Add labels: app=<name>.
+2. Resources limits, requests.
+3. Health Checks.
+
+
+1. Terragrunt.
+2. [10 антипаттернов деплоя в Kubernetes: распространенные практики, для которых есть другие решения](https://habr.com/ru/company/mailru/blog/529152/).
+3. Release history with `helm install`.
+4. [How do you rollback deployments in Kubernetes?](https://learnk8s.io/kubernetes-rollbacks)

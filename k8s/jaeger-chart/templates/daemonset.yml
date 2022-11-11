@@ -1,37 +1,43 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-agent
-    app.kubernetes.io/component: tracing
   name: {{ .Chart.Name }}-agent-daemonset
   namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-agent-daemonset
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: tracing
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/component: {{ .Chart.Name }}-agent
+      app: {{ .Chart.Name }}-agent
   template:
     metadata:
       labels:
+        app: {{ .Chart.Name }}-agent
         app.kubernetes.io/name: {{ .Chart.Name }}-agent
         app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: tracing
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}-agent
           image: "jaegertracing/jaeger-agent:{{ .Values.jaeger.version }}"
           env:
             - name: REPORTER_GRPC_HOST_PORT
-              value: jaeger-collector-service.tracing.svc.cluster.local:14250
+              value: "jaeger-collector-service.tracing.svc.cluster.local:{{ .Values.jaeger.collector.ports.grpc }}"
           ports:
             - name: compact-thrift
-              containerPort: 6831
+              containerPort: {{ .Values.jaeger.agent.ports.thrift_compact }}
               protocol: UDP
             - name: binary-trift
-              containerPort: 6832
+              containerPort: {{ .Values.jaeger.agent.ports.thrift_binary }}
               protocol: UDP
             - name: admin
-              containerPort: 14271
+              containerPort: {{ .Values.jaeger.agent.ports.admin }}
               protocol: TCP
 
       restartPolicy: OnFailure

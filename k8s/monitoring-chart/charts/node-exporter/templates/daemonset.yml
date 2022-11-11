@@ -5,27 +5,41 @@ metadata:
   namespace: {{ .Values.global.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-daemonset
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: monitoring
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Chart.Name }}
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
+        app: {{ .Chart.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
-        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: monitoring
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
-        - args:
+        - name: {{ .Chart.Name }}
+          image: "prom/node-exporter:{{ .Values.version }}"
+          args:
             - --path.sysfs=/host/sys
             - --path.rootfs=/host/root
             - --no-collector.wifi
             - --no-collector.hwmon
             - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
             - --collector.netclass.ignored-devices=^(veth.*)$
-          name: {{ .Chart.Name }}
-          image: "prom/node-exporter:{{ .Values.version }}"
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
           ports:
             - containerPort: {{ .Values.port }}
               protocol: TCP

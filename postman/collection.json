@@ -10,91 +10,6 @@
 			"name": "Store service",
 			"item": [
 				{
-					"name": "[auth0] Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Health check\", function() {",
-									"    pm.response.to.have.status(200)",
-									"",
-									"    const response = pm.response.json();",
-									"    pm.expect(response.access_token).to.not.empty",
-									"    pm.expect(response.token_type).to.be.eq(\"Bearer\")",
-									"",
-									"    pm.environment.set(\"token\", response.access_token)",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "scope",
-									"value": "openid",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "{{username}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{clientId}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{clientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "https://romanowalex.eu.auth0.com/oauth/token",
-							"protocol": "https",
-							"host": [
-								"romanowalex",
-								"eu",
-								"auth0",
-								"com"
-							],
-							"path": [
-								"oauth",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "[store] Health Check",
 					"event": [
 						{
@@ -534,96 +449,51 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const token = pm.environment.get(\"token\")",
+							"if (_.isEmpty(token)) {",
+							"    pm.sendRequest({",
+							"        url: 'https://romanowalex.eu.auth0.com/oauth/token',",
+							"        method: 'POST',",
+							"        header: 'Content-Type: application/x-www-form-urlencoded',",
+							"         body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            { key: \"grant_type\", value: \"password\" },",
+							"            { key: \"scope\", value: \"openid\" },",
+							"            { key: \"username\", value: pm.environment.get(\"username\") },",
+							"            { key: \"password\", value: pm.environment.get(\"password\") },",
+							"            { key: \"client_id\", value: pm.environment.get(\"clientId\") },",
+							"            { key: \"client_secret\", value: pm.environment.get(\"clientSecret\") }",
+							"        ]",
+							"      }",
+							"    }, function (error, response) {",
+							"        pm.environment.set(\"token\", response.json().access_token);",
+							"  });",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
 			"name": "Order service",
 			"item": [
-				{
-					"name": "[auth0] Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Health check\", function() {",
-									"    pm.response.to.have.status(200)",
-									"",
-									"    const response = pm.response.json();",
-									"    pm.expect(response.access_token).to.not.empty",
-									"    pm.expect(response.token_type).to.be.eq(\"Bearer\")",
-									"",
-									"    pm.environment.set(\"token\", response.access_token)",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "scope",
-									"value": "openid",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "{{username}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{clientId}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{clientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "https://romanowalex.eu.auth0.com/oauth/token",
-							"protocol": "https",
-							"host": [
-								"romanowalex",
-								"eu",
-								"auth0",
-								"com"
-							],
-							"path": [
-								"oauth",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "[order] Health Check",
 					"event": [
@@ -1068,7 +938,27 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							""
+							"const token = pm.environment.get(\"token\")",
+							"if (_.isEmpty(token)) {",
+							"    pm.sendRequest({",
+							"        url: 'https://romanowalex.eu.auth0.com/oauth/token',",
+							"        method: 'POST',",
+							"        header: 'Content-Type: application/x-www-form-urlencoded',",
+							"         body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            { key: \"grant_type\", value: \"password\" },",
+							"            { key: \"scope\", value: \"openid\" },",
+							"            { key: \"username\", value: pm.environment.get(\"username\") },",
+							"            { key: \"password\", value: pm.environment.get(\"password\") },",
+							"            { key: \"client_id\", value: pm.environment.get(\"clientId\") },",
+							"            { key: \"client_secret\", value: pm.environment.get(\"clientSecret\") }",
+							"        ]",
+							"      }",
+							"    }, function (error, response) {",
+							"        pm.environment.set(\"token\", response.json().access_token);",
+							"  });",
+							"}"
 						]
 					}
 				},
@@ -1086,91 +976,6 @@
 		{
 			"name": "Warehouse Service",
 			"item": [
-				{
-					"name": "[auth0] Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Health check\", function() {",
-									"    pm.response.to.have.status(200)",
-									"",
-									"    const response = pm.response.json();",
-									"    pm.expect(response.access_token).to.not.empty",
-									"    pm.expect(response.token_type).to.be.eq(\"Bearer\")",
-									"",
-									"    pm.environment.set(\"token\", response.access_token)",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "scope",
-									"value": "openid",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "{{username}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{clientId}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{clientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "https://romanowalex.eu.auth0.com/oauth/token",
-							"protocol": "https",
-							"host": [
-								"romanowalex",
-								"eu",
-								"auth0",
-								"com"
-							],
-							"path": [
-								"oauth",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "[warehouse] Health Check",
 					"event": [
@@ -1574,96 +1379,51 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const token = pm.environment.get(\"token\")",
+							"if (_.isEmpty(token)) {",
+							"    pm.sendRequest({",
+							"        url: 'https://romanowalex.eu.auth0.com/oauth/token',",
+							"        method: 'POST',",
+							"        header: 'Content-Type: application/x-www-form-urlencoded',",
+							"         body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            { key: \"grant_type\", value: \"password\" },",
+							"            { key: \"scope\", value: \"openid\" },",
+							"            { key: \"username\", value: pm.environment.get(\"username\") },",
+							"            { key: \"password\", value: pm.environment.get(\"password\") },",
+							"            { key: \"client_id\", value: pm.environment.get(\"clientId\") },",
+							"            { key: \"client_secret\", value: pm.environment.get(\"clientSecret\") }",
+							"        ]",
+							"      }",
+							"    }, function (error, response) {",
+							"        pm.environment.set(\"token\", response.json().access_token);",
+							"  });",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
 			"name": "Warranty Service",
 			"item": [
-				{
-					"name": "[auth0] Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Health check\", function() {",
-									"    pm.response.to.have.status(200)",
-									"",
-									"    const response = pm.response.json();",
-									"    pm.expect(response.access_token).to.not.empty",
-									"    pm.expect(response.token_type).to.be.eq(\"Bearer\")",
-									"",
-									"    pm.environment.set(\"token\", response.access_token)",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "scope",
-									"value": "openid",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "{{username}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{clientId}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{clientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "https://romanowalex.eu.auth0.com/oauth/token",
-							"protocol": "https",
-							"host": [
-								"romanowalex",
-								"eu",
-								"auth0",
-								"com"
-							],
-							"path": [
-								"oauth",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "[warranty] Health Check",
 					"event": [
@@ -1989,6 +1749,46 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const token = pm.environment.get(\"token\")",
+							"if (_.isEmpty(token)) {",
+							"    pm.sendRequest({",
+							"        url: 'https://romanowalex.eu.auth0.com/oauth/token',",
+							"        method: 'POST',",
+							"        header: 'Content-Type: application/x-www-form-urlencoded',",
+							"         body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            { key: \"grant_type\", value: \"password\" },",
+							"            { key: \"scope\", value: \"openid\" },",
+							"            { key: \"username\", value: pm.environment.get(\"username\") },",
+							"            { key: \"password\", value: pm.environment.get(\"password\") },",
+							"            { key: \"client_id\", value: pm.environment.get(\"clientId\") },",
+							"            { key: \"client_secret\", value: pm.environment.get(\"clientSecret\") }",
+							"        ]",
+							"      }",
+							"    }, function (error, response) {",
+							"        pm.environment.set(\"token\", response.json().access_token);",
+							"  });",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}

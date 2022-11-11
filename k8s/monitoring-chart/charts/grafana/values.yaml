@@ -1,2 +1,10 @@
 version: 8.2.2
 port: 3000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+  limits:
+    cpu: 100m
+    memory: 1024Mi

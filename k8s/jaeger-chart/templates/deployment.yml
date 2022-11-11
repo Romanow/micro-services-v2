@@ -1,21 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-query
+  name: {{ .Chart.Name }}-query-deployment
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-query
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: tracing
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Chart.Name }}-query
+      app: {{ .Chart.Name }}-query
   template:
     metadata:
       labels:
+        app: {{ .Chart.Name }}-query
         app.kubernetes.io/name: {{ .Chart.Name }}-query
         app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: tracing
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}-query
@@ -33,16 +40,16 @@ spec:
               value: "6831"
           ports:
             - name: query
-              containerPort: {{ .Values.jaeger.ports.query }}
+              containerPort: {{ .Values.jaeger.query.ports.query }}
               protocol: TCP
             - name: admin
-              containerPort: {{ .Values.jaeger.ports.query_admin }}
+              containerPort: {{ .Values.jaeger.query.ports.admin }}
               protocol: TCP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-collector
+  name: {{ .Chart.Name }}-collector-deployment
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-collector
@@ -50,13 +57,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Chart.Name }}-collector
+      app: {{ .Chart.Name }}-collector
   template:
     metadata:
       labels:
+        app: {{ .Chart.Name }}-collector
         app.kubernetes.io/name: {{ .Chart.Name }}-collector
         app.kubernetes.io/version: "{{ .Chart.Version }}"
         app.kubernetes.io/component: tracing
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}-collector
@@ -71,12 +81,12 @@ spec:
             - name: ES_PASSWORD
               value: {{ .Values.jaeger.elasticsearch.password }}
           ports:
-            - containerPort: {{ .Values.jaeger.ports.grpc }}
+            - containerPort: {{ .Values.jaeger.collector.ports.grpc }}
               name: grpc
               protocol: TCP
-            - containerPort: {{ .Values.jaeger.ports.http }}
+            - containerPort: {{ .Values.jaeger.collector.ports.http }}
               name: http
               protocol: TCP
-            - containerPort: {{ .Values.jaeger.ports.collector_admin }}
+            - containerPort: {{ .Values.jaeger.collector.ports.admin }}
               name: admin
               protocol: TCP

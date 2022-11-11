@@ -2,11 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-deployment
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-deployment
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Chart.Name }}
+      app: {{ .Chart.Name }}
   template:
     metadata:
       annotations:
@@ -14,40 +20,65 @@ spec:
         prometheus.io/path: "{{ .Values.service.metrics.path }}"
         prometheus.io/port: "{{ .Values.service.port }}"
       labels:
+        app: {{ .Chart.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
         app.kubernetes.io/version: "{{ .Chart.Version }}"
-        app.kubernetes.io/component: spring
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
     spec:
       containers:
-        - name: {{ .Chart.Name }}-filebeat-sidecar
-          image: "docker.elastic.co/beats/filebeat:{{ .Values.filebeat.version }}"
-          volumeMounts:
-            - name: {{ .Chart.Name }}-logs
-              mountPath: "/var/log/{{ .Chart.Name }}-service/"
-            - name: {{ .Chart.Name }}-filebeat-config-volume
-              mountPath: /usr/share/filebeat/filebeat.yml
-              subPath: filebeat.yml
-
         - name: {{ .Chart.Name }}
           imagePullPolicy: Always
           image: {{ .Values.service.image.name }}:{{ .Values.service.image.version }}
           resources:
             requests:
-              memory: "{{ .Values.service.memory.requested }}Mi"
+              memory: "{{ .Values.service.resources.requests.memory }}"
+              cpu: "{{ .Values.service.resources.requests.cpu }}"
             limits:
-              memory: "{{ .Values.service.memory.limit }}Mi"
+              memory: "{{ .Values.service.resources.limits.memory }}"
+              cpu: "{{ .Values.service.resources.limits.cpu }}"
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.service.profile }}
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            httpGet:
+              path: /manage/health/liveness
+              port: {{ .Values.service.port }}
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            httpGet:
+              path: /manage/health/readiness
+              port: {{ .Values.service.port }}
           ports:
             - name: web
               containerPort: {{ .Values.service.port }}
           volumeMounts:
-            - name: {{ .Chart.Name }}-logs
+            - name: {{ .Chart.Name }}-logs-volume
               mountPath: "/var/log/{{ .Chart.Name }}-service/"
+
+        - name: {{ .Chart.Name }}-filebeat-sidecar
+          image: "docker.elastic.co/beats/filebeat:{{ .Values.filebeat.version }}"
+          resources:
+            requests:
+              memory: "{{ .Values.filebeat.resources.requests.memory }}"
+              cpu: "{{ .Values.filebeat.resources.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.filebeat.resources.limits.memory }}"
+              cpu: "{{ .Values.filebeat.resources.limits.cpu }}"
+          volumeMounts:
+            - name: {{ .Chart.Name }}-logs-volume
+              mountPath: "/var/log/{{ .Chart.Name }}-service/"
+            - name: {{ .Chart.Name }}-config-volume
+              mountPath: /usr/share/filebeat/filebeat.yml
+              subPath: filebeat.yml
+
       volumes:
-        - name: {{ .Chart.Name }}-logs
-        - name: {{ .Chart.Name }}-filebeat-config-volume
+        - name: {{ .Chart.Name }}-logs-volume
+        - name: {{ .Chart.Name }}-config-volume
           configMap:
-            name: {{ .Chart.Name }}-filebeat-configmap
+            name: {{ .Chart.Name }}-configmap
             defaultMode: 420

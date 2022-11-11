@@ -1,10 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Chart.Name }}-datasource-configmap
+  name: {{ .Chart.Name }}-configmap
   namespace: {{ .Values.global.namespace }}
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-datasource-configmap
+    app.kubernetes.io/name: {{ .Chart.Name }}-configmap
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/component: monitoring
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
 data:
   prometheus.yaml: |-
   {{- .Files.Get "config/datasource-config.yaml" | nindent 4 }}
