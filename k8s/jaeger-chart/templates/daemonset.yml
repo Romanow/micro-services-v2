@@ -29,6 +29,13 @@ spec:
           env:
             - name: REPORTER_GRPC_HOST_PORT
               value: "jaeger-collector-service.tracing.svc.cluster.local:{{ .Values.jaeger.collector.ports.grpc }}"
+          resources:
+            requests:
+              memory: "{{ .Values.jaeger.agent.resources.requests.memory }}"
+              cpu: "{{ .Values.jaeger.agent.resources.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.jaeger.agent.resources.limits.memory }}"
+              cpu: "{{ .Values.jaeger.agent.resources.limits.cpu }}"
           ports:
             - name: compact-thrift
               containerPort: {{ .Values.jaeger.agent.ports.thrift_compact }}
@@ -39,5 +46,3 @@ spec:
             - name: admin
               containerPort: {{ .Values.jaeger.agent.ports.admin }}
               protocol: TCP
-
-      restartPolicy: OnFailure

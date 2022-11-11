@@ -77,7 +77,7 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 Для проверки работоспособности системы используются скрипты Postman. В папке [postman](postman)
 содержится [коллекция запросов](postman/collection.json) к серверу и два enviroment'а:
 
-* [local](postman/environment.json);
+* [local](postman/local-environment.json);
 
 Для автоматизированной проверки используется [GitHub Actions](.github/workflows/main.yml), CI/CD содержит шаги:
 

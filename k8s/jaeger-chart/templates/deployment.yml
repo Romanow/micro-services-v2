@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-query-deployment
+  name: {{ .Chart.Name }}-query
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-query
@@ -38,6 +38,13 @@ spec:
               value: {{ .Values.jaeger.elasticsearch.password }}
             - name: JAEGER_AGENT_PORT
               value: "6831"
+          resources:
+            requests:
+              memory: "{{ .Values.jaeger.query.resources.requests.memory }}"
+              cpu: "{{ .Values.jaeger.query.resources.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.jaeger.query.resources.limits.memory }}"
+              cpu: "{{ .Values.jaeger.query.resources.limits.cpu }}"
           ports:
             - name: query
               containerPort: {{ .Values.jaeger.query.ports.query }}
@@ -49,7 +56,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-collector-deployment
+  name: {{ .Chart.Name }}-collector
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-collector
@@ -80,6 +87,13 @@ spec:
               value: {{ .Values.jaeger.elasticsearch.username }}
             - name: ES_PASSWORD
               value: {{ .Values.jaeger.elasticsearch.password }}
+          resources:
+            requests:
+              memory: "{{ .Values.jaeger.collector.resources.requests.memory }}"
+              cpu: "{{ .Values.jaeger.collector.resources.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.jaeger.collector.resources.limits.memory }}"
+              cpu: "{{ .Values.jaeger.collector.resources.limits.cpu }}"
           ports:
             - containerPort: {{ .Values.jaeger.collector.ports.grpc }}
               name: grpc

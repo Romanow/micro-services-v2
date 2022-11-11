@@ -8,8 +8,8 @@ elasticsearch:
 
 resources:
   requests:
-    cpu: 100m
-    memory: 768Mi
+    cpu: 300m
+    memory: 1024Mi
   limits:
-    cpu: 200m
+    cpu: 500m
     memory: 1024Mi

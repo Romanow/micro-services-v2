@@ -19,3 +19,11 @@ datases:
     user: program
   - name: warranty
     user: program
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

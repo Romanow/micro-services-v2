@@ -6,10 +6,10 @@ service:
     version:
   resources:
     requests:
-      cpu: 100m
-      memory: 768Mi
+      cpu: 500m
+      memory: 1024Mi
     limits:
-      cpu: 100m
+      cpu: 500m
       memory: 1024Mi
   metrics:
     path: "/manage/prometheus"

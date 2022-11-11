@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-deployment
+  name: {{ .Chart.Name }}
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}-deployment
+    app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/version: "{{ .Chart.Version }}"
     app.kubernetes.io/component: application
     app.kubernetes.io/part-of: micro-services
@@ -42,14 +42,14 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.service.profile }}
           livenessProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
             httpGet:
               path: /manage/health/liveness
               port: {{ .Values.service.port }}
           readinessProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
             httpGet:
               path: /manage/health/readiness
               port: {{ .Values.service.port }}

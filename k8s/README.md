@@ -16,10 +16,10 @@ $ helm install services services-chart/
 
 Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
 
-* Node Exporter – 1860
-* Spring Boot – 10280
+* Node Exporter – [12486](https://grafana.com/grafana/dashboards/12486-node-exporter-full/)
+* Spring Boot – [10280](https://grafana.com/grafana/dashboards/10280-microservices-spring-boot-2-1/)
 
-## Grafana alerting
+## Alerting
 
 * Создать бота
   ```

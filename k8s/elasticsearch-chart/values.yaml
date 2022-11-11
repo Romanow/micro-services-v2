@@ -10,8 +10,8 @@ ports:
 
 resources:
   requests:
-    cpu: 100m
+    cpu: 500m
     memory: 1024Mi
   limits:
-    cpu: 200m
+    cpu: 500m
     memory: 2048Mi

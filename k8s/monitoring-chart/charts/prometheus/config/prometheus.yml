@@ -40,7 +40,7 @@ scrape_configs:
         regex: true
       - source_labels: [ __meta_kubernetes_pod_label_app_kubernetes_io_component ]
         action: keep
-        regex: 'spring'
+        regex: 'application'
       - source_labels: [ __meta_kubernetes_namespace ]
         action: replace
         target_label: kubernetes_namespace

@@ -16,7 +16,7 @@ spec:
     service:
       name: {{ .Chart.Name }}-query-service
       port:
-        number: {{ .Values.jaeger.ports.query }}
+        number: {{ .Values.jaeger.query.ports.query }}
   rules:
     - host: {{ .Chart.Name }}.romanow-alex.ru
       http:
@@ -27,4 +27,4 @@ spec:
               service:
                 name: {{ .Chart.Name }}-query-service
                 port:
-                  number: {{ .Values.jaeger.ports.query }}
+                  number: {{ .Values.jaeger.query.ports.query }}

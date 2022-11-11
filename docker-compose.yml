@@ -15,7 +15,7 @@ services:
 
   store-service:
     build: ./store-service
-    image: romanowalex/store-service:v2.0
+    image: romanowalex/store-service:v2.1
     container_name: store-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -26,7 +26,7 @@ services:
 
   order-service:
     build: ./order-service
-    image: romanowalex/order-service:v2.0
+    image: romanowalex/order-service:v2.1
     container_name: order-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -37,7 +37,7 @@ services:
 
   warehouse-service:
     build: ./warehouse-service
-    image: romanowalex/warehouse-service:v2.0
+    image: romanowalex/warehouse-service:v2.1
     container_name: warehouse-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -48,7 +48,7 @@ services:
 
   warranty-service:
     build: ./warranty-service
-    image: romanowalex/warranty-service:v2.0
+    image: romanowalex/warranty-service:v2.1
     container_name: warranty-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
