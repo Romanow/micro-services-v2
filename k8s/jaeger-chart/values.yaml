@@ -1,4 +1,5 @@
 namespace: tracing
+domain: romanow-alex.ru
 
 jaeger:
   version: 1.22.0

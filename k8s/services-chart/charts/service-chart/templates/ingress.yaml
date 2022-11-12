@@ -17,7 +17,7 @@ spec:
       port:
         number: {{ .Values.service.port }}
   rules:
-    - host: {{ .Chart.Name }}.romanow-alex.ru
+    - host: {{ .Chart.Name }}.{{ .Values.domain }}
       http:
         paths:
           - path: /

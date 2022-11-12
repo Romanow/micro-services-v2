@@ -21,13 +21,109 @@ graph TD
 
 ## Сборка и запуск
 
+### Запуск в Docker Compose
+
 ```shell
 $ ./gradlew clean build
 
 $ docker compose build
 
 $ dcoker compose up -d
+
+$ docker compose logs -f
 ```
+
+### Запуск локального кластера k8s
+
+```shell
+# create local cluster
+$ kind create cluster --config kind.yml
+
+# configure ingress
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# если требуется загрузить локальный образ в кластер
+$ kind load docker-image <image-name>
+
+$ cd k8s
+$ helm install postgres postgres-chart/
+
+$ helm install services services-chart/ \
+      --set store.domain=local \
+      --set order.domain=local \
+      --set warehouse.domain=local \
+      --set warranty.domain=local
+      
+$ sudo tee -a /etc/hosts > /dev/null <<EOT
+127.0.0.1    store.local
+127.0.0.1    order.local
+127.0.0.1    warehouse.local
+127.0.0.1    warranty.local
+127.0.0.1    grafana.local
+127.0.0.1    jaeger.local
+127.0.0.1    kibana.local
+EOT
+
+$ cd ../postman
+$ newman run -e kind-environment.json --folder=Store\ service  collection.json
+```
+
+#### Grafana + Prometheus
+
+```shell
+$ helm upgrade monitoring monitoring-chart --set grafana.domain=local
+```
+
+Открыть в браузере [http://grafana.local](http://grafana.local).
+
+##### Dashboard
+
+Импортировать Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
+
+* Node Exporter – [12486](https://grafana.com/grafana/dashboards/12486-node-exporter-full/)
+* Spring Boot – [10280](https://grafana.com/grafana/dashboards/10280-microservices-spring-boot-2-1/)
+
+Другие доски доступны на [Grafana Labs](https://grafana.com/grafana/dashboards/).
+
+##### Alerting
+
+## Alerting
+
+* Создать бота: в телеграмм находим `@BotFather`, вызываем `/newbot`:
+    * name: _k8s_monitoring_
+    * id: _k8s_monitoring_bot_
+* Создать канал _K8S Monitoring_, добавить `@k8s_monitoring_bot` как администратора. Отправить хотя бы одно сообщение в
+  группу.
+* После этого через Telegram API получить chart ID:
+  ```http request
+  GET https://api.telegram.org/bot<token>/getUpdates
+  ```
+* Создать Notification Channel: `Grafana` -> `Alerting` -> `Notification Channels` -> `Telegram Bot`.
+* Создать новый dashboard:
+    * Title: Request Count
+    * Panel: `Query: sum(irate(http_server_requests_seconds_count{application="store-service"}[5m]))`
+    * Alerting:
+        * Condition: `Evaluate every: 10s for 0, when avg() of query(A, 10s, now) is above 10`
+        * Send to: `Telegram bot`, message: `Too many requests`
+
+#### ELK Stack
+
+```shell
+$ helm upgrade elasticsearch elasticsearch-chart
+
+$ helm upgrade logging logging-chart --set kibana.domain=local
+```
+
+Открыть в браузере [http://kibana.local](http://kibana.local).
+
+#### Jaeger
+
+```shell
+# для работы требуется ElasticSearch
+$ helm upgrade jaeger jaeger-chart --set domain=local
+```
+
+Открыть в браузере [http://jaeger.local](http://jaeger.local).
 
 ## Настройка Auth0
 
@@ -72,27 +168,7 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 }
 ```
 
-## Тестирование
+## Ссылки
 
-Для проверки работоспособности системы используются скрипты Postman. В папке [postman](postman)
-содержится [коллекция запросов](postman/collection.json) к серверу и два enviroment'а:
-
-* [local](postman/local-environment.json);
-
-Для автоматизированной проверки используется [GitHub Actions](.github/workflows/main.yml), CI/CD содержит шаги:
-
-* сборка;
-* запуск в docker compose;
-* прогон скриптов postman через newman.
-
-## TODO
-
-1. Add labels: app=<name>.
-2. Resources limits, requests.
-3. Health Checks.
-
-
-1. Terragrunt.
-2. [10 антипаттернов деплоя в Kubernetes: распространенные практики, для которых есть другие решения](https://habr.com/ru/company/mailru/blog/529152/).
-3. Release history with `helm install`.
-4. [How do you rollback deployments in Kubernetes?](https://learnk8s.io/kubernetes-rollbacks)
+1. [10 антипаттернов деплоя в Kubernetes: распространенные практики, для которых есть другие решения](https://habr.com/ru/company/mailru/blog/529152/)
+2. [How do you rollback deployments in Kubernetes?](https://learnk8s.io/kubernetes-rollbacks)

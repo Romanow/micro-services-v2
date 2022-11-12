@@ -1,5 +1,6 @@
 version: 7.15.0
 port: 5601
+domain: romanow-alex.ru
 
 elasticsearch:
   url: http://elasticsearch-service.elastic.svc.cluster.local:9200

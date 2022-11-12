@@ -18,7 +18,7 @@ spec:
       port:
         number: {{ .Values.jaeger.query.ports.query }}
   rules:
-    - host: {{ .Chart.Name }}.romanow-alex.ru
+    - host: {{ .Chart.Name }}.{{ .Values.domain }}
       http:
         paths:
           - path: /
