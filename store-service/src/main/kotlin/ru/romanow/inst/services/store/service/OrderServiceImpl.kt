@@ -2,7 +2,6 @@ package ru.romanow.inst.services.store.service
 
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpMethod.*
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
@@ -41,7 +40,7 @@ class OrderServiceImpl(
             .transform {
                 factory.create("getOrderInfo")
                     .run(it) { throwable ->
-                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userUid/$orderUid", throwable)
+                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userId/$orderUid", throwable)
                     }
             }
             .blockOptional()
@@ -57,7 +56,7 @@ class OrderServiceImpl(
             .transform {
                 factory.create("getOrderInfoByUser")
                     .run(it) { throwable ->
-                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userUid", throwable)
+                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userId", throwable)
                     }
             }
             .blockOptional()
@@ -76,14 +75,14 @@ class OrderServiceImpl(
             .transform {
                 factory.create("makePurchase")
                     .run(it) { throwable ->
-                        fallback.apply(POST, "${properties.orderUrl}/api/v1/orders/$userUid", throwable, request)
+                        fallback.apply(POST, "${properties.orderUrl}/api/v1/orders/$userId", throwable, request)
                     }
             }
             .blockOptional()
     }
 
     override fun refundPurchase(orderUid: UUID) {
-        webClient
+        orderWebClient
             .delete()
             .uri("/{orderUid}", orderUid)
             .retrieve()
@@ -100,7 +99,7 @@ class OrderServiceImpl(
     }
 
     override fun warrantyRequest(orderUid: UUID, request: WarrantyRequest): Optional<OrderWarrantyResponse> {
-        return webClient
+        return orderWebClient
             .post()
             .uri("/{orderUid}/warranty", orderUid)
             .body(BodyInserters.fromValue(request))

@@ -5,7 +5,6 @@ import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.Customizer
 import org.springframework.context.annotation.Bean
@@ -14,8 +13,6 @@ import org.springframework.http.HttpMethod
 import reactor.core.publisher.Mono
 import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 import java.time.Duration
-import java.util.*
-import java.util.Optional.empty
 
 @Configuration
 class CircuitBreakerConfiguration {
@@ -30,7 +27,7 @@ class CircuitBreakerConfiguration {
     @Bean
     fun defaultCustomizer(
         circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport,
-        properties: CircuitBreakerConfigurationProperties
+        properties: CircuitBreakerConfigurationProperties,
     ): Customizer<ReactiveResilience4JCircuitBreakerFactory> {
         val timeLimiterConfig = TimeLimiterConfig
             .custom()
@@ -40,10 +37,10 @@ class CircuitBreakerConfiguration {
             .custom()
             .failureRateThreshold(20f)
             .slowCallRateThreshold(50f)
-            .ignoreExceptions(*circuitBreakerConfigurationSupport.ignoredExceptions())
+            .ignoreExceptions(* circuitBreakerConfigurationSupport.ignoredExceptions())
             .build()
-        return Customizer { factory: ReactiveResilience4JCircuitBreakerFactory ->
-            factory.configureDefault { id: String ->
+        return Customizer {
+            it.configureDefault { id ->
                 Resilience4JConfigBuilder(id)
                     .timeLimiterConfig(timeLimiterConfig)
                     .circuitBreakerConfig(circuitBreakerConfig)
@@ -56,18 +53,10 @@ class CircuitBreakerConfiguration {
     fun fallback(circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport): Fallback {
         return object : Fallback {
             override fun <T> apply(
-                method: HttpMethod,
-                url: String,
-                throwable: Throwable,
-                vararg params: Any
+                method: HttpMethod, url: String, throwable: Throwable, vararg params: Any,
             ): Mono<T> {
-                logger.warn(
-                    "Request to {} '{}' failed with exception: {}. (params: '{}')",
-                    method.name,
-                    url,
-                    throwable.message,
-                    params
-                )
+                logger.warn("Request to {} '{}' failed with exception: {}. (params: '{}')",
+                    method.name, url, throwable.message, params)
                 if (throwable.javaClass in circuitBreakerConfigurationSupport.ignoredExceptions()) {
                     throw (throwable as RuntimeException)
                 }

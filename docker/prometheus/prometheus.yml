@@ -9,11 +9,9 @@ scrape_configs:
     basic_auth:
       username: management
       password: 'passwd'
-    consul_sd_configs:
-      - server: "consul-server-bootstrap:8500"
-        refresh_interval: 10s
-        services:
-          - store-service
-          - order-service
-          - warehouse-service
-          - warranty-service
+    static_configs:
+      - targets:
+          - store-service:8480
+          - order-service:8380
+          - warehouse-service:8280
+          - warranty-service:8180

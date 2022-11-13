@@ -37,6 +37,10 @@ opentracing:
     udp-sender.port: 6831
     enabled: false
 
+circuit:
+  breaker:
+    default-timeout: 100
+
 logging:
   level:
     org.zalando.logbook: TRACE
