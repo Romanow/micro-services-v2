@@ -15,13 +15,12 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 class WebClientConfiguration {
 
     @Bean
-    fun orderWebClient(properties: ServerUrlProperties): WebClient {
-        return WebClient.builder()
+    fun orderWebClient(properties: ServerUrlProperties): WebClient =
+        WebClient.builder()
             .baseUrl("${properties.orderUrl}/api/v1/orders")
             .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
-    }
 
     @Bean
     fun warehouseWebClient(properties: ServerUrlProperties): WebClient =

@@ -10,8 +10,9 @@ plugins {
 }
 
 ext {
-    springBootVersion = "2.7.5"
     kotlinVersion = "1.7.10"
+    springBootVersion = "2.7.5"
+    springCircuitBreakerVersion = "2.0.2"
     validationApiVersion = "2.0.1.Final"
     tracingVersion = "3.3.1"
     gsonVersion = "2.8.5"
@@ -46,6 +47,8 @@ subprojects { ->
     dependencyManagement {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:$springConsulVersion"
+            mavenBom "org.springframework.cloud:spring-cloud-circuitbreaker-dependencies:$springCircuitBreakerVersion"
         }
     }
 

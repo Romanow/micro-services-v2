@@ -28,7 +28,6 @@ class WebConfiguration : WebMvcConfigurer {
             )
     }
 
-
     @Bean
     fun logFilter(): AbstractRequestLoggingFilter {
         val filter: AbstractRequestLoggingFilter = object : AbstractRequestLoggingFilter() {

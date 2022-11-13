@@ -6,12 +6,17 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import ru.romanow.inst.services.common.properties.ActuatorSecurityProperties
+import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import javax.annotation.PostConstruct
 
 @ComponentScan("ru.romanow.inst.services.common")
 @AutoConfigureBefore(TracerAutoConfiguration::class)
-@EnableConfigurationProperties(value = [ActuatorSecurityProperties::class, ServerUrlProperties::class])
+@EnableConfigurationProperties(value = [
+    ActuatorSecurityProperties::class,
+    CircuitBreakerConfigurationProperties::class,
+    ServerUrlProperties::class
+])
 class CommonAutoConfiguration {
     private val logger = LoggerFactory.getLogger(CommonAutoConfiguration::class.java)
 

@@ -13,6 +13,32 @@ services:
     ports:
       - "5432:5432"
 
+  prometheus:
+    image: prom/prometheus:v2.31.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/data'
+
+  grafana:
+    image: grafana/grafana:8.2.5
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
   store-service:
     build: ./store-service
     image: romanowalex/store-service:v2.1
@@ -59,3 +85,5 @@ services:
 
 volumes:
   db-data:
+  prometheus-data:
+  grafana-data:
