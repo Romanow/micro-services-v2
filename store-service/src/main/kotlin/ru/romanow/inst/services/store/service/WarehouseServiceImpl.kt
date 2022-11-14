@@ -16,15 +16,14 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarehouseServiceImpl(
-    warehouseWebClient: WebClient.Builder,
+    private val warehouseWebClient: WebClient,
     private val fallback: Fallback,
     private val properties: ServerUrlProperties,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>,
 ) : WarehouseService {
-    private val webClient: WebClient = warehouseWebClient.build()
 
     override fun getItemInfo(itemUid: UUID): Optional<ItemInfoResponse> {
-        return webClient
+        return warehouseWebClient
             .get()
             .uri("/{itemUid}", itemUid)
             .retrieve()
@@ -34,7 +33,9 @@ class WarehouseServiceImpl(
             .transform {
                 factory.create("getItemInfo")
                     .run(it) { throwable ->
-                        fallback.apply(HttpMethod.GET, "${properties.warehouseUrl}/api/v1/warehouse/$itemUid", throwable)
+                        fallback.apply(HttpMethod.GET,
+                            "${properties.warehouseUrl}/api/v1/warehouse/$itemUid",
+                            throwable)
                     }
             }
             .blockOptional()

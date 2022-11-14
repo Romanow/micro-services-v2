@@ -25,6 +25,16 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus/data'
 
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=k6
+
   grafana:
     image: grafana/grafana:8.2.5
     container_name: grafana
@@ -38,6 +48,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+      - influxdb
 
   store-service:
     build: ./store-service
@@ -86,4 +97,5 @@ services:
 volumes:
   db-data:
   prometheus-data:
+  influxdb-data:
   grafana-data:

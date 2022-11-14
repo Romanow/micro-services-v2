@@ -3,7 +3,6 @@ package ru.romanow.inst.services.warehouse.service
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -21,14 +20,13 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(
-    warrantyWebClient: WebClient.Builder,
+    private val warrantyWebClient: WebClient,
     private val fallback: Fallback,
     private val properties: ServerUrlProperties,
     private val warehouseService: WarehouseService,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>,
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
-    private val webClient: WebClient = warrantyWebClient.build()
 
     override fun warrantyRequest(orderItemUid: UUID, request: OrderWarrantyRequest): OrderWarrantyResponse {
         logger.info("Warranty request (reason: {}) on item '{}'", request.reason, orderItemUid)
@@ -44,7 +42,7 @@ class WarrantyServiceImpl(
     }
 
     private fun requestToWarranty(orderItemUid: UUID, request: ItemWarrantyRequest): Optional<OrderWarrantyResponse> {
-        return webClient
+        return warrantyWebClient
             .post()
             .uri("/{orderItemUid}/warranty", orderItemUid)
             .body(BodyInserters.fromValue(request))

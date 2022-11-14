@@ -2,7 +2,6 @@ package ru.romanow.inst.services.order.service
 
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus.*
@@ -24,16 +23,15 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarehouseServiceImpl(
-    warehouseWebClient: WebClient.Builder,
+    private val warehouseWebClient: WebClient,
     private val fallback: Fallback,
     private val properties: ServerUrlProperties,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>,
 ) : WarehouseService {
-    private val webClient: WebClient = warehouseWebClient.build()
 
     override fun takeItem(orderUid: UUID, model: String, size: SizeChart): Optional<OrderItemResponse> {
         val request = OrderItemRequest(orderUid, model, size.name)
-        return webClient
+        return warehouseWebClient
             .post()
             .body(BodyInserters.fromValue(request))
             .retrieve()
@@ -51,7 +49,7 @@ class WarehouseServiceImpl(
     }
 
     override fun returnItem(itemUid: UUID) {
-        webClient
+        warehouseWebClient
             .delete()
             .uri("/{itemUid}", itemUid)
             .retrieve()
@@ -67,13 +65,14 @@ class WarehouseServiceImpl(
     }
 
     override fun useWarrantyItem(itemUid: UUID, request: OrderWarrantyRequest): Optional<OrderWarrantyResponse> {
-        return webClient
+        return warehouseWebClient
             .post()
             .uri("/{itemUid}/warranty", itemUid)
             .body(BodyInserters.fromValue(request))
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
-            .onStatus({ it == UNPROCESSABLE_ENTITY }, { response -> buildEx(response) { WarehouseProcessException(it) } })
+            .onStatus({ it == UNPROCESSABLE_ENTITY },
+                { response -> buildEx(response) { WarehouseProcessException(it) } })
             .onStatus({ it.isError }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .bodyToMono(OrderWarrantyResponse::class.java)
             .transform {

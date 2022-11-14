@@ -7,3 +7,13 @@ datasources:
     access: proxy
     version: 1
     editable: true
+
+  - name: InfluxDB
+    type: influxdb
+    url: http://influxdb:8086
+    database: k6
+    access: proxy
+    jsonData:
+      httpMode: GET
+    version: 1
+    editable: true

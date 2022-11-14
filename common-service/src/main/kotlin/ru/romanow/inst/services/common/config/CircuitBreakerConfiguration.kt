@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import reactor.core.publisher.Mono
 import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
-import java.time.Duration
 
 @Configuration
 class CircuitBreakerConfiguration {
@@ -31,7 +30,7 @@ class CircuitBreakerConfiguration {
     ): Customizer<ReactiveResilience4JCircuitBreakerFactory> {
         val timeLimiterConfig = TimeLimiterConfig
             .custom()
-            .timeoutDuration(Duration.ofSeconds(properties.defaultTimeout))
+            .timeoutDuration(properties.defaultTimeout)
             .build()
         val circuitBreakerConfig = CircuitBreakerConfig
             .custom()

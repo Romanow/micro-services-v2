@@ -2,7 +2,6 @@ package ru.romanow.inst.services.store.service
 
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -17,15 +16,14 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(
-    warrantyWebClient: WebClient.Builder,
+    private val warrantyWebClient: WebClient,
     private val fallback: Fallback,
     private val properties: ServerUrlProperties,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>,
 ) : WarrantyService {
-    private val webClient: WebClient = warrantyWebClient.build()
 
     override fun getItemWarrantyInfo(itemUid: UUID): Optional<WarrantyInfoResponse> {
-        return webClient
+        return warrantyWebClient
             .get()
             .uri("/{itemUid}", itemUid)
             .retrieve()

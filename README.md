@@ -168,6 +168,18 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 }
 ```
 
+## Нагрузочное тестирование
+
+```shell
+$ k6 run \                                                                                             master 
+    --out influxdb=http://localhost:8086/k6 \
+    -e USERNAME=ronin@romanow-alex.ru \
+    -e PASSWORD=Qwerty123 \
+    -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
+    -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
+    k6-load.js
+```
+
 ## Ссылки
 
 1. [10 антипаттернов деплоя в Kubernetes: распространенные практики, для которых есть другие решения](https://habr.com/ru/company/mailru/blog/529152/)
