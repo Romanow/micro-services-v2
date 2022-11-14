@@ -17,7 +17,7 @@
       "type": "java.time.Duration",
       "sourceType": "ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties",
       "description": "Default timeout for circuit breaker.",
-      "defaultValue": 100
+      "defaultValue": "200ms"
     },
     {
       "name": "services.order-url",

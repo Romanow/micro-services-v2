@@ -171,7 +171,9 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 ## Нагрузочное тестирование
 
 ```shell
-$ k6 run \                                                                                             master 
+$ brew install k6
+
+$ k6 run \
     --out influxdb=http://localhost:8086/k6 \
     -e USERNAME=ronin@romanow-alex.ru \
     -e PASSWORD=Qwerty123 \

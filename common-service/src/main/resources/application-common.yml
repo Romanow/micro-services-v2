@@ -39,7 +39,7 @@ opentracing:
 
 circuit:
   breaker:
-    default-timeout: 100ms
+    default-timeout: 5s
 
 logging:
   level:
