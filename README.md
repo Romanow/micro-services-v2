@@ -43,7 +43,7 @@ $ kind create cluster --config kind.yml
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 # если требуется загрузить локальный образ в кластер
-$ kind load docker-image <image-name>
+$ bash scripts/load-images.sh
 
 $ cd k8s
 $ helm install postgres postgres-chart/
@@ -65,7 +65,7 @@ $ sudo tee -a /etc/hosts > /dev/null <<EOT
 EOT
 
 $ cd ../postman
-$ newman run -e kind-environment.json --folder=Store\ service  collection.json
+$ newman run -e kind-environment.json --folder=store  collection.json
 ```
 
 #### Grafana + Prometheus

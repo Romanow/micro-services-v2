@@ -4,3 +4,10 @@
 .gradle
 out/
 build/
+
+**/.terraform/*
+**/.terragrunt-cache/*
+*.tfplan
+*.tfstate
+*.tfstate.*
+*.auto.tfvars
