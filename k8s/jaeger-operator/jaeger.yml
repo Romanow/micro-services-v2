@@ -5,14 +5,22 @@ metadata:
   namespace: tracing
 spec:
   strategy: allInOne
+  allInOne:
+    options:
+      query:
+        base-path: /
+
   agent:
     strategy: DaemonSet
+
   ingress:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
+    pathType: Prefix
     hosts:
       - jaeger.romanow-alex.ru
+
   storage:
     type: elasticsearch
     options:
