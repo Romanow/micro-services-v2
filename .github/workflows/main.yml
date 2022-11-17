@@ -39,6 +39,9 @@ jobs:
           delayRequest: 100
           reporters: '[ "cli" ]'
 
+      - name: Push images
+        run: docker compose push
+
       - name: Stop containers
         if: always()
         continue-on-error: true
