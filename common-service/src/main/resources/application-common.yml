@@ -3,6 +3,11 @@ spring:
     hibernate:
       ddl-auto: validate
 
+  cloud:
+    circuitbreaker:
+      resilience4j:
+        enabled: ${CIRCUIT_BREAKER_ENABLED:true}
+
 management:
   endpoint:
     health.probes.enabled: true
@@ -31,15 +36,15 @@ springdoc:
 
 opentracing:
   jaeger:
+    enabled: ${JAEGER_ENABLED:true}
     enable-b3-propagation: true
     log-spans: false
-    udp-sender.host: localhost
-    udp-sender.port: 6831
-    enabled: false
+    udp-sender:
+      host: ${JAEGER_HOST:localhost}
+      port: ${JAEGER_PORT:6831}
 
-circuit:
-  breaker:
-    default-timeout: 5s
+circuit-breaker:
+  default-timeout: 5s
 
 logging:
   level:

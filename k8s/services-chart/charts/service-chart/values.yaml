@@ -5,6 +5,18 @@ service:
   image:
     name:
     version:
+  database:
+    name:
+    host: postgres-service
+    port: 5432
+    username: program
+    password: test
+  circuit-breaker:
+    enabled: true
+  tracing:
+    enabled: true
+    host: jaeger-agent-service.tracing.svc.cluster.local
+    port: 6831
   resources:
     requests:
       cpu: 500m

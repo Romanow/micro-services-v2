@@ -5,9 +5,9 @@ import io.jaegertracing.internal.MDCScopeManager
 import io.opentracing.Tracer
 import io.opentracing.contrib.java.spring.jaeger.starter.TracerBuilderCustomizer
 import io.opentracing.noop.NoopTracerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 
 /**
  * В TracingConfiguration для `profile` != k8s переопределяется `Tracer` на `NoopTracer`.
@@ -32,7 +32,7 @@ class TracingConfiguration {
     }
 
     @Bean
-    @Profile("!k8s")
+    @ConditionalOnProperty("opentracing.jaeger.enabled", havingValue = "false")
     fun jaegerTracer(): Tracer {
         return NoopTracerFactory.create()
     }

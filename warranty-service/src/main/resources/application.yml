@@ -1,5 +1,5 @@
 server:
-  port: 8180
+  port: ${APPLICATION_PORT:8180}
 
 spring:
   profiles:
@@ -11,4 +11,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://romanowalex.eu.auth0.com/
+          issuer-uri: ${JWT_ISSUER_URI:https://romanowalex.eu.auth0.com/}

@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres-service:5432/warranty
-    username: program
-    password: test
+    url: jdbc:postgresql://${DATABASE_HOST:postgres-service}:${DATABASE_PORT:5432}/${DATABASE_NAME:warranty}
+    username: ${DATABASE_USER:program}
+    password: ${DATABAES_PASSWORD:test}
     driver-class-name: org.postgresql.Driver
 
 opentracing:
   jaeger:
-    enabled: true
+    enabled: ${JAEGER_ENABLED:true}
     udp-sender:
-      host: jaeger-agent-service.tracing.svc.cluster.local
-      port: 6831
+      host: ${JAEGER_HOST:jaeger-agent-service.tracing.svc.cluster.local}
+      port: ${JAEGER_PORT:6831}

@@ -41,6 +41,20 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.service.profile }}
+            - name: DATABASE_HOST
+              value: {{ .Values.service.database.host }}
+            - name: DATABASE_PORT
+              value: {{ .Values.service.database.port }}
+            - name: DATABASE_USER
+              value: {{ .Values.service.database.username }}
+            - name: DATABAES_PASSWORD
+              value: {{ .Values.service.database.password }}
+            - name: JAEGER_ENABLED
+              value: {{ .Values.service.tracing.enabled }}
+            - name: JAEGER_HOST
+              value: {{ .Values.service.tracing.host }}
+            - name: JAEGER_PORT
+              value: {{ .Values.service.tracing.port }}
           livenessProbe:
             initialDelaySeconds: 60
             failureThreshold: 10

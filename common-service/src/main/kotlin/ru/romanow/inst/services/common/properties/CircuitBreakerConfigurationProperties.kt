@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConstructorBinding
 import java.time.Duration
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "circuit.breaker")
+@ConfigurationProperties(prefix = "circuit-breaker")
 data class CircuitBreakerConfigurationProperties(
     val defaultTimeout: Duration,
 )
