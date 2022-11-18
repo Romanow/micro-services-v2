@@ -40,7 +40,7 @@ opentracing:
 
 circuit-breaker:
   enabled: ${CIRCUIT_BREAKER_ENABLED:true}
-  default-timeout: 5s
+  default-timeout: ${CIRCUIT_BREAKER_TIMEOUT:30s}
 
 logging:
   level:
