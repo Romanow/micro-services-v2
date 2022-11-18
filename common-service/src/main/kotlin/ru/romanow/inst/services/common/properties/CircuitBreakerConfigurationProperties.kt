@@ -7,5 +7,6 @@ import java.time.Duration
 @ConstructorBinding
 @ConfigurationProperties(prefix = "circuit-breaker")
 data class CircuitBreakerConfigurationProperties(
+    val enabled: Boolean,
     val defaultTimeout: Duration,
 )

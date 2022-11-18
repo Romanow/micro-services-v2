@@ -1,13 +1,13 @@
 package ru.romanow.inst.services.store.service
 
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
 import org.springframework.http.HttpMethod.*
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import ru.romanow.inst.services.common.config.CircuitBreakerFactory
 import ru.romanow.inst.services.common.config.Fallback
+import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.order.model.CreateOrderResponse
@@ -25,8 +25,9 @@ import javax.persistence.EntityNotFoundException
 class OrderServiceImpl(
     private val fallback: Fallback,
     private val orderWebClient: WebClient,
-    private val properties: ServerUrlProperties,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+    private val serverUrlProperties: ServerUrlProperties,
+    private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
+    private val factory: CircuitBreakerFactory,
 ) : OrderService {
 
     override fun getOrderInfo(userId: String, orderUid: UUID): Optional<OrderInfoResponse> {
@@ -38,10 +39,14 @@ class OrderServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .bodyToMono(OrderInfoResponse::class.java)
             .transform {
-                factory.create("getOrderInfo")
-                    .run(it) { throwable ->
-                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userId/$orderUid", throwable)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("getOrderInfo").run(it) { throwable ->
+                        fallback
+                            .apply(GET, "${serverUrlProperties.orderUrl}/api/v1/orders/$userId/$orderUid", throwable)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .blockOptional()
     }
@@ -54,10 +59,13 @@ class OrderServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .bodyToMono(OrdersInfoResponse::class.java)
             .transform {
-                factory.create("getOrderInfoByUser")
-                    .run(it) { throwable ->
-                        fallback.apply(GET, "${properties.orderUrl}/api/v1/orders/$userId", throwable)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("getOrderInfoByUser").run(it) { throwable ->
+                        fallback.apply(GET, "${serverUrlProperties.orderUrl}/api/v1/orders/$userId", throwable)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .blockOptional()
     }
@@ -73,10 +81,14 @@ class OrderServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .bodyToMono(CreateOrderResponse::class.java)
             .transform {
-                factory.create("makePurchase")
-                    .run(it) { throwable ->
-                        fallback.apply(POST, "${properties.orderUrl}/api/v1/orders/$userId", throwable, request)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("makePurchase").run(it) { throwable ->
+                        fallback
+                            .apply(POST, "${serverUrlProperties.orderUrl}/api/v1/orders/$userId", throwable, request)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .blockOptional()
     }
@@ -90,10 +102,13 @@ class OrderServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .toBodilessEntity()
             .transform {
-                factory.create("refundPurchase")
-                    .run(it) { throwable ->
-                        fallback.apply(DELETE, "${properties.orderUrl}/api/v1/orders/$orderUid", throwable)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("refundPurchase").run(it) { throwable ->
+                        fallback.apply(DELETE, "${serverUrlProperties.orderUrl}/api/v1/orders/$orderUid", throwable)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .block()
     }
@@ -109,10 +124,14 @@ class OrderServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { OrderProcessException(it) } })
             .bodyToMono(OrderWarrantyResponse::class.java)
             .transform {
-                factory.create("warrantyRequest")
-                    .run(it) { throwable ->
-                        fallback.apply(POST, "${properties.orderUrl}/api/v1/orders/$orderUid/warranty", throwable, request)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("warrantyRequest").run(it) { throwable ->
+                        fallback.apply(POST, "${serverUrlProperties.orderUrl}/api/v1/orders/$orderUid/warranty",
+                            throwable, request)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .blockOptional()
     }

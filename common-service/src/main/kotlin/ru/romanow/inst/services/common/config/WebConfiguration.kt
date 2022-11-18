@@ -37,7 +37,7 @@ class WebConfiguration : WebMvcConfigurer {
                 if (!contains) {
                     return
                 }
-                logger.info(message)
+                this@WebConfiguration.logger.info(message)
             }
         }
         filter.setIncludeQueryString(true)

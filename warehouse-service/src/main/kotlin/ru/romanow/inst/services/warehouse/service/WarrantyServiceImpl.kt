@@ -1,14 +1,14 @@
 package ru.romanow.inst.services.warehouse.service
 
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import ru.romanow.inst.services.common.config.CircuitBreakerFactory
 import ru.romanow.inst.services.common.config.Fallback
+import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
@@ -20,11 +20,12 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(
-    private val warrantyWebClient: WebClient,
     private val fallback: Fallback,
-    private val properties: ServerUrlProperties,
+    private val warrantyWebClient: WebClient,
     private val warehouseService: WarehouseService,
-    private val factory: ReactiveCircuitBreakerFactory<Resilience4JConfigBuilder.Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>,
+    private val serverUrlProperties: ServerUrlProperties,
+    private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
+    private val factory: CircuitBreakerFactory,
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
 
@@ -51,10 +52,15 @@ class WarrantyServiceImpl(
             .onStatus({ it.isError }, { response -> buildEx(response) { WarrantyProcessException(it) } })
             .bodyToMono(OrderWarrantyResponse::class.java)
             .transform {
-                factory.create("requestToWarranty")
-                    .run(it) { throwable ->
-                        fallback.apply(POST, "${properties.warrantyUrl}/api/v1/warranty/$orderItemUid/warranty", throwable)
+                if (circuitBreakerProperties.enabled) {
+                    factory.create("requestToWarranty").run(it) { throwable ->
+                        fallback.apply(POST,
+                            "${serverUrlProperties.warrantyUrl}/api/v1/warranty/$orderItemUid/warranty",
+                            throwable)
                     }
+                } else {
+                    return@transform it
+                }
             }
             .blockOptional()
     }

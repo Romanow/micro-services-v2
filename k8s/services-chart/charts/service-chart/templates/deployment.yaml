@@ -31,6 +31,7 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: Always
           image: {{ .Values.service.image.name }}:{{ .Values.service.image.version }}
+
           resources:
             requests:
               memory: "{{ .Values.service.resources.requests.memory }}"
@@ -38,23 +39,35 @@ spec:
             limits:
               memory: "{{ .Values.service.resources.limits.memory }}"
               cpu: "{{ .Values.service.resources.limits.cpu }}"
+
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.service.profile }}
+              value: "{{ .Values.service.profile }}"
+            {{ if .Values.service.database.name }}
+            - name: DATABASE_NAME
+              value: "{{ .Values.service.database.name }}"
+            {{- end }}
             - name: DATABASE_HOST
-              value: {{ .Values.service.database.host }}
+              value: "{{ .Values.service.database.host }}"
             - name: DATABASE_PORT
-              value: {{ .Values.service.database.port }}
+              value: "{{ .Values.service.database.port }}"
             - name: DATABASE_USER
-              value: {{ .Values.service.database.username }}
+              value: "{{ .Values.service.database.username }}"
             - name: DATABAES_PASSWORD
-              value: {{ .Values.service.database.password }}
+              value: "{{ .Values.service.database.password }}"
+            - name: CIRCUIT_BREAKER_ENABLED
+              value: "{{ .Values.service.circuit_breaker.enabled }}"
             - name: JAEGER_ENABLED
-              value: {{ .Values.service.tracing.enabled }}
+              value: "{{ .Values.service.tracing.enabled }}"
+            {{ if .Values.service.tracing.host }}
             - name: JAEGER_HOST
-              value: {{ .Values.service.tracing.host }}
+              value: "{{ .Values.service.tracing.host }}"
+            {{- end }}
+            {{ if .Values.service.tracing.port }}
             - name: JAEGER_PORT
-              value: {{ .Values.service.tracing.port }}
+              value: "{{ .Values.service.tracing.port }}"
+          {{- end }}
+
           livenessProbe:
             initialDelaySeconds: 60
             failureThreshold: 10
@@ -69,15 +82,18 @@ spec:
             httpGet:
               path: /manage/health/readiness
               port: {{ .Values.service.port }}
+
           ports:
             - name: web
               containerPort: {{ .Values.service.port }}
+
           volumeMounts:
             - name: {{ .Chart.Name }}-logs-volume
               mountPath: "/var/log/{{ .Chart.Name }}-service/"
 
         - name: {{ .Chart.Name }}-filebeat-sidecar
           image: "docker.elastic.co/beats/filebeat:{{ .Values.filebeat.version }}"
+
           resources:
             requests:
               memory: "{{ .Values.filebeat.resources.requests.memory }}"
@@ -85,6 +101,7 @@ spec:
             limits:
               memory: "{{ .Values.filebeat.resources.limits.memory }}"
               cpu: "{{ .Values.filebeat.resources.limits.cpu }}"
+
           volumeMounts:
             - name: {{ .Chart.Name }}-logs-volume
               mountPath: "/var/log/{{ .Chart.Name }}-service/"

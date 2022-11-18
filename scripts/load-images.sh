@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
+version=${1:-v2.2}
+
 images=(
-  "romanowalex/store-service:v2.2"
-  "romanowalex/order-service:v2.2"
-  "romanowalex/warehouse-service:v2.2"
-  "romanowalex/warranty-service:v2.2"
+  "romanowalex/store-service:$version"
+  "romanowalex/order-service:$version"
+  "romanowalex/warehouse-service:$version"
+  "romanowalex/warranty-service:$version"
+  "postgres:13"
   "docker.elastic.co/elasticsearch/elasticsearch:7.15.0"
   "grafana/grafana:8.2.5"
   "prom/prometheus:v2.31.1"

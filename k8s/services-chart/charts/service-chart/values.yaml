@@ -11,7 +11,7 @@ service:
     port: 5432
     username: program
     password: test
-  circuit-breaker:
+  circuit_breaker:
     enabled: true
   tracing:
     enabled: true
