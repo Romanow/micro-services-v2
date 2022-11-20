@@ -82,6 +82,10 @@ $ helm upgrade monitoring monitoring-chart --set grafana.domain=local
 
 * Node Exporter – [12486](https://grafana.com/grafana/dashboards/12486-node-exporter-full/)
 * Spring Boot – [10280](https://grafana.com/grafana/dashboards/10280-microservices-spring-boot-2-1/)
+* Kubernetes Global – [15757](https://grafana.com/grafana/dashboards/15757-kubernetes-views-global/)
+* Kubernetes Nodes – [15759](https://grafana.com/grafana/dashboards/15759-kubernetes-views-nodes/)
+* Kubernetes Namespaces – [15758](https://grafana.com/grafana/dashboards/15758-kubernetes-views-namespaces/)
+* Kubernetes Pods – [15760](https://grafana.com/grafana/dashboards/15760-kubernetes-views-pods/)
 
 Другие доски доступны на [Grafana Labs](https://grafana.com/grafana/dashboards/).
 

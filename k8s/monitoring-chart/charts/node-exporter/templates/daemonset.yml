@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.global.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-daemonset
-    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/version: "{{ .Values.version }}"
     app.kubernetes.io/component: monitoring
     app.kubernetes.io/part-of: micro-services
     app.kubernetes.io/managed-by: helm
@@ -18,7 +18,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
-        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: monitoring
         app.kubernetes.io/part-of: micro-services
         app.kubernetes.io/managed-by: helm
@@ -27,10 +27,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "prom/node-exporter:{{ .Values.version }}"
           args:
+            - --path.procfs=/host/proc
             - --path.sysfs=/host/sys
             - --path.rootfs=/host/root
-            - --no-collector.wifi
-            - --no-collector.hwmon
             - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
             - --collector.netclass.ignored-devices=^(veth.*)$
           resources:
@@ -44,18 +43,26 @@ spec:
             - containerPort: {{ .Values.port }}
               protocol: TCP
           volumeMounts:
-            - mountPath: /host/sys
-              mountPropagation: HostToContainer
-              name: sys
+            - name: proc
+              mountPath: /host/proc
               readOnly: true
-            - mountPath: /host/root
-              mountPropagation: HostToContainer
-              name: root
+            - name: sys
+              mountPath: /host/sys
               readOnly: true
+            - name: root
+              mountPath: /host/root
+              mountPropagation: HostToContainer
+              readOnly: true
+
+      hostNetwork: true
+      hostPID: true
       volumes:
-        - hostPath:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
             path: /sys
-          name: sys
-        - hostPath:
+        - name: root
+          hostPath:
             path: /
-          name: root

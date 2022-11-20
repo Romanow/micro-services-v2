@@ -4,7 +4,7 @@ metadata:
   name: {{ .Chart.Name }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
-    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/version: "{{ .Values.service.image.version }}"
     app.kubernetes.io/component: application
     app.kubernetes.io/part-of: micro-services
     app.kubernetes.io/managed-by: helm
@@ -22,7 +22,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
-        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/version: "{{ .Values.service.image.version }}"
         app.kubernetes.io/component: application
         app.kubernetes.io/part-of: micro-services
         app.kubernetes.io/managed-by: helm

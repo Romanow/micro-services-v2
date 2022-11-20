@@ -1,4 +1,4 @@
-version: v2.31.1
+version: v2.40.0
 port: 9090
 
 resources:

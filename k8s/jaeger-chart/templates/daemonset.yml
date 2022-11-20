@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-agent-daemonset
-    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/version: "{{ .Values.version }}"
     app.kubernetes.io/component: tracing
     app.kubernetes.io/part-of: micro-services
     app.kubernetes.io/managed-by: helm
@@ -18,14 +18,14 @@ spec:
       labels:
         app: {{ .Chart.Name }}-agent
         app.kubernetes.io/name: {{ .Chart.Name }}-agent
-        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: tracing
         app.kubernetes.io/part-of: micro-services
         app.kubernetes.io/managed-by: helm
     spec:
       containers:
         - name: {{ .Chart.Name }}-agent
-          image: "jaegertracing/jaeger-agent:{{ .Values.jaeger.version }}"
+          image: "jaegertracing/jaeger-agent:{{ .Values.version }}"
           env:
             - name: REPORTER_GRPC_HOST_PORT
               value: "jaeger-collector-service.tracing.svc.cluster.local:{{ .Values.jaeger.collector.ports.grpc }}"

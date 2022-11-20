@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/version: "{{ .Values.version }}"
+    app.kubernetes.io/component: monitoring
+    app.kubernetes.io/part-of: micro-services
+    app.kubernetes.io/managed-by: helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/component: monitoring
+        app.kubernetes.io/part-of: micro-services
+        app.kubernetes.io/managed-by: helm
+    spec:
+      serviceAccountName: {{ .Chart.Name }}-service-account
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "registry.k8s.io/kube-state-metrics/kube-state-metrics:{{ .Values.version }}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 65534
+            capabilities:
+              drop: [ "ALL" ]
+          livenessProbe:
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 8080
+          readinessProbe:
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            httpGet:
+              path: /
+              port: 8081
+          ports:
+            - containerPort: {{ .Values.ports.http }}
+              name: http-metrics
+            - containerPort: {{ .Values.ports.telemerty }}
+              name: telemetry

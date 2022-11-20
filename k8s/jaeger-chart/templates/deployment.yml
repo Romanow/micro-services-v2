@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}-query
-    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/version: "{{ .Values.version }}"
     app.kubernetes.io/component: tracing
     app.kubernetes.io/part-of: micro-services
     app.kubernetes.io/managed-by: helm
@@ -19,7 +19,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}-query
         app.kubernetes.io/name: {{ .Chart.Name }}-query
-        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: tracing
         app.kubernetes.io/part-of: micro-services
         app.kubernetes.io/managed-by: helm
@@ -70,7 +70,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}-collector
         app.kubernetes.io/name: {{ .Chart.Name }}-collector
-        app.kubernetes.io/version: "{{ .Chart.Version }}"
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/component: tracing
         app.kubernetes.io/part-of: micro-services
         app.kubernetes.io/managed-by: helm

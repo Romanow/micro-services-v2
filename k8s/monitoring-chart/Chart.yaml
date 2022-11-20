@@ -9,3 +9,5 @@ dependencies:
     version: 1.0.0
   - name: grafana
     version: 1.0.0
+  - name: kube-state-metrics
+    version: 1.0.0

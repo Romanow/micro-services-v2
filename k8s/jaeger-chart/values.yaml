@@ -1,8 +1,8 @@
 namespace: tracing
 domain: romanow-alex.ru
+version: 1.22.0
 
 jaeger:
-  version: 1.22.0
   collector:
     resources:
       requests:
