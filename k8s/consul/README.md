@@ -17,7 +17,7 @@ $ cd vm/
 $ terrafrom apply -auto-approve
 ```
 
-#### Install kubectl
+#### Install Kubectl
 
 ```shell
 $ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -34,17 +34,24 @@ $ doctl auth init
 $ doctl kubernetes cluster kubeconfig save k8s-cluster
 ```
 
+#### Install Consul Agent
+
+```shell
+$ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+$ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >> /dev/null
+$ sudo apt update
+$ sudo apt install consul
+```
+
 #### Install and configure Postgres
 
 ```shell
 $ sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
-$ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - $ sudo apt-get update
-
+$ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+$ sudo apt-get update
 $ sudo apt-get -y install postgresql-13
 
 $ sudo su postgres
-
 $ psql <<EOF
 CREATE ROLE program WITH PASSWORD 'test';
 ALTER ROLE program WITH LOGIN;
@@ -55,12 +62,12 @@ EOF
 # listen external address (listen_addresses = '*')
 $ sudo nano /etc/postgresql/13/main/postgresql.conf
 
-# allow external connections (host all all 0.0.0.0/0 md5)
+# allow external connections (host    all    all    0.0.0.0/0    md5)
 $ sudo nano /etc/postgresql/13/main/pg_hba.conf
 
-$ sudo systemctl restart postrges
+$ sudo systemctl restart postgresql
 
-$ psql -h 10.110.0.6 -p 5432 -U program simple_backend
+$ psql -h 10.110.0.2 -p 5432 -U program simple_backend
 ```
 
 ### Connect VM to Consul Cluster
@@ -69,9 +76,9 @@ $ psql -h 10.110.0.6 -p 5432 -U program simple_backend
 
 ```shell
 $ consul agent \
-    -advertise="10.110.0.6" \
-    -retry-join='provider=k8s host_network=true label_selector="app=consul,component=server"' \
-    -bind=10.110.0.6  \
+    -advertise="10.110.0.3" \
+    -retry-join='10.110.0.4:9301' \
+    -bind=0.0.0.0  \
     -hcl='leave_on_terminate = true' \
     -hcl='ports { grpc = 8502 }' \
     -data-dir=/tmp/consul
@@ -110,11 +117,13 @@ data:
     .:53 {
         <Existing CoreDNS definition>
     }
-   consul {
-     errors
-     cache 30
-     forward . 10.245.161.203
-   }
+    consul {
+        errors
+        cache 30
+        forward . 10.245.60.35
+    }
 ```
 
 1. [Resolve Consul DNS Requests in Kubernetes](https://developer.hashicorp.com/consul/docs/k8s/dns)
+2. [Join External Services to Consul on Kubernetes](https://developer.hashicorp.com/consul/docs/k8s/deployment-configurations/clients-outside-kubernetes)
+3. [Cloud Auto-join (Kubernetes)](https://developer.hashicorp.com/consul/docs/install/cloud-auto-join#kubernetes-k8s)

@@ -2,8 +2,12 @@ data "digitalocean_ssh_key" "default" {
   name = "[work-pc] Romanow"
 }
 
+data "digitalocean_image" "ubuntu" {
+  name = var.vm_image
+}
+
 resource "digitalocean_droplet" "main" {
-  image    = var.vm_image
+  image    = data.digitalocean_image.ubuntu.id
   name     = var.hostname
   region   = var.vm_region
   size     = var.vm_size

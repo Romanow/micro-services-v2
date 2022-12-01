@@ -13,9 +13,6 @@ client:
 server:
   replicas: 1
   exposeGossipAndRPCPorts: true
-  ports:
-    serflan:
-      port: 9301
 
 ui:
   enabled: true

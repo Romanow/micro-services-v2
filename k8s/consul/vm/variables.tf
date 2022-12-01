@@ -11,7 +11,7 @@ variable "domain" {
 
 variable "vm_image" {
   type        = string
-  default     = "ubuntu-22-04-x64"
+  default     = "ubuntu-22.04-01-12-2022"
   description = "VM image name"
 }
 
@@ -23,7 +23,7 @@ variable "vm_region" {
 
 variable "vm_size" {
   type        = string
-  default     = "s-1vcpu-1gb"
+  default     = "s-1vcpu-2gb"
   description = "Node size"
 }
 
