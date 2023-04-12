@@ -58,8 +58,10 @@ class CircuitBreakerConfiguration {
             override fun <T> apply(
                 method: HttpMethod, url: String, throwable: Throwable, vararg params: Any,
             ): Mono<T> {
-                logger.warn("Request to {} '{}' failed with exception: {}. (params: '{}')",
-                    method.name, url, throwable.message, params)
+                logger.warn(
+                    "Request to {} '{}' failed with exception: {}. (params: '{}')",
+                    method.name(), url, throwable.message, params
+                )
                 if (throwable.javaClass in circuitBreakerConfigurationSupport.ignoredExceptions()) {
                     throw (throwable as RuntimeException)
                 }

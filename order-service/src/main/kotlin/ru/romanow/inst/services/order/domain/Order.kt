@@ -1,9 +1,9 @@
 package ru.romanow.inst.services.order.domain
 
+import jakarta.persistence.*
 import ru.romanow.inst.services.order.model.PaymentStatus
 import java.time.LocalDateTime
 import java.util.*
-import javax.persistence.*
 
 @Entity
 @Table(name = "orders", indexes = [

@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.warehouse.service
 
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +14,6 @@ import ru.romanow.inst.services.warehouse.model.SizeChart
 import ru.romanow.inst.services.warehouse.repository.ItemRepository
 import ru.romanow.inst.services.warehouse.repository.OrderItemRepository
 import java.util.*
-import javax.persistence.EntityNotFoundException
 
 @Service
 class WarehouseServiceImpl(

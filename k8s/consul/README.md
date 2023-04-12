@@ -39,8 +39,8 @@ $ doctl kubernetes cluster kubeconfig save k8s-cluster
 ```shell
 $ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 $ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >> /dev/null
-$ sudo apt update
-$ sudo apt install consul
+$ sudo apt-get update
+$ sudo apt-get install consul
 ```
 
 #### Install and configure Postgres
@@ -76,8 +76,8 @@ $ psql -h 10.110.0.2 -p 5432 -U program simple_backend
 
 ```shell
 $ consul agent \
-    -advertise="10.110.0.3" \
-    -retry-join='10.110.0.4:9301' \
+    -advertise="10.110.0.2" \
+    -retry-join='provider=k8s host_network=true label_selector="app=consul,component=server"' \
     -bind=0.0.0.0  \
     -hcl='leave_on_terminate = true' \
     -hcl='ports { grpc = 8502 }' \

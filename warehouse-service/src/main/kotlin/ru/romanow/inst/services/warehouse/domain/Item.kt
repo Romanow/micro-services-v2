@@ -1,8 +1,8 @@
 package ru.romanow.inst.services.warehouse.domain
 
+import jakarta.persistence.*
 import ru.romanow.inst.services.warehouse.model.SizeChart
 import java.util.*
-import javax.persistence.*
 
 @Entity
 @Table(name = "items")

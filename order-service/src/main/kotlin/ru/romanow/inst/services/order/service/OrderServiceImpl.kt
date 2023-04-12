@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.order.service
 
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +14,6 @@ import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors.toCollection
-import javax.persistence.EntityNotFoundException
 
 @Service
 class OrderServiceImpl(

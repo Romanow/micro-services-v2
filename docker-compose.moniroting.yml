@@ -1,7 +1,7 @@
 version: "3"
 services:
   prometheus:
-    image: prom/prometheus:v2.31.1
+    image: prom/prometheus:v2.41.0
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -23,7 +23,7 @@ services:
       - INFLUXDB_DB=k6
 
   grafana:
-    image: grafana/grafana:8.2.5
+    image: grafana/grafana:9.4.7
     container_name: grafana
     ports:
       - "3000:3000"

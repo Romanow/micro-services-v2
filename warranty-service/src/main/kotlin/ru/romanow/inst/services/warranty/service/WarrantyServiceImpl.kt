@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.warranty.service
 
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -7,16 +8,19 @@ import ru.romanow.inst.services.warranty.domain.Warranty
 import ru.romanow.inst.services.warranty.model.ItemWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import ru.romanow.inst.services.warranty.model.WarrantyDecision
-import ru.romanow.inst.services.warranty.model.WarrantyDecision.*
+import ru.romanow.inst.services.warranty.model.WarrantyDecision.FIXING
+import ru.romanow.inst.services.warranty.model.WarrantyDecision.REFUSE
+import ru.romanow.inst.services.warranty.model.WarrantyDecision.RETURN
 import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
-import ru.romanow.inst.services.warranty.model.WarrantyStatus.*
+import ru.romanow.inst.services.warranty.model.WarrantyStatus.ON_WARRANTY
+import ru.romanow.inst.services.warranty.model.WarrantyStatus.REMOVED_FROM_WARRANTY
+import ru.romanow.inst.services.warranty.model.WarrantyStatus.USE_WARRANTY
 import ru.romanow.inst.services.warranty.repository.WarrantyRepository
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
-import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(

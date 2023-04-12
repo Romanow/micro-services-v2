@@ -30,9 +30,8 @@ dependencies {
     api "org.zalando:logbook-core:$logbookVersion"
     api "io.github.resilience4j:resilience4j-micrometer"
 
-    api "org.springdoc:springdoc-openapi-webmvc-core:$openApiVersion"
-    api "org.springdoc:springdoc-openapi-ui:$openApiVersion"
-    api "org.springdoc:springdoc-openapi-kotlin:$openApiVersion"
+    api "org.springdoc:springdoc-openapi-starter-common:$openApiVersion"
+    api "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openApiVersion"
 }
 
 test {

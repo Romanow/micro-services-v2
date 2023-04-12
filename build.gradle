@@ -4,32 +4,29 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.10"
     id "org.jetbrains.kotlin.plugin.jpa" version "1.7.10" apply false
     id "org.jetbrains.kotlin.plugin.spring" version "1.7.10" apply false
-    id "com.gorylenko.gradle-git-properties" version "2.3.1" apply false
-    id "org.springframework.boot" version "2.7.5" apply false
-    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "com.gorylenko.gradle-git-properties" version "2.4.1" apply false
+    id "org.springframework.boot" version "3.0.4" apply false
+    id "io.spring.dependency-management" version "1.1.0"
 }
 
 ext {
     kotlinVersion = "1.7.10"
-    springBootVersion = "2.7.5"
-    springCircuitBreakerVersion = "2.1.5"
+    springBootVersion = "3.0.4"
+    springCircuitBreakerVersion = "3.0.1"
     validationApiVersion = "2.0.1.Final"
     tracingVersion = "3.3.1"
     gsonVersion = "2.8.5"
-    jwtVersion = "4.2.1"
-    openApiVersion = "1.6.12"
-    logbookVersion = "2.14.0"
-    logstashEncoderVersion = "6.6"
-    postgresContainerVersion = "1.17.5"
+    jwtVersion = "4.4.0"
+    openApiVersion = "2.1.0"
+    logbookVersion = "2.16.0"
+    logstashEncoderVersion = "7.3"
+    postgresContainerVersion = "1.18.0"
 }
 
 subprojects { ->
     apply plugin: "idea"
     apply plugin: "kotlin"
     apply plugin: "io.spring.dependency-management"
-
-    sourceCompatibility = 1.11
-    targetCompatibility = 1.11
 
     idea {
         module {
@@ -38,7 +35,7 @@ subprojects { ->
         }
     }
 
-    [compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
+    [compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "17"
 
     repositories {
         mavenCentral()
@@ -52,12 +49,12 @@ subprojects { ->
     }
 
     dependencies {
-        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-        implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+        implementation "org.jetbrains.kotlin:kotlin-reflect"
+        implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
 
         implementation "javax.validation:validation-api:$validationApiVersion"
         implementation "org.apache.commons:commons-lang3"
-        implementation "com.google.code.gson:gson:$gsonVersion"
+        implementation "com.google.code.gson:gson"
     }
 }

@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.store.service
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -12,7 +13,6 @@ import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.store.exceptions.WarrantyProcessException
 import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
 import java.util.*
-import javax.persistence.EntityNotFoundException
 
 @Service
 class WarrantyServiceImpl(

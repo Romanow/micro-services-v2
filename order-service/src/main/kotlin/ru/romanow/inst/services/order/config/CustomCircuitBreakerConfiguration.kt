@@ -1,11 +1,11 @@
 package ru.romanow.inst.services.order.config
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.context.annotation.Configuration
 import ru.romanow.inst.services.common.config.CircuitBreakerConfigurationSupport
 import ru.romanow.inst.services.order.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.order.exceptions.WarehouseProcessException
 import ru.romanow.inst.services.order.exceptions.WarrantyProcessException
-import javax.persistence.EntityNotFoundException
 
 @Configuration
 class CustomCircuitBreakerConfiguration : CircuitBreakerConfigurationSupport {

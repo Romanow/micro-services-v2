@@ -1,5 +1,6 @@
 package ru.romanow.inst.services.common.config
 
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -8,8 +9,6 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import javax.servlet.http.HttpServletRequest
-
 
 @EnableWebMvc
 @Configuration
@@ -20,11 +19,11 @@ class WebConfiguration : WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins("*")
             .allowedMethods(
-                HttpMethod.GET.name,
-                HttpMethod.POST.name,
-                HttpMethod.PUT.name,
-                HttpMethod.PATCH.name,
-                HttpMethod.DELETE.name
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.PATCH.name(),
+                HttpMethod.DELETE.name()
             )
     }
 

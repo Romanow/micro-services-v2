@@ -1,6 +1,7 @@
 package ru.romanow.inst.services.warehouse.web
 
 import io.swagger.v3.oas.annotations.Hidden
+import jakarta.persistence.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.warehouse.exceptions.ItemNotAvailableException
 import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
-import javax.persistence.EntityNotFoundException
 
 @Hidden
 @RestControllerAdvice(annotations = [RestController::class])

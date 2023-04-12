@@ -1,11 +1,8 @@
 package ru.romanow.inst.services.store.config
 
-import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
-import org.springframework.security.core.context.SecurityContextHolder.getContext
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.oauth2.server.resource.web.reactive.function.client.ServletBearerExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 import ru.romanow.inst.services.common.properties.ServerUrlProperties

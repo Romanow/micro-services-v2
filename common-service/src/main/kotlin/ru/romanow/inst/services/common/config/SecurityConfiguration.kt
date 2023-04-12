@@ -26,7 +26,7 @@ class SecurityConfiguration {
 
     @Bean
     fun tokenSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.antMatcher("/api/v1/**")
+        return http.securityMatcher("/api/v1/**")
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }
@@ -39,13 +39,13 @@ class SecurityConfiguration {
     @Bean
     fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         // @formatter:off
-        http.requestMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
-                .authorizeRequests().anyRequest().hasRole(properties.role)
-            .and()
-                .csrf().disable()
-                .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+        http.securityMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
+                .authorizeHttpRequests {
+                    it.anyRequest().hasRole(properties.role)
+                }
+                .csrf {it.disable() }
+                .formLogin {it.disable() }
+                .sessionManagement{ it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
                 .httpBasic()
         // @formatter:on
 
