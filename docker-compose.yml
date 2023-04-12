@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: library/postgres:13
+    image: library/postgres:15
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
