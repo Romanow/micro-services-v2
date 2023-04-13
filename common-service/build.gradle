@@ -32,6 +32,8 @@ dependencies {
 
     api "org.springdoc:springdoc-openapi-starter-common:$openApiVersion"
     api "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openApiVersion"
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 test {

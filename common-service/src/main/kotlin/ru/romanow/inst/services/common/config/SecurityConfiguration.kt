@@ -4,6 +4,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -25,31 +26,39 @@ class SecurityConfiguration {
     }
 
     @Bean
+    @Order(1)
     fun tokenSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.securityMatcher("/api/v1/**")
+        return http
+            .securityMatcher("/api/v1/**")
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }
             .oauth2ResourceServer {
-                it.jwt()
+                it.jwt {}
             }
             .build()
     }
 
     @Bean
+    @Order(2)
     fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
-        // @formatter:off
-        http.securityMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
-                .authorizeHttpRequests {
-                    it.anyRequest().hasRole(properties.role)
-                }
-                .csrf {it.disable() }
-                .formLogin {it.disable() }
-                .sessionManagement{ it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-                .httpBasic()
-        // @formatter:on
+        return http
+            .securityMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
+            .authorizeHttpRequests { it.anyRequest().hasRole(properties.role) }
+            .csrf { it.disable() }
+            .formLogin { it.disable() }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .httpBasic {}
+            .build()
+    }
 
-        return http.build()
+    @Bean
+    @Order(3)
+    fun permitAllSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
+        return http
+            .securityMatcher("/**")
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+            .build()
     }
 
     @Bean
