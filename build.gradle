@@ -11,8 +11,8 @@ plugins {
 
 ext {
     kotlinVersion = "1.7.10"
-    springBootVersion = "3.0.4"
-    springCircuitBreakerVersion = "3.0.1"
+    springBootVersion = "3.1.2"
+    springCircuitBreakerVersion = "3.0.3"
     validationApiVersion = "2.0.1.Final"
     tracingVersion = "3.3.1"
     gsonVersion = "2.8.5"

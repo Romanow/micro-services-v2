@@ -3,39 +3,58 @@ services:
   prometheus:
     image: prom/prometheus:v2.41.0
     container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus/data"
+    healthcheck:
+      test: [ "CMD", "wget", "http://localhost:9090" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     ports:
       - "9090:9090"
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus/data'
 
   influxdb:
     image: influxdb:1.8
     container_name: influxdb
+    environment:
+      - INFLUXDB_DB=k6
+    healthcheck:
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8086/ping" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     ports:
       - "8086:8086"
     volumes:
       - influxdb-data:/var/lib/influxdb
-    environment:
-      - INFLUXDB_DB=k6
 
   grafana:
     image: grafana/grafana:9.4.7
     container_name: grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_BASIC_ENABLED=false
+      - GF_USERS_DEFAULT_THEME=light
+    healthcheck:
+      test: [ "CMD", "wget", "http://localhost:3000/api/health" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     ports:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./docker/grafana/:/etc/grafana/provisioning/
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
-      - prometheus
-      - influxdb
+      prometheus:
+        - condition: service_healthy
+      influxdb:
+        - condition: service_healthy
 
 volumes:
   prometheus-data:

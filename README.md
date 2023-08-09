@@ -24,13 +24,14 @@ graph TD
 ### Запуск в Docker Compose
 
 ```shell
+# build services
 $ ./gradlew clean build
 
+# build docker images
 $ docker compose build
 
-$ dcoker compose up -d
-
-$ docker compose logs -f
+# run images
+$ docker compose up -d
 ```
 
 ### Запуск локального кластера k8s

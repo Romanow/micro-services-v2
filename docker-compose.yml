@@ -1,61 +1,99 @@
 version: "3"
 services:
   postgres:
-    image: library/postgres:15
+    image: postgres:15
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./docker/postgres/:/docker-entrypoint-initdb.d/
-    ports:
-      - "5432:5432"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.5"
+          memory: 256M
 
   store-service:
     build: ./store-service
-    image: romanowalex/store-service:v2.2
+    image: ${REPOSITORY_NAME}/store-service:v3.0
     container_name: store-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8480/manage/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     ports:
       - "8480:8480"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   order-service:
     build: ./order-service
-    image: romanowalex/order-service:v2.2
+    image: ${REPOSITORY_NAME}/order-service:v3.0
     container_name: order-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8380/manage/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     ports:
       - "8380:8380"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   warehouse-service:
     build: ./warehouse-service
-    image: romanowalex/warehouse-service:v2.2
+    image: ${REPOSITORY_NAME}/warehouse-service:v3.0
     container_name: warehouse-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8280/manage/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     ports:
       - "8280:8280"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   warranty-service:
     build: ./warranty-service
-    image: romanowalex/warranty-service:v2.2
+    image: ${REPOSITORY_NAME}/warranty-service:v3.0
     container_name: warranty-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8180/manage/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     ports:
       - "8180:8180"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   db-data:
