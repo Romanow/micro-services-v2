@@ -1,0 +1,17 @@
+version: 7.15.0
+namespace: elastic
+
+username: logging
+password: qwerty
+
+ports:
+  http: 9200
+  communication: 9300
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+  limits:
+    cpu: 500m
+    memory: 2048Mi

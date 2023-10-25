@@ -11,7 +11,7 @@ scrape_configs:
       password: 'passwd'
     static_configs:
       - targets:
-          - store-service:8480
-          - order-service:8380
-          - warehouse-service:8280
-          - warranty-service:8180
+          - store:8480
+          - orders:8380
+          - warehouse:8280
+          - warranty:8180

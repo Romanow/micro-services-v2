@@ -1,5 +1,0 @@
-version: v2.6.0
-
-ports:
-  http: 8080
-  telemerty: 8081

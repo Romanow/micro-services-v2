@@ -1,0 +1,39 @@
+---
+grafana:
+  grafana.ini:
+    server:
+      domain: grafana.local
+      root_url: "%(protocol)s://%(domain)s/"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - "grafana.local"
+  admin:
+    existingSecret: grafana-credentials
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+  dashboardProviders:
+    dashboard-providers.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      spring-boot:
+        gnetId: 10280
+        revision: 1
+        datasource: Prometheus

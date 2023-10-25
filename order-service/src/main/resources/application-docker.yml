@@ -2,9 +2,9 @@ spring:
   datasource:
     url: jdbc:postgresql://${DATABASE_HOST:postgres}:${DATABASE_PORT:5432}/${DATABASE_NAME:orders}
     username: ${DATABASE_USER:program}
-    password: ${DATABAES_PASSWORD:test}
+    password: ${DATABASE_PASSWORD:test}
     driver-class-name: org.postgresql.Driver
 
 services:
-  warranty-url: ${WARRANTY_URL:http://warranty-service:8180}
-  warehouse-url: ${WAREHOUSE_URL:http://warehouse-service:8280}
+  warranty-url: ${WARRANTY_URL:http://warranty:8180}
+  warehouse-url: ${WAREHOUSE_URL:http://warehouse:8280}

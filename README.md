@@ -34,102 +34,6 @@ $ docker compose build
 $ docker compose up -d
 ```
 
-### Запуск локального кластера k8s
-
-```shell
-# create local cluster
-$ kind create cluster --config kind.yml
-
-# configure ingress
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-
-# если требуется загрузить локальный образ в кластер
-$ bash scripts/load-images.sh
-
-$ cd k8s
-$ helm install postgres postgres-chart/
-
-$ helm install services services-chart/ \
-      --set store.domain=local \
-      --set order.domain=local \
-      --set warehouse.domain=local \
-      --set warranty.domain=local
-      
-$ sudo tee -a /etc/hosts > /dev/null <<EOT
-127.0.0.1    store.local
-127.0.0.1    order.local
-127.0.0.1    warehouse.local
-127.0.0.1    warranty.local
-127.0.0.1    grafana.local
-127.0.0.1    jaeger.local
-127.0.0.1    kibana.local
-EOT
-
-$ cd ../postman
-$ newman run -e kind-environment.json --folder=store  collection.json
-```
-
-#### Grafana + Prometheus
-
-```shell
-$ helm upgrade monitoring monitoring-chart --set grafana.domain=local
-```
-
-Открыть в браузере [http://grafana.local](http://grafana.local).
-
-##### Dashboard
-
-Импортировать Grafana dashboards: `Create` -> `Import` -> `Import via grafana.com`.
-
-* Node Exporter – [12486](https://grafana.com/grafana/dashboards/12486-node-exporter-full/)
-* Spring Boot – [10280](https://grafana.com/grafana/dashboards/10280-microservices-spring-boot-2-1/)
-* Kubernetes Global – [15757](https://grafana.com/grafana/dashboards/15757-kubernetes-views-global/)
-* Kubernetes Nodes – [15759](https://grafana.com/grafana/dashboards/15759-kubernetes-views-nodes/)
-* Kubernetes Namespaces – [15758](https://grafana.com/grafana/dashboards/15758-kubernetes-views-namespaces/)
-* Kubernetes Pods – [15760](https://grafana.com/grafana/dashboards/15760-kubernetes-views-pods/)
-
-Другие доски доступны на [Grafana Labs](https://grafana.com/grafana/dashboards/).
-
-##### Alerting
-
-## Alerting
-
-* Создать бота: в телеграмм находим `@BotFather`, вызываем `/newbot`:
-    * name: _k8s_monitoring_
-    * id: _k8s_monitoring_bot_
-* Создать канал _K8S Monitoring_, добавить `@k8s_monitoring_bot` как администратора. Отправить хотя бы одно сообщение в
-  группу.
-* После этого через Telegram API получить chart ID:
-  ```http request
-  GET https://api.telegram.org/bot<token>/getUpdates
-  ```
-* Создать Notification Channel: `Grafana` -> `Alerting` -> `Notification Channels` -> `Telegram Bot`.
-* Создать новый dashboard:
-    * Title: Request Count
-    * Panel: `Query: sum(irate(http_server_requests_seconds_count{application="store-service"}[5m]))`
-    * Alerting:
-        * Condition: `Evaluate every: 10s for 0, when avg() of query(A, 10s, now) is above 10`
-        * Send to: `Telegram bot`, message: `Too many requests`
-
-#### ELK Stack
-
-```shell
-$ helm upgrade elasticsearch elasticsearch-chart
-
-$ helm upgrade logging logging-chart --set kibana.domain=local
-```
-
-Открыть в браузере [http://kibana.local](http://kibana.local).
-
-#### Jaeger
-
-```shell
-# для работы требуется ElasticSearch
-$ helm upgrade jaeger jaeger-chart --set domain=local
-```
-
-Открыть в браузере [http://jaeger.local](http://jaeger.local).
-
 ## Настройка Auth0
 
 1. Регистрируемся на [Auth0](https://auth0.com).
@@ -138,10 +42,10 @@ $ helm upgrade jaeger jaeger-chart --set domain=local
 3. Переходим в `Advanced Settings` -> `Grant Types`: только `Password` (Resource Owner Password Flow).
 4. Переходим в `API` -> `Create API`:
     * Name: `Cinema Aggregator Service`;
-    * Identifier: `http://store-service.romanow-alex.ru`;
+    * Identifier: `http://store.romanow-alex.ru`;
     * Signing Algorithm: RS256.
 5. Настраиваем хранилище паролей: `Settings` -> `Tenant Settings` -> `API Authorization Settings`:
-    * Default Audience: `http://store-service.romanow-alex.ru`;
+    * Default Audience: `http://store.romanow-alex.ru`;
     * Default Directory: `Username-Password-Authentication`.
 6. Создаем тестового пользователя: `User Management` -> `Users` -> `Create User`:
     * Email: `ronin@romanow-alex.ru`;
@@ -184,7 +88,7 @@ $ k6 run \
     -e PASSWORD=Qwerty123 \
     -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
     -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
-    k6-load.js
+    k6.js
 ```
 
 ## Ссылки

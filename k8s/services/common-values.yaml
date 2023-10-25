@@ -1,0 +1,51 @@
+profile: k8s
+
+ingress:
+  enabled: true
+  domain: local
+
+database:
+  host: postgres
+  port: 5432
+  username: program
+  password: test
+
+resources:
+  requests:
+    cpu: 0.5
+    memory: 1024Mi
+  limits:
+    cpu: 0.5
+    memory: 1024Mi
+
+circuit_breaker:
+  enabled: true
+
+jaeger:
+  enabled: true
+  application:
+    host: jaeger-agent
+    port: 6831
+  collector:
+    host: jaeger-collector
+    port: 14250
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
+filebeat:
+  enabled: true
+  logstash:
+    host: logstash
+    port: 5044
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 50m
+      memory: 128Mi

@@ -2,6 +2,7 @@ package ru.romanow.inst.services.common.config
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.toAnyEndpoint
 import org.springframework.boot.actuate.health.HealthEndpoint
+import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -43,7 +44,10 @@ class SecurityConfiguration {
     @Order(2)
     fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         return http
-            .securityMatcher(toAnyEndpoint().excluding(HealthEndpoint::class.java))
+            .securityMatcher(
+                toAnyEndpoint()
+                    .excluding(HealthEndpoint::class.java, PrometheusScrapeEndpoint::class.java)
+            )
             .authorizeHttpRequests { it.anyRequest().hasRole(properties.role) }
             .csrf { it.disable() }
             .formLogin { it.disable() }

@@ -5,7 +5,7 @@ spring:
   profiles:
     active: local
     include: common
-  application.name: order-service
+  application.name: orders
   main.banner-mode: off
   security:
     oauth2:
