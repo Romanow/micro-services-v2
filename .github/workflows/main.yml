@@ -55,6 +55,11 @@ jobs:
         run: |
           docker compose up -d --wait
 
+      - name: Print logs
+        if: failure()
+        run: |
+          docker compose logs
+
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
