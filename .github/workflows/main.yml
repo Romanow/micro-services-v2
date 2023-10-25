@@ -51,12 +51,13 @@ jobs:
         run: docker compose build
 
       - name: Run containers
+        id: run-containers
         timeout-minutes: 10
         run: |
           docker compose up -d --wait
 
       - name: Print logs
-        if: failure()
+        if: failure() && steps.run-containers.outcome != 'success'
         run: |
           docker compose logs
 
