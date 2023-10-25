@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar
-          path: '**/build/libs/*.jar'
+          path: '*-service/build/libs/*.jar'
           retention-days: 1
 
       - name: Test Report
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: jar
-          path: build/libs/
+          path: .
 
       - name: Build images
         timeout-minutes: 5
