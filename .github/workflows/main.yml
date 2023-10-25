@@ -32,11 +32,6 @@ jobs:
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
 
-      - name: Stop containers
-        if: always()
-        continue-on-error: true
-        run: docker compose down -v
-
   test:
     name: Integration Test
     runs-on: ubuntu-latest
@@ -91,7 +86,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: jar
-          path: build/libs/
+          path: .
 
       - name: Build images
         timeout-minutes: 5
