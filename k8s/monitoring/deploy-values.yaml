@@ -37,3 +37,7 @@ grafana:
         gnetId: 10280
         revision: 1
         datasource: Prometheus
+      postgres:
+        gnetId: 9628
+        revision: 1
+        datasource: Prometheus

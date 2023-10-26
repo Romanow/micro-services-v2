@@ -26,7 +26,11 @@ $ sudo tee -a /etc/hosts >/dev/null <<EOT
 EOT
 
 # install postgres
-$ helm install postgres romanow/postgres --values postgres/deploy-values.yaml
+$ helm install postgres romanow/postgres --values postgres/values.yaml
+
+# install postgres exporter
+$ helm install postgres-exporter prometheus-community/prometheus-postgres-exporter \
+  --values=postgres-exporter/values.yaml
 
 # install monitoring (Prometheus Stack)
 $ kubectl create secret generic grafana-credentials \

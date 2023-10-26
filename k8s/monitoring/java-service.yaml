@@ -3,9 +3,15 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: java-service-monitor
+  labels:
+    release: prometheus-stack
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: java-service
+  namespaceSelector:
+    matchNames: [ default ]
   endpoints:
-    - port: java-service
+    - path: /manage/prometheus
+      port: java-service
+      interval: 5s

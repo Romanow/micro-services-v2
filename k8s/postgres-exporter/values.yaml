@@ -1,0 +1,10 @@
+service:
+  labels:
+    app.kubernetes.io/name: postgres-exporter
+
+config:
+  datasource:
+    host: postgres
+    user: postgres
+    password: postgres
+    port: "5432"
