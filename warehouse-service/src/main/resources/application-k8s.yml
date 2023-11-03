@@ -12,5 +12,5 @@ opentracing:
   jaeger:
     enabled: ${JAEGER_ENABLED:true}
     udp-sender:
-      host: ${JAEGER_HOST:jaeger-agent}
+      host: ${JAEGER_HOST:localhost}
       port: ${JAEGER_PORT:6831}

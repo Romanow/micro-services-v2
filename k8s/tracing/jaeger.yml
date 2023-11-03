@@ -1,8 +1,8 @@
+---
 apiVersion: jaegertracing.io/v1
 kind: Jaeger
 metadata:
   name: jaeger
-  namespace: tracing
 spec:
   strategy: allInOne
   allInOne:
@@ -10,21 +10,18 @@ spec:
       query:
         base-path: /
 
-  agent:
-    strategy: DaemonSet
-
   ingress:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
     pathType: Prefix
     hosts:
-      - jaeger.romanow-alex.ru
+      - jaeger.local
 
   storage:
     type: elasticsearch
     options:
       es:
-        server-urls: http://elasticsearch-service.elastic.svc.cluster.local:9200
+        server-urls: http://elastic:9200
         username: logging
         password: qwerty

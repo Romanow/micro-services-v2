@@ -1,8 +1,9 @@
-version: 7.15.0
-namespace: elastic
+clusterName: logs
 
-username: logging
-password: qwerty
+security:
+  enabled: true
+  name: logging
+  password: qwerty
 
 ports:
   http: 9200
@@ -10,8 +11,8 @@ ports:
 
 resources:
   requests:
-    cpu: 500m
+    cpu: 200m
     memory: 1024Mi
   limits:
-    cpu: 500m
-    memory: 2048Mi
+    cpu: 200m
+    memory: 1024Mi

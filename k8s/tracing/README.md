@@ -12,7 +12,5 @@ $ helm install cert-manager jetstack/cert-manager \
 
 # устанавливаем Jaeger Operator
 $ helm install jaeger-operator jaegertracing/jaeger-operator \
-    --values=deploy-values.yml \
-    --create-namespace \
-    -n tracing
+    --values=deploy-values.yml
 ```

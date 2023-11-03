@@ -18,13 +18,13 @@ resources:
     cpu: 0.5
     memory: 1024Mi
 
-circuit_breaker:
+circuitBreaker:
   enabled: true
 
 jaeger:
   enabled: true
   application:
-    host: jaeger-agent
+    host: localhost
     port: 6831
   collector:
     host: jaeger-collector
