@@ -4,6 +4,10 @@ spring:
       ddl-auto: validate
 
 management:
+  tracing:
+    enabled: ${TRACING_ENABLED:false}
+    sampling:
+      probability: 1.0
   endpoint:
     health.probes.enabled: true
   endpoints:
@@ -30,19 +34,12 @@ springdoc:
   api-docs:
     path: /api-docs
 
-opentracing:
-  jaeger:
-    enabled: ${JAEGER_ENABLED:false}
-    enable-b3-propagation: true
-    log-spans: false
-    udp-sender:
-      host: ${JAEGER_HOST:localhost}
-      port: ${JAEGER_PORT:6831}
-
 circuit-breaker:
   enabled: ${CIRCUIT_BREAKER_ENABLED:true}
   default-timeout: ${CIRCUIT_BREAKER_TIMEOUT:30s}
 
 logging:
+  pattern:
+    level=%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
   level:
     org.zalando.logbook: TRACE

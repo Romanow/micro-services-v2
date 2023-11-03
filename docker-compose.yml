@@ -28,7 +28,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8480/manage/health" ]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
     ports:
       - "8480:8480"
     depends_on:
@@ -45,7 +45,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8380/manage/health" ]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
     ports:
       - "8380:8380"
     depends_on:
@@ -62,7 +62,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8280/manage/health" ]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
     ports:
       - "8280:8280"
     depends_on:
@@ -79,7 +79,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8180/manage/health" ]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
     ports:
       - "8180:8180"
     depends_on:

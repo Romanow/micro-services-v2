@@ -1,39 +1,38 @@
 package ru.romanow.inst.services.common.config
 
-import io.jaegertracing.internal.JaegerTracer
-import io.jaegertracing.internal.MDCScopeManager
-import io.opentracing.Tracer
-import io.opentracing.contrib.java.spring.jaeger.starter.TracerBuilderCustomizer
-import io.opentracing.noop.NoopTracerFactory
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import io.micrometer.tracing.Tracer
+import io.micrometer.tracing.annotation.DefaultNewSpanParser
+import io.micrometer.tracing.annotation.ImperativeMethodInvocationProcessor
+import io.micrometer.tracing.annotation.MethodInvocationProcessor
+import io.micrometer.tracing.annotation.NewSpanParser
+import io.micrometer.tracing.annotation.SpanAspect
+import io.opentelemetry.context.propagation.TextMapPropagator
+import io.opentelemetry.extension.trace.propagation.JaegerPropagator
+import org.springframework.beans.factory.BeanFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-/**
- * В TracingConfiguration для `profile` != k8s переопределяется `Tracer` на `NoopTracer`.
- * Файл `TracerAutoConfiguration` является auto configuration и создается раньше `TracingConfiguration`,
- * т.к. он является просто `@Configuration`, из-за этого метод `public Tracer getTracer()` отрабатывает несмотря на аннотацию
- * `@ConditionalOnMissingBean(Tracer.class)`. Для задания правильного порядка используется
- * `@AutoConfigureBefore(TracerAutoConfiguration::class)`.
- */
-@Configuration
+
+@Configuration(proxyBeanMethods = false)
 class TracingConfiguration {
 
     @Bean
-    fun expandByMDCScopeManager(): ExpandByMDCScopeManager {
-        return ExpandByMDCScopeManager()
-    }
+    fun jaegerPropagator(): TextMapPropagator = JaegerPropagator.getInstance()
 
-    class ExpandByMDCScopeManager : TracerBuilderCustomizer {
-        override fun customize(builder: JaegerTracer.Builder) {
-            val mdcScopeManager = MDCScopeManager.Builder().build()
-            builder.withScopeManager(mdcScopeManager)
-        }
+    @Bean
+    fun newSpanParser() = DefaultNewSpanParser()
+
+    @Bean
+    fun methodInvocationProcessor(
+        newSpanParser: NewSpanParser,
+        tracer: Tracer,
+        beanFactory: BeanFactory
+    ): MethodInvocationProcessor {
+        return ImperativeMethodInvocationProcessor(
+            newSpanParser, tracer, { beanFactory.getBean(it) }, { beanFactory.getBean(it) }
+        )
     }
 
     @Bean
-    @ConditionalOnProperty("opentracing.jaeger.enabled", havingValue = "false")
-    fun jaegerTracer(): Tracer {
-        return NoopTracerFactory.create()
-    }
+    fun spanAspect(methodInvocationProcessor: MethodInvocationProcessor) = SpanAspect(methodInvocationProcessor)
 }

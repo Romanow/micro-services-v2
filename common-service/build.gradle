@@ -1,4 +1,5 @@
 plugins {
+    id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.spring"
 }
 
@@ -19,21 +20,23 @@ dependencies {
     api "org.springframework:spring-webflux"
 
     api "net.logstash.logback:logstash-logback-encoder:$logstashEncoderVersion"
-    api "io.opentracing.contrib:opentracing-spring-jaeger-web-starter:$tracingVersion"
+    api "io.micrometer:micrometer-commons"
+    api "io.micrometer:micrometer-tracing-bridge-otel"
+    api "io.opentelemetry:opentelemetry-exporter-otlp"
     api "io.projectreactor.netty:reactor-netty-http"
+    api "io.micrometer:micrometer-registry-prometheus"
 
     api "com.auth0:java-jwt:$jwtVersion"
 
     api "org.postgresql:postgresql"
     api "org.flywaydb:flyway-core"
-    api "io.micrometer:micrometer-registry-prometheus"
-    api "org.zalando:logbook-core:$logbookVersion"
     api "io.github.resilience4j:resilience4j-micrometer"
+    api "org.zalando:logbook-core:$logbookVersion"
 
     api "org.springdoc:springdoc-openapi-starter-common:$openApiVersion"
     api "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openApiVersion"
 
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    kapt "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 test {
