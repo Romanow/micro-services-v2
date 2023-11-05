@@ -9,11 +9,13 @@ import io.micrometer.tracing.annotation.SpanAspect
 import io.opentelemetry.context.propagation.TextMapPropagator
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator
 import org.springframework.beans.factory.BeanFactory
+import org.springframework.boot.actuate.autoconfigure.tracing.ConditionalOnEnabledTracing
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnEnabledTracing
 class TracingConfiguration {
 
     @Bean
