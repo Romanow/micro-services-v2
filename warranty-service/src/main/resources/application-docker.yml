@@ -4,3 +4,10 @@ spring:
     username: ${DATABASE_USER:program}
     password: ${DATABASE_PASSWORD:test}
     driver-class-name: org.postgresql.Driver
+
+management:
+  otlp:
+    tracing:
+      endpoint: http://jaeger:4318/v1/traces
+  tracing:
+    enabled: true

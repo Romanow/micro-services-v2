@@ -12,24 +12,24 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 class WebClientConfiguration {
 
     @Bean
-    fun orderWebClient(properties: ServerUrlProperties): WebClient =
-        WebClient.builder()
+    fun orderWebClient(builder: WebClient.Builder, properties: ServerUrlProperties): WebClient =
+        builder
             .baseUrl("${properties.orderUrl}/api/v1/orders")
             .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
 
     @Bean
-    fun warehouseWebClient(properties: ServerUrlProperties): WebClient =
-        WebClient.builder()
+    fun warehouseWebClient(builder: WebClient.Builder, properties: ServerUrlProperties): WebClient =
+        builder
             .baseUrl("${properties.warehouseUrl}/api/v1/warehouse")
             .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .build()
 
     @Bean
-    fun warrantyWebClient(properties: ServerUrlProperties): WebClient =
-        WebClient.builder()
+    fun warrantyWebClient(builder: WebClient.Builder, properties: ServerUrlProperties): WebClient =
+        builder
             .baseUrl("${properties.warrantyUrl}/api/v1/warranty")
             .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")

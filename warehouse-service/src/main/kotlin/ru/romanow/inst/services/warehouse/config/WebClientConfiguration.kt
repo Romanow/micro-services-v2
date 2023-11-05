@@ -11,8 +11,8 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 class WebClientConfiguration {
 
     @Bean
-    fun warrantyWebClient(properties: ServerUrlProperties): WebClient =
-        WebClient.builder()
+    fun warrantyWebClient(builder: WebClient.Builder, properties: ServerUrlProperties): WebClient =
+        builder
             .baseUrl("${properties.warrantyUrl}/api/v1/warranty")
             .filter(ServletBearerExchangeFilterFunction())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")

@@ -7,6 +7,9 @@ spring:
       client.health-indicator.enabled: false
 
 management:
+  otlp:
+    tracing:
+      endpoint: ${COLLECTOR_ENDPOINT:http://localhost:4318/v1/traces}
   tracing:
     enabled: ${TRACING_ENABLED:false}
     sampling:
