@@ -53,14 +53,14 @@ class OrderServiceImpl(
         )
 
         orderRepository.save(order)
-        logger.debug("Create order '$orderUid' for user '$userId' and item '$itemUid'")
+        logger.debug("Create order '{}' for user '{}' and item '{}'", orderUid, userId, itemUid)
     }
 
     @Transactional
     override fun cancelOrder(orderUid: UUID) {
         val deleted = orderRepository.deleteOrder(orderUid)
         if (deleted > 0) {
-            logger.debug("Deleted '$orderUid' order")
+            logger.debug("Deleted '{}' order", orderUid)
         }
     }
 

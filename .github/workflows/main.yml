@@ -2,6 +2,7 @@ name: Build project
 on: [ push ]
 jobs:
   qodana:
+    name: Qodana
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -12,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Qodana Scan'
+      - name: Qodana Scan
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
