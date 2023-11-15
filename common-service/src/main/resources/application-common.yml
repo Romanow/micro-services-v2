@@ -25,6 +25,10 @@ management:
   health.diskspace.enabled: false
   endpoint.health.show-details: always
   info.git.mode: simple
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
   credentials:
     user: management
     passwd: passwd
