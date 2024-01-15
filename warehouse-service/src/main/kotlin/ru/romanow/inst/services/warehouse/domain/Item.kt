@@ -1,15 +1,8 @@
 package ru.romanow.inst.services.warehouse.domain
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import ru.romanow.inst.services.warehouse.model.SizeChart
-import java.util.Objects
+import java.util.*
 
 @Entity
 @Table(name = "items")

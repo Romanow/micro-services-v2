@@ -7,14 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.warehouse.model.ItemInfoResponse
 import ru.romanow.inst.services.warehouse.model.OrderItemRequest
@@ -23,7 +16,7 @@ import ru.romanow.inst.services.warehouse.service.WarehouseService
 import ru.romanow.inst.services.warehouse.service.WarrantyService
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.UUID
+import java.util.*
 import javax.validation.Valid
 
 @Tag(name = "Warehouse API")

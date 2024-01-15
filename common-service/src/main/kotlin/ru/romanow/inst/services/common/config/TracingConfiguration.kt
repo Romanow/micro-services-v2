@@ -1,11 +1,7 @@
 package ru.romanow.inst.services.common.config
 
 import io.micrometer.tracing.Tracer
-import io.micrometer.tracing.annotation.DefaultNewSpanParser
-import io.micrometer.tracing.annotation.ImperativeMethodInvocationProcessor
-import io.micrometer.tracing.annotation.MethodInvocationProcessor
-import io.micrometer.tracing.annotation.NewSpanParser
-import io.micrometer.tracing.annotation.SpanAspect
+import io.micrometer.tracing.annotation.*
 import io.opentelemetry.context.propagation.TextMapPropagator
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator
 import org.springframework.beans.factory.BeanFactory

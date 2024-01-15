@@ -10,23 +10,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import ru.romanow.inst.services.common.model.ErrorResponse
-import ru.romanow.inst.services.store.model.PurchaseRequest
-import ru.romanow.inst.services.store.model.UserOrderResponse
-import ru.romanow.inst.services.store.model.UserOrdersResponse
-import ru.romanow.inst.services.store.model.WarrantyRequest
-import ru.romanow.inst.services.store.model.WarrantyResponse
+import ru.romanow.inst.services.store.model.*
 import ru.romanow.inst.services.store.service.StoreService
-import java.util.UUID
+import java.util.*
 import javax.validation.Valid
 
 @Tag(name = "Store API")

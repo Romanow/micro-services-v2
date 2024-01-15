@@ -1,12 +1,8 @@
 package ru.romanow.inst.services.store.service
 
 import jakarta.persistence.EntityNotFoundException
-import org.springframework.http.HttpMethod.DELETE
-import org.springframework.http.HttpMethod.GET
-import org.springframework.http.HttpMethod.POST
-import org.springframework.http.HttpStatus.CONFLICT
-import org.springframework.http.HttpStatus.NOT_FOUND
-import org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
+import org.springframework.http.HttpMethod.*
+import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
@@ -23,8 +19,7 @@ import ru.romanow.inst.services.store.exceptions.OrderProcessException
 import ru.romanow.inst.services.store.model.PurchaseRequest
 import ru.romanow.inst.services.store.model.WarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 
 @Service
 class OrderServiceImpl(

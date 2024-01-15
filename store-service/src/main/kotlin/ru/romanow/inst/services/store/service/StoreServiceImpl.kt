@@ -5,15 +5,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.romanow.inst.services.store.exceptions.OrderProcessException
 import ru.romanow.inst.services.store.exceptions.WarrantyProcessException
-import ru.romanow.inst.services.store.model.PurchaseRequest
-import ru.romanow.inst.services.store.model.SizeChart
-import ru.romanow.inst.services.store.model.UserOrderResponse
-import ru.romanow.inst.services.store.model.UserOrdersResponse
-import ru.romanow.inst.services.store.model.WarrantyRequest
-import ru.romanow.inst.services.store.model.WarrantyResponse
-import ru.romanow.inst.services.store.model.WarrantyStatus
+import ru.romanow.inst.services.store.model.*
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.UUID
+import java.util.*
 
 @Service
 class StoreServiceImpl(
