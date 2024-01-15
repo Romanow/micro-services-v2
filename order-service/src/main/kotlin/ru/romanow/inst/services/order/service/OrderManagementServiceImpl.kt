@@ -7,7 +7,7 @@ import ru.romanow.inst.services.order.model.CreateOrderRequest
 import ru.romanow.inst.services.order.model.CreateOrderResponse
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.UUID
 
 @Service
 class OrderManagementServiceImpl(
@@ -57,6 +57,8 @@ class OrderManagementServiceImpl(
         logger.info("Request to WarrantyService to use warranty for item '$itemUid' in order '$orderUid'")
         return warehouseService
             .useWarrantyItem(itemUid!!, request)
-            .orElseThrow { WarrantyProcessException("Can't process warranty request for item '$itemUid' in order '$orderUid'") }
+            .orElseThrow {
+                WarrantyProcessException("Can't process warranty request for item '$itemUid' in order '$orderUid'")
+            }
     }
 }

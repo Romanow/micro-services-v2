@@ -21,7 +21,8 @@ import ru.romanow.inst.services.warehouse.model.OrderItemRequest
 import ru.romanow.inst.services.warehouse.model.OrderItemResponse
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class WarehouseServiceImpl(
@@ -29,7 +30,7 @@ class WarehouseServiceImpl(
     private val warehouseWebClient: WebClient,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : WarehouseService {
 
     override fun takeItem(orderUid: UUID, model: String, size: SizeChart): Optional<OrderItemResponse> {
@@ -81,15 +82,21 @@ class WarehouseServiceImpl(
             .body(BodyInserters.fromValue(request))
             .retrieve()
             .onStatus({ it == NOT_FOUND }, { response -> buildEx(response) { EntityNotFoundException(it) } })
-            .onStatus({ it == UNPROCESSABLE_ENTITY },
-                { response -> buildEx(response) { WarehouseProcessException(it) } })
+            .onStatus(
+                { it == UNPROCESSABLE_ENTITY },
+                { response -> buildEx(response) { WarehouseProcessException(it) } }
+            )
             .onStatus({ it.isError }, { response -> buildEx(response) { WarehouseProcessException(it) } })
             .bodyToMono(OrderWarrantyResponse::class.java)
             .transform {
                 if (circuitBreakerProperties.enabled) {
                     factory.create("useWarrantyItem").run(it) { throwable ->
-                        fallback.apply(POST, "${serverUrlProperties.warehouseUrl}/api/v1/warehouse/$itemUid/warranty",
-                            throwable, request)
+                        fallback.apply(
+                            POST,
+                            "${serverUrlProperties.warehouseUrl}/api/v1/warehouse/$itemUid/warranty",
+                            throwable,
+                            request
+                        )
                     }
                 } else {
                     return@transform it

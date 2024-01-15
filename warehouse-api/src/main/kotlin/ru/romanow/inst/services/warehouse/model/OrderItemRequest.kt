@@ -1,6 +1,6 @@
 package ru.romanow.inst.services.warehouse.model
 
-import java.util.*
+import java.util.UUID
 import javax.validation.constraints.NotEmpty
 
 data class OrderItemRequest(

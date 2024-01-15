@@ -16,7 +16,8 @@ import ru.romanow.inst.services.warehouse.exceptions.WarrantyProcessException
 import ru.romanow.inst.services.warranty.model.ItemWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class WarrantyServiceImpl(
@@ -25,7 +26,7 @@ class WarrantyServiceImpl(
     private val warehouseService: WarehouseService,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarehouseServiceImpl::class.java)
 
@@ -54,9 +55,11 @@ class WarrantyServiceImpl(
             .transform {
                 if (circuitBreakerProperties.enabled) {
                     factory.create("requestToWarranty").run(it) { throwable ->
-                        fallback.apply(POST,
+                        fallback.apply(
+                            POST,
                             "${serverUrlProperties.warrantyUrl}/api/v1/warranty/$orderItemUid/warranty",
-                            throwable)
+                            throwable
+                        )
                     }
                 } else {
                     return@transform it

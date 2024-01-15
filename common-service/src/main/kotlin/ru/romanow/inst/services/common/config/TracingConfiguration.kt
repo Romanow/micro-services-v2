@@ -13,7 +13,6 @@ import org.springframework.boot.actuate.autoconfigure.tracing.ConditionalOnEnabl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnEnabledTracing
 class TracingConfiguration {
@@ -31,7 +30,10 @@ class TracingConfiguration {
         beanFactory: BeanFactory
     ): MethodInvocationProcessor {
         return ImperativeMethodInvocationProcessor(
-            newSpanParser, tracer, { beanFactory.getBean(it) }, { beanFactory.getBean(it) }
+            newSpanParser,
+            tracer,
+            { beanFactory.getBean(it) },
+            { beanFactory.getBean(it) }
         )
     }
 

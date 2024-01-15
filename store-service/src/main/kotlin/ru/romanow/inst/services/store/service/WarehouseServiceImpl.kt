@@ -12,7 +12,8 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.store.exceptions.WarehouseProcessException
 import ru.romanow.inst.services.warehouse.model.ItemInfoResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class WarehouseServiceImpl(
@@ -20,7 +21,7 @@ class WarehouseServiceImpl(
     private val warehouseWebClient: WebClient,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : WarehouseService {
 
     override fun getItemInfo(itemUid: UUID): Optional<ItemInfoResponse> {

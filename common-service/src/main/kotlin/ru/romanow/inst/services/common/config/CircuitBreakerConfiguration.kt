@@ -15,7 +15,8 @@ import org.springframework.http.HttpMethod
 import reactor.core.publisher.Mono
 import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationProperties
 
-typealias CircuitBreakerFactory = ReactiveCircuitBreakerFactory<Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
+typealias CircuitBreakerFactory =
+    ReactiveCircuitBreakerFactory<Resilience4JCircuitBreakerConfiguration, Resilience4JConfigBuilder>
 
 @Configuration
 class CircuitBreakerConfiguration {
@@ -30,7 +31,7 @@ class CircuitBreakerConfiguration {
     @Bean
     fun defaultCustomizer(
         circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport,
-        properties: CircuitBreakerConfigurationProperties,
+        properties: CircuitBreakerConfigurationProperties
     ): Customizer<ReactiveResilience4JCircuitBreakerFactory> {
         val timeLimiterConfig = TimeLimiterConfig
             .custom()
@@ -56,11 +57,17 @@ class CircuitBreakerConfiguration {
     fun fallback(circuitBreakerConfigurationSupport: CircuitBreakerConfigurationSupport): Fallback {
         return object : Fallback {
             override fun <T> apply(
-                method: HttpMethod, url: String, throwable: Throwable, vararg params: Any,
+                method: HttpMethod,
+                url: String,
+                throwable: Throwable,
+                vararg params: Any
             ): Mono<T> {
                 logger.warn(
                     "Request to {} '{}' failed with exception: {}. (params: '{}')",
-                    method.name(), url, throwable.message, params
+                    method.name(),
+                    url,
+                    throwable.message,
+                    params
                 )
                 if (throwable.javaClass in circuitBreakerConfigurationSupport.ignoredExceptions()) {
                     throw (throwable as RuntimeException)
@@ -69,5 +76,4 @@ class CircuitBreakerConfiguration {
             }
         }
     }
-
 }

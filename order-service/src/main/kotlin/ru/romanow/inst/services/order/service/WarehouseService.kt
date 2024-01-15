@@ -4,7 +4,8 @@ import ru.romanow.inst.services.order.model.SizeChart
 import ru.romanow.inst.services.warehouse.model.OrderItemResponse
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface WarehouseService {
     fun takeItem(orderUid: UUID, model: String, size: SizeChart): Optional<OrderItemResponse>

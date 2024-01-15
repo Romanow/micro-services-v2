@@ -3,7 +3,7 @@ package ru.romanow.inst.services.order.service
 import ru.romanow.inst.services.order.domain.Order
 import ru.romanow.inst.services.order.model.OrderInfoResponse
 import ru.romanow.inst.services.order.model.OrdersInfoResponse
-import java.util.*
+import java.util.UUID
 
 interface OrderService {
     fun getOrderByUid(orderUid: UUID): Order

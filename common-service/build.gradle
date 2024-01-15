@@ -1,6 +1,7 @@
 plugins {
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.spring"
+    id "com.adarshr.test-logger"
 }
 
 dependencies {
@@ -40,4 +41,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+testlogger {
+    theme "mocha"
 }

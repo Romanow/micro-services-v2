@@ -12,7 +12,8 @@ import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.store.exceptions.WarrantyProcessException
 import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class WarrantyServiceImpl(
@@ -20,7 +21,7 @@ class WarrantyServiceImpl(
     private val warrantyWebClient: WebClient,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : WarrantyService {
 
     override fun getItemWarrantyInfo(itemUid: UUID): Optional<WarrantyInfoResponse> {

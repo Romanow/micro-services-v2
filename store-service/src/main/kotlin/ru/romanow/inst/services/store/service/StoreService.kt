@@ -1,7 +1,11 @@
 package ru.romanow.inst.services.store.service
 
-import ru.romanow.inst.services.store.model.*
-import java.util.*
+import ru.romanow.inst.services.store.model.PurchaseRequest
+import ru.romanow.inst.services.store.model.UserOrderResponse
+import ru.romanow.inst.services.store.model.UserOrdersResponse
+import ru.romanow.inst.services.store.model.WarrantyRequest
+import ru.romanow.inst.services.store.model.WarrantyResponse
+import java.util.UUID
 
 interface StoreService {
     fun findUserOrders(userId: String): UserOrdersResponse

@@ -13,7 +13,7 @@ import ru.romanow.inst.services.warehouse.model.OrderItemResponse
 import ru.romanow.inst.services.warehouse.model.SizeChart
 import ru.romanow.inst.services.warehouse.repository.ItemRepository
 import ru.romanow.inst.services.warehouse.repository.OrderItemRepository
-import java.util.*
+import java.util.UUID
 
 @Service
 class WarehouseServiceImpl(

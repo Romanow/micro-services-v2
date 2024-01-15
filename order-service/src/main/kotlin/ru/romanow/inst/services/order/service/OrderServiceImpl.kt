@@ -12,7 +12,7 @@ import ru.romanow.inst.services.order.repository.OrderRepository
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 import java.util.stream.Collectors.toCollection
 
 @Service

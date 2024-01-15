@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import ru.romanow.inst.services.warehouse.domain.Item
 import ru.romanow.inst.services.warehouse.model.SizeChart
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface ItemRepository : JpaRepository<Item, Int> {
 
@@ -21,7 +22,9 @@ interface ItemRepository : JpaRepository<Item, Int> {
     fun takeOneItem(@Param("id") id: Int)
 
     @Modifying
-    @Query("update Item set availableCount = availableCount + 1 " +
-        "where id = (select id from OrderItem oi where oi.orderItemUid = :orderItemUid)")
+    @Query(
+        "update Item set availableCount = availableCount + 1 " +
+            "where id = (select id from OrderItem oi where oi.orderItemUid = :orderItemUid)"
+    )
     fun returnOneItem(@Param("orderItemUid") orderItemUid: UUID)
 }

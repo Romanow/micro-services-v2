@@ -4,7 +4,7 @@ import ru.romanow.inst.services.warranty.domain.Warranty
 import ru.romanow.inst.services.warranty.model.ItemWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
 import ru.romanow.inst.services.warranty.model.WarrantyInfoResponse
-import java.util.*
+import java.util.UUID
 
 interface WarrantyService {
     fun getWarrantyByItemUid(itemUid: UUID): Warranty

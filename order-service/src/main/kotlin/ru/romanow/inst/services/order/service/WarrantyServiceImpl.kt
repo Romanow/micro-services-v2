@@ -11,7 +11,7 @@ import ru.romanow.inst.services.common.properties.CircuitBreakerConfigurationPro
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
 import ru.romanow.inst.services.common.utils.buildEx
 import ru.romanow.inst.services.order.exceptions.WarrantyProcessException
-import java.util.*
+import java.util.UUID
 
 @Service
 class WarrantyServiceImpl(
@@ -19,7 +19,7 @@ class WarrantyServiceImpl(
     private val warrantyWebClient: WebClient,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : WarrantyService {
     private val logger = LoggerFactory.getLogger(WarrantyServiceImpl::class.java)
 

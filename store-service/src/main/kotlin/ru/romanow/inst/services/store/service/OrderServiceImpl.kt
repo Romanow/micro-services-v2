@@ -23,7 +23,8 @@ import ru.romanow.inst.services.store.exceptions.OrderProcessException
 import ru.romanow.inst.services.store.model.PurchaseRequest
 import ru.romanow.inst.services.store.model.WarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class OrderServiceImpl(
@@ -31,7 +32,7 @@ class OrderServiceImpl(
     private val orderWebClient: WebClient,
     private val serverUrlProperties: ServerUrlProperties,
     private val circuitBreakerProperties: CircuitBreakerConfigurationProperties,
-    private val factory: CircuitBreakerFactory,
+    private val factory: CircuitBreakerFactory
 ) : OrderService {
 
     override fun getOrderInfo(userId: String, orderUid: UUID): Optional<OrderInfoResponse> {
@@ -130,8 +131,12 @@ class OrderServiceImpl(
             .transform {
                 if (circuitBreakerProperties.enabled) {
                     factory.create("warrantyRequest").run(it) { throwable ->
-                        fallback.apply(POST, "${serverUrlProperties.orderUrl}/api/v1/orders/$orderUid/warranty",
-                            throwable, request)
+                        fallback.apply(
+                            POST,
+                            "${serverUrlProperties.orderUrl}/api/v1/orders/$orderUid/warranty",
+                            throwable,
+                            request
+                        )
                     }
                 } else {
                     return@transform it

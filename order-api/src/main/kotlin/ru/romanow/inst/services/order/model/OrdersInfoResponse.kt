@@ -1,3 +1,3 @@
 package ru.romanow.inst.services.order.model
 
-class OrdersInfoResponse: ArrayList<OrderInfoResponse>()
+class OrdersInfoResponse : ArrayList<OrderInfoResponse>()

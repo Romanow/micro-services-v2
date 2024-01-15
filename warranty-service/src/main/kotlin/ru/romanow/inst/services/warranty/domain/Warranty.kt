@@ -11,11 +11,13 @@ import jakarta.persistence.Index
 import jakarta.persistence.Table
 import ru.romanow.inst.services.warranty.model.WarrantyStatus
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
 @Table(
-    name = "warranty", indexes = [
+    name = "warranty",
+    indexes = [
         Index(name = "idx_warranty_item_uid", columnList = "item_uid", unique = true)
     ]
 )

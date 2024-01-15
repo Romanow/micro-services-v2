@@ -3,6 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.jpa"
     id "org.jetbrains.kotlin.plugin.spring"
     id "com.gorylenko.gradle-git-properties"
+    id "com.adarshr.test-logger"
 }
 
 dependencies {
@@ -17,4 +18,12 @@ dependencies {
 
 bootJar {
     archiveFileName = "${project.name}.jar"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+testlogger {
+    theme "mocha"
 }

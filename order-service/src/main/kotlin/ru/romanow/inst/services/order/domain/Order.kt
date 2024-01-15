@@ -1,16 +1,28 @@
 package ru.romanow.inst.services.order.domain
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.Table
 import ru.romanow.inst.services.order.model.PaymentStatus
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
-@Table(name = "orders", indexes = [
-    Index(name = "idx_orders_user_id", columnList = "user_id"),
-    Index(name = "idx_orders_order_uid", columnList = "order_uid", unique = true),
-    Index(name = "idx_orders_user_id_and_order_uid", columnList = "user_id, order_uid")
-])
+@Table(
+    name = "orders",
+    indexes = [
+        Index(name = "idx_orders_user_id", columnList = "user_id"),
+        Index(name = "idx_orders_order_uid", columnList = "order_uid", unique = true),
+        Index(name = "idx_orders_user_id_and_order_uid", columnList = "user_id, order_uid")
+    ]
+)
 class Order(
 
     @Id
@@ -49,6 +61,7 @@ class Order(
     }
 
     override fun toString(): String {
-        return "Order(id=$id, userId=$userId, orderUid=$orderUid, itemUid=$itemUid, orderDate=$orderDate, status=$status)"
+        return "Order(id=$id, userId=$userId, orderUid=$orderUid," +
+            "itemUid=$itemUid, orderDate=$orderDate, status=$status)"
     }
 }

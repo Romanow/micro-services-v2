@@ -1,6 +1,6 @@
 package ru.romanow.inst.services.warehouse.model
 
-import java.util.*
+import java.util.UUID
 
 data class OrderItemResponse(
     val orderItemUid: UUID,

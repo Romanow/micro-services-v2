@@ -7,7 +7,6 @@ import org.springframework.security.oauth2.server.resource.web.reactive.function
 import org.springframework.web.reactive.function.client.WebClient
 import ru.romanow.inst.services.common.properties.ServerUrlProperties
 
-
 @Configuration
 class WebClientConfiguration {
 

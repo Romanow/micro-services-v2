@@ -1,6 +1,6 @@
 package ru.romanow.inst.services.store.model
 
-import java.util.*
+import java.util.UUID
 
 data class WarrantyResponse(
     var orderUid: UUID,

@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import ru.romanow.inst.services.warranty.domain.Warranty
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface WarrantyRepository : JpaRepository<Warranty, Int> {
 

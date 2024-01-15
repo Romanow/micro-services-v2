@@ -11,11 +11,13 @@ import jakarta.persistence.Index
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
 @Table(
-    name = "order_item", indexes = [
+    name = "order_item",
+    indexes = [
         Index(name = "idx_order_item_item_id", columnList = "item_id"),
         Index(name = "idx_order_item_order_uid", columnList = "order_uid"),
         Index(name = "idx_order_item_item_uid", columnList = "order_item_uid", unique = true)

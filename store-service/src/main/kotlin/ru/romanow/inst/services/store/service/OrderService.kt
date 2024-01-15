@@ -6,7 +6,8 @@ import ru.romanow.inst.services.order.model.OrdersInfoResponse
 import ru.romanow.inst.services.store.model.PurchaseRequest
 import ru.romanow.inst.services.store.model.WarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface OrderService {
     fun getOrderInfo(userId: String, orderUid: UUID): Optional<OrderInfoResponse>

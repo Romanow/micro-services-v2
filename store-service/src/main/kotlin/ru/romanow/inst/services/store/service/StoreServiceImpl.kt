@@ -13,7 +13,7 @@ import ru.romanow.inst.services.store.model.WarrantyRequest
 import ru.romanow.inst.services.store.model.WarrantyResponse
 import ru.romanow.inst.services.store.model.WarrantyStatus
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.UUID
 
 @Service
 class StoreServiceImpl(
@@ -109,7 +109,10 @@ class StoreServiceImpl(
     }
 
     override fun warrantyRequest(userId: String, orderUid: UUID, request: WarrantyRequest): WarrantyResponse {
-        logger.info("Request to Order Service for user '$userId' and order '$orderUid' to make warranty request (${request.reason}})")
+        logger.info(
+            "Request to Order Service for user '{}' and order '{}' to make warranty request ({})",
+            userId, orderUid, request.reason
+        )
         return orderService
             .warrantyRequest(orderUid, request)
             .map { buildWarrantyResponse(orderUid, it) }

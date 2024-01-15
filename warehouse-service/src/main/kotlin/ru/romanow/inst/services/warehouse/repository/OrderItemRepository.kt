@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import ru.romanow.inst.services.warehouse.domain.OrderItem
-import java.util.*
+import java.util.UUID
 
 interface OrderItemRepository : JpaRepository<OrderItem, Int> {
 

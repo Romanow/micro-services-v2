@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.*
+import java.util.UUID
 
 @Service
 class WarrantyServiceImpl(
@@ -50,8 +50,13 @@ class WarrantyServiceImpl(
             decision = if (request.availableCount > 0) RETURN else FIXING
         }
 
-        logger.info("Warranty decision on item '{}' is {} (count: {}, status: {})",
-            itemUid, decision, request.availableCount, warranty.status)
+        logger.info(
+            "Warranty decision on item '{}' is {} (count: {}, status: {})",
+            itemUid,
+            decision,
+            request.availableCount,
+            warranty.status
+        )
 
         updateWarranty(warranty, decision, request.reason)
         return OrderWarrantyResponse(

@@ -7,7 +7,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import ru.romanow.inst.services.common.model.ErrorResponse
 import ru.romanow.inst.services.order.model.CreateOrderRequest
 import ru.romanow.inst.services.order.model.CreateOrderResponse
@@ -17,9 +24,10 @@ import ru.romanow.inst.services.order.service.OrderManagementService
 import ru.romanow.inst.services.order.service.OrderService
 import ru.romanow.inst.services.warranty.model.OrderWarrantyRequest
 import ru.romanow.inst.services.warranty.model.OrderWarrantyResponse
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
+@Suppress("ktlint:standard:max-line-length")
 @Tag(name = "Order API")
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -29,10 +37,12 @@ class OrderController(
 ) {
 
     @Operation(summary = "User order info")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Order info"),
-        ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Order info"),
+            ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+    )
     @GetMapping("/{userId}/{orderUid}", produces = ["application/json"])
     fun userOrder(@PathVariable userId: String, @PathVariable orderUid: UUID): OrderInfoResponse {
         return orderService.getUserOrder(userId, orderUid)
@@ -46,23 +56,27 @@ class OrderController(
     }
 
     @Operation(summary = "Create order")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Order created"),
-        ApiResponse(responseCode = "400", description = "Bad request format", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "409", description = "Item not available", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Order created"),
+            ApiResponse(responseCode = "400", description = "Bad request format", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "409", description = "Item not available", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+    )
     @PostMapping(value = ["/{userId}"], consumes = ["application/json"], produces = ["application/json"])
     fun makeOrder(@PathVariable userId: String, @Valid @RequestBody request: CreateOrderRequest): CreateOrderResponse {
         return orderManagementService.makeOrder(userId, request)
     }
 
     @Operation(summary = "Return order")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "204", description = "Order returned"),
-        ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Order returned"),
+            ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+    )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = ["/{orderUid}"])
     private fun refundOrder(@PathVariable orderUid: UUID) {
@@ -70,15 +84,19 @@ class OrderController(
     }
 
     @Operation(summary = "Warranty request")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Warranty decision"),
-        ApiResponse(responseCode = "400", description = "Bad request format", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
-        ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Warranty decision"),
+            ApiResponse(responseCode = "400", description = "Bad request format", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "404", description = "Order not found", content = [Content(schema = Schema(implementation = ErrorResponse::class))]),
+            ApiResponse(responseCode = "422", description = "External request failed", content = [Content(schema = Schema(implementation = ErrorResponse::class))])
+        ]
+    )
     @PostMapping(value = ["/{orderUid}/warranty"], consumes = ["application/json"], produces = ["application/json"])
-    private fun warranty(@PathVariable orderUid: UUID,
-                         @Valid @RequestBody request: OrderWarrantyRequest): OrderWarrantyResponse {
+    private fun warranty(
+        @PathVariable orderUid: UUID,
+        @Valid @RequestBody request: OrderWarrantyRequest
+    ): OrderWarrantyResponse {
         return orderManagementService.useWarranty(orderUid, request)
     }
 }
