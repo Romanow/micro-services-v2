@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  elastic:
+    image: elasticsearch:8.12.2
+    container_name: elastic
+    environment:
+      discovery.type: single-node
+      node.name: elastics
+      bootstrap.memory_lock: true
+      cluster.routing.allocation.disk.threshold_enabled: false
+      xpack.security.enabled: false
+      ES_JAVA_OPTS: "-Xms1024m -Xmx1024m"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cat/health | grep -q green" ]
+      interval: 20s
+      timeout: 20s
+      retries: 10
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana:8.12.2
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: http://elastic:9200
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:5601/api/status || exit 1" ]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+    ports:
+      - "5601:5601"
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+    depends_on:
+      elastic:
+        condition: service_healthy
+
+  fluent-bit:
+    image: fluent/fluent-bit:3.0
+    container_name: fluent-bit
+    ports:
+      - "5170:5170"
+    volumes:
+      - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    depends_on:
+      elastic:
+        condition: service_healthy
+
+volumes:
+  elastic-data:
+  kibana-data:

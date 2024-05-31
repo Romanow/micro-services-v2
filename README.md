@@ -34,7 +34,12 @@ $ ./gradlew clean build
 $ docker compose build
 
 # run images
-$ docker compose up -d
+$ docker compose \
+    -f docker-compose.yml \
+    -f docker-compose.tracing.yml \
+    -f docker-compose.logging.yml \
+    -f docker-compose.monitoring.yml \
+    up -d --wait
 ```
 
 ## Настройка Auth0
@@ -85,16 +90,18 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 ```shell
 $ brew install k6
 
-$ k6 run \
-    --out influxdb=http://localhost:8086/k6 \
+$ $ docker compose \
+    -f docker-compose.yml \
+    -f docker-compose.tracing.yml \
+    -f docker-compose.monitoring.yml \
+    -f docker-compose.load-testing.yml \
+    up -d --wait
+
+$ K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=report.html \
+  k6 run \
     -e USERNAME=ronin@romanow-alex.ru \
     -e PASSWORD=Qwerty123 \
     -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
     -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
     k6.js
 ```
-
-## Ссылки
-
-1. [10 антипаттернов деплоя в Kubernetes: распространенные практики, для которых есть другие решения](https://habr.com/ru/company/mailru/blog/529152/)
-2. [How do you rollback deployments in Kubernetes?](https://learnk8s.io/kubernetes-rollbacks)

@@ -1,17 +1,28 @@
+---
 apiVersion: 1
 
 providers:
-  - name: 'Resilience4j'
+  - name: "Node Exporter"
+    type: file
+    options:
+      path: /etc/grafana/provisioning/dashboards/dashboards/node-exporter.json
+
+  - name: "cAdvisor"
+    type: file
+    options:
+      path: /etc/grafana/provisioning/dashboards/dashboards/cadvisor.json
+
+  - name: "Circuit Breaker"
     type: file
     options:
       path: /etc/grafana/provisioning/dashboards/dashboards/resilience4j.json
 
-  - name: 'Spring Boot Statistics'
+  - name: "Spring Boot"
     type: file
     options:
       path: /etc/grafana/provisioning/dashboards/dashboards/spring-boot.json
 
-  - name: 'k6'
+  - name: "K6 results"
     type: file
     options:
-      path: /etc/grafana/provisioning/dashboards/dashboards/k6-load-testing-results.json
+      path: /etc/grafana/provisioning/dashboards/dashboards/k6-results.json
