@@ -3,9 +3,7 @@ services:
   warehouse-url: ${WAREHOUSE_URL:http://warehouse:8280}
   warranty-url: ${WARRANTY_URL:http://warranty:8180}
 
-opentracing:
-  jaeger:
-    enabled: ${JAEGER_ENABLED:true}
-    udp-sender:
-      host: ${JAEGER_HOST:localhost}
-      port: ${JAEGER_PORT:6831}
+management:
+  otlp:
+    tracing:
+      endpoint: http://jaeger:4318/v1/traces

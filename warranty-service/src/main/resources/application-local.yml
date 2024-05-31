@@ -4,3 +4,11 @@ spring:
     username: program
     password: test
     driver-class-name: org.postgresql.Driver
+
+oauth2:
+  security:
+    enabled: false
+
+management:
+  tracing:
+    enabled: false

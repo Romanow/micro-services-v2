@@ -6,7 +6,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.jpa" version "1.9.22" apply false
     id "org.jetbrains.kotlin.plugin.spring" version "1.9.22" apply false
     id "org.jlleitschuh.gradle.ktlint" version "12.1.0" apply false
-    id "org.springframework.boot" version "3.1.5" apply false
+    id "org.springframework.boot" version "3.2.5" apply false
     id "com.gorylenko.gradle-git-properties" version "2.4.1" apply false
     id "com.adarshr.test-logger" version "4.0.0" apply false
     id "io.spring.dependency-management" version "1.1.3"
@@ -14,8 +14,8 @@ plugins {
 
 ext {
     kotlinVersion = "1.9.22"
-    springBootVersion = "3.1.5"
-    springCircuitBreakerVersion = "3.0.3"
+    springBootVersion = "3.2.5"
+    springCircuitBreakerVersion = "3.1.1"
     validationApiVersion = "2.0.1.Final"
     gsonVersion = "2.8.5"
     jwtVersion = "4.4.0"
@@ -63,5 +63,11 @@ subprojects { ->
         implementation "javax.validation:validation-api:$validationApiVersion"
         implementation "org.apache.commons:commons-lang3"
         implementation "com.google.code.gson:gson"
+    }
+
+    processResources {
+        filesMatching(["**/properties-from-gradle.properties"]) {
+            expand(project.properties)
+        }
     }
 }

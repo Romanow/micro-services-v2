@@ -15,12 +15,36 @@ dependencies {
     testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
 }
 
-bootJar {
-    archiveFileName = "${project.name}.jar"
+gitProperties {
+    dateFormat = "dd.MM.yyyy HH:mm:ss"
+    dateFormatTimeZone = "Europe/Moscow"
+    extProperty = "gitProps"
 }
+
+generateGitProperties.outputs.upToDateWhen { false }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+    manifest {
+        attributes(
+            "Application-Name": "${rootProject.name}",
+            "Application-Version": "${project.version}",
+            "Git-Branch": "${-> project.ext.gitProps["git.branch"]}",
+            "Build-Revision": "${-> project.ext.gitProps["git.commit.id.abbrev"]}",
+            "Commit-Time": "${-> project.ext.gitProps["git.commit.time"]}"
+        )
+    }
+}
+
+jar {
+    enabled = false
 }
 
 testlogger {

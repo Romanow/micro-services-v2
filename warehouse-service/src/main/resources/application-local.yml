@@ -7,3 +7,11 @@ spring:
 
 services:
   warranty-url: http://localhost:8180
+
+oauth2:
+  security:
+    enabled: false
+
+management:
+  tracing:
+    enabled: false

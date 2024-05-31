@@ -20,15 +20,15 @@
                     <pattern>
                         <pattern>
                             {
-                            "timestamp": "@timestamp",
-                            "level": "%level",
-                            "application": "${APPLICATION_NAME:-}",
-                            "trace": "%X{traceId:-}",
-                            "span": "%X{spanId:-}",
-                            "pid": "${PID:-}",
-                            "thread": "%thread",
-                            "class": "%logger{40}",
-                            "message": "%message"
+                                "timestamp": "@timestamp",
+                                "level": "%level",
+                                "application": "${APPLICATION_NAME:-}",
+                                "trace": "%X{traceId:-}",
+                                "span": "%X{spanId:-}",
+                                "pid": "${PID:-}",
+                                "thread": "%thread",
+                                "class": "%logger{40}",
+                                "message": "%message"
                             }
                         </pattern>
                     </pattern>

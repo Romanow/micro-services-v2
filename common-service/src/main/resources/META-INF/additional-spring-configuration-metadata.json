@@ -27,6 +27,12 @@
       "defaultValue": "200ms"
     },
     {
+      "name": "oauth2.security.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable OAuth2 security.",
+      "defaultValue": "true"
+    },
+    {
       "name": "services.order-url",
       "type": "java.lang.String",
       "description": "Order url.",

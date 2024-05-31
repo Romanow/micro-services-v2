@@ -1,0 +1,22 @@
+  ____  _                   ____                  _
+ / ___|| |_ ___  _ __ ___  / ___|  ___ _ ____   _(_) ___ ___
+ \___ \| __/ _ \| '__/ _ \ \___ \ / _ \ '__\ \ / / |/ __/ _ \
+  ___) | || (_) | | |  __/  ___) |  __/ |   \ V /| | (_|  __/
+ |____/ \__\___/|_|  \___| |____/ \___|_|    \_/ |_|\___\___|
+==============================================================
+Profile: ${spring.profiles.active}
+Application name: ${spring.application.name}
+Application version: ${git.build.version}
+==============================================================
+Built from branch: ${git.branch}
+Commit id: ${git.commit.id.abbrev}
+Commit time: ${git.commit.time}
+==============================================================
+Database url: ${spring.datasource.url}
+Order service: ${services.order-url}
+Warehouse service: ${services.warehouse-url}
+Warranty service: ${services.warranty-url}
+==============================================================
+Tracing enabled: ${management.tracing.enabled}
+Security enabled: ${oauth2.security.enabled}
+==============================================================

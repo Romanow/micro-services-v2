@@ -5,8 +5,9 @@ spring:
   profiles:
     active: local
     include: common
+  config:
+    import: optional:git.properties
   application.name: store
-  main.banner-mode: off
   security:
     oauth2:
       resourceserver:

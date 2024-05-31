@@ -6,12 +6,16 @@ spring:
     discovery:
       client.health-indicator.enabled: false
 
+oauth2:
+  security:
+    enabled: ${OAUTH2_SECURITY_ENABLED:true}
+
 management:
   otlp:
     tracing:
       endpoint: ${COLLECTOR_ENDPOINT:http://localhost:4318/v1/traces}
   tracing:
-    enabled: ${TRACING_ENABLED:false}
+    enabled: ${TRACING_ENABLED:true}
     sampling:
       probability: 1.0
   endpoint:

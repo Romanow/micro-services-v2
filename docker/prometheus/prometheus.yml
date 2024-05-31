@@ -1,14 +1,11 @@
 global:
   scrape_interval: 5s
   external_labels:
-    monitor: 'services-monitor'
+    monitor: "services-monitor"
 
 scrape_configs:
-  - job_name: 'Order Service'
-    metrics_path: '/manage/prometheus'
-    basic_auth:
-      username: management
-      password: 'passwd'
+  - job_name: "services"
+    metrics_path: "/manage/prometheus"
     static_configs:
       - targets:
           - store:8480

@@ -17,29 +17,50 @@ services:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
 
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
-    environment:
-      - INFLUXDB_DB=k6
-    healthcheck:
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8086/ping" ]
-      interval: 5s
-      timeout: 10s
-      retries: 5
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    privileged: true
     ports:
-      - "8086:8086"
+      - "8880:8080"
+    devices:
+      - /dev/kmsg
     volumes:
-      - influxdb-data:/var/lib/influxdb
+      - /:/rootfs:ro
+      - /sys:/sys:ro
+      - /var/run:/var/run:rw
+      - /dev/disk/:/dev/disk:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    depends_on:
+      prometheus:
+        condition: service_healthy
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.1
+    container_name: node-exporter
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    depends_on:
+      prometheus:
+        condition: service_healthy
 
   grafana:
     image: grafana/grafana:9.4.7
     container_name: grafana
     environment:
+      - GF_AUTH_BASIC_ENABLED=false
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_AUTH_BASIC_ENABLED=false
-      - GF_USERS_DEFAULT_THEME=light
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health" ]
       interval: 5s
@@ -53,10 +74,7 @@ services:
     depends_on:
       prometheus:
         condition: service_healthy
-      influxdb:
-        condition: service_healthy
 
 volumes:
   prometheus-data:
-  influxdb-data:
   grafana-data:

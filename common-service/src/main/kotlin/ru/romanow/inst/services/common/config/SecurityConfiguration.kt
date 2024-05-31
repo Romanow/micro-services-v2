@@ -3,6 +3,7 @@ package ru.romanow.inst.services.common.config
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.toAnyEndpoint
 import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -27,7 +28,8 @@ class SecurityConfiguration {
     }
 
     @Bean
-    @Order(1)
+    @Order(FIRST)
+    @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
     fun tokenSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .securityMatcher("/api/v1/**")
@@ -41,7 +43,7 @@ class SecurityConfiguration {
     }
 
     @Bean
-    @Order(2)
+    @Order(SECOND)
     fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         return http
             .securityMatcher(
@@ -57,7 +59,8 @@ class SecurityConfiguration {
     }
 
     @Bean
-    @Order(3)
+    @Order(THIRD)
+    @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
     fun permitAllSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         return http
             .securityMatcher("/**")
@@ -73,5 +76,11 @@ class SecurityConfiguration {
             .roles(properties.role)
             .build()
         return InMemoryUserDetailsManager(user)
+    }
+
+    companion object {
+        private const val FIRST = 1
+        private const val SECOND = 2
+        private const val THIRD = 3
     }
 }
