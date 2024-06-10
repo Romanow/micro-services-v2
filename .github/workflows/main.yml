@@ -63,7 +63,7 @@ jobs:
           collection: tests/postman/collection.json
           environment: tests/postman/local-environment.json
           delayRequest: 100
-          reporters: "[ "cli" ]"
+          reporters: '["cli"]'
 
       - name: Stop containers
         if: ${{ always() }}
