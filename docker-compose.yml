@@ -20,7 +20,7 @@ services:
 
   store-service:
     build: ./store-service
-    image: ${REPOSITORY_NAME}/store-service:v3.0
+    image: ${REPOSITORY_NAME}/store-service:v3.1
     container_name: store
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -37,7 +37,7 @@ services:
 
   order-service:
     build: ./order-service
-    image: ${REPOSITORY_NAME}/order-service:v3.0
+    image: ${REPOSITORY_NAME}/order-service:v3.1
     container_name: orders
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -54,7 +54,7 @@ services:
 
   warehouse-service:
     build: ./warehouse-service
-    image: ${REPOSITORY_NAME}/warehouse-service:v3.0
+    image: ${REPOSITORY_NAME}/warehouse-service:v3.1
     container_name: warehouse
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -71,7 +71,7 @@ services:
 
   warranty-service:
     build: ./warranty-service
-    image: ${REPOSITORY_NAME}/warranty-service:v3.0
+    image: ${REPOSITORY_NAME}/warranty-service:v3.1
     container_name: warranty
     environment:
       SPRING_PROFILES_ACTIVE: docker

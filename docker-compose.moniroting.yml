@@ -1,7 +1,7 @@
 version: "3"
 services:
   prometheus:
-    image: prom/prometheus:v2.41.0
+    image: prom/prometheus:v2.52.0
     container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"

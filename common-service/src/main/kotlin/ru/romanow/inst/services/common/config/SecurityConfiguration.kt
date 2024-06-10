@@ -60,6 +60,19 @@ class SecurityConfiguration {
 
     @Bean
     @Order(THIRD)
+    @ConditionalOnProperty("oauth2.security.enabled", havingValue = "false")
+    fun disabledSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        return http
+            .authorizeHttpRequests {
+                it.anyRequest().permitAll()
+            }
+            .csrf { it.disable() }
+            .cors { it.disable() }
+            .build()
+    }
+
+    @Bean
+    @Order(THIRD)
     @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
     fun permitAllSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         return http

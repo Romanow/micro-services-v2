@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version=${1:-v3.0}
+version=${1:-v3.1}
 
 images=(
   "romanowalex/store-service:$version"
