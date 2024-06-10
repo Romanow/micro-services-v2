@@ -53,7 +53,7 @@ jobs:
           docker compose up -d --wait
 
       - name: Print logs
-        if: failure() && steps.run-containers.outcome != "success"
+        if: ${{ failure() && steps.run-containers.outcome != "success" }}
         run: |
           docker compose logs
 
@@ -66,7 +66,7 @@ jobs:
           reporters: "[ "cli" ]"
 
       - name: Stop containers
-        if: always()
+        if: ${{ always() }}
         continue-on-error: true
         run: docker compose down -v
 
