@@ -21,7 +21,7 @@ ext {
     jwtVersion = "4.4.0"
     openApiVersion = "2.1.0"
     logbookVersion = "2.16.0"
-    logstashEncoderVersion = "7.3"
+    logstashEncoderVersion = "7.4"
     postgresContainerVersion = "1.19.0"
 }
 
