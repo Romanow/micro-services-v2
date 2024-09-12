@@ -90,11 +90,10 @@ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
 ```shell
 $ brew install k6
 
-$ $ docker compose \
+$ docker compose \
     -f docker-compose.yml \
     -f docker-compose.tracing.yml \
     -f docker-compose.monitoring.yml \
-    -f docker-compose.load-testing.yml \
     up -d --wait
 
 $ K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=report.html \
