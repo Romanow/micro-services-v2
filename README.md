@@ -1,7 +1,7 @@
-# Microservices
-
 [![Build project](https://github.com/Romanow/micro-services-v2/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/Romanow/micro-services-v2/actions/workflows/main.yml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
+# Microservices
 
 ## Состав
 
