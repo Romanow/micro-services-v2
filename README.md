@@ -93,6 +93,7 @@ $ brew install k6
 $ docker compose \
     -f docker-compose.yml \
     -f docker-compose.tracing.yml \
+    -f docker-compose.logging.yml \
     -f docker-compose.monitoring.yml \
     up -d --wait
 

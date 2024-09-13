@@ -1,4 +1,4 @@
-FROM amazoncorretto:17 as builder
+FROM amazoncorretto:17 AS builder
 WORKDIR application
 ARG JAR_FILE=build/libs/order-service.jar
 COPY ${JAR_FILE} application.jar
