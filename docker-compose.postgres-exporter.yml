@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  postgres-exporter:
+    image: bitnami/postgres-exporter:0.15.0
+    container_name: postgres-exporter
+    environment:
+      DATA_SOURCE_URI: "postgres:5432/postgres?sslmode=disable"
+      DATA_SOURCE_USER: postgres
+      DATA_SOURCE_PASS: postgres
+    ports:
+      - "9187:9187"
+    depends_on:
+      postgres:
+        condition: service_healthy

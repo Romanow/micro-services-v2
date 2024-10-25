@@ -22,7 +22,7 @@ providers:
     options:
       path: /etc/grafana/provisioning/dashboards/dashboards/spring-boot.json
 
-  - name: "K6 results"
+  - name: "Postgres Exporter"
     type: file
     options:
-      path: /etc/grafana/provisioning/dashboards/dashboards/k6-results.json
+      path: /etc/grafana/provisioning/dashboards/dashboards/postgres-exporter.json

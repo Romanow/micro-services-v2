@@ -103,5 +103,5 @@ $ K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=report.html \
     -e PASSWORD=Qwerty123 \
     -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
     -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
-    k6.js
+    k6.auth.js
 ```
