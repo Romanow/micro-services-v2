@@ -1,4 +1,4 @@
-rootProject.name = "micro-services"
+rootProject.name = "store-service"
 
 include "common-api"
 include "common-service"

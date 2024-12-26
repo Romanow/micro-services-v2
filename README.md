@@ -4,7 +4,7 @@
 [![Store Service](https://img.shields.io/docker/pulls/romanowalex/store-service?logo=docker)](https://hub.docker.com/r/romanowalex/store-service)
 [![License](https://img.shields.io/github/license/Romanow/store-service)](https://github.com/Romanow/store-service/blob/master/LICENSE)
 
-# Microservices
+# Store Service
 
 ## Состав
 
@@ -66,14 +66,14 @@ $ docker compose \
 После настройки у вас должен успешно выполняться запрос на проверку получение токена (подставить свои настройки):
 
 ```shell
-curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
-  --header 'Content-Type: application/x-www-form-urlencoded' \
-  --data-urlencode 'grant_type=password' \
-  --data-urlencode 'username=ronin@romanow-alex.ru' \
-  --data-urlencode 'password=Qwerty123' \
-  --data-urlencode 'scope=openid' \
-  --data-urlencode 'client_id=<Client ID>' \
-  --data-urlencode 'client_secret=<Client Secret>'
+$ curl --location --request POST 'https://romanowalex.eu.auth0.com/oauth/token' \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --data-urlencode 'grant_type=password' \
+    --data-urlencode 'username=ronin@romanow-alex.ru' \
+    --data-urlencode 'password=Qwerty123' \
+    --data-urlencode 'scope=openid' \
+    --data-urlencode 'client_id=<Client ID>' \
+    --data-urlencode 'client_secret=<Client Secret>'
 ```
 
 В ответ получаем токен:
@@ -95,7 +95,6 @@ $ brew install k6
 
 $ docker compose \
     -f docker-compose.yml \
-    -f docker-compose.keycloak.yml \
     -f docker-compose.tracing.yml \
     -f docker-compose.logging.yml \
     -f docker-compose.monitoring.yml \
@@ -103,9 +102,9 @@ $ docker compose \
 
 $ K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=report.html \
   k6 run \
-    -e USERNAME=program@mail.ru \
-    -e PASSWORD=test \
-    -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
-    -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
+    -e USERNAME=ronin@romanow-alex.ru \
+    -e PASSWORD=Qwerty123 \
+    -e CLIENT_ID=<Client ID> \
+    -e CLIENT_SECRET=<Client Secret> \
     k6.auth.js
 ```
