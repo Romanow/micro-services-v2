@@ -29,7 +29,7 @@ dependencies {
     api "com.auth0:java-jwt:$jwtVersion"
 
     api "org.postgresql:postgresql"
-    api "org.flywaydb:flyway-core"
+    api "org.flywaydb:flyway-database-postgresql"
     api "io.github.resilience4j:resilience4j-micrometer"
     api "org.zalando:logbook-core:$logbookVersion"
 
