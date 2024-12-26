@@ -1,7 +1,7 @@
 x-common-envs: &common-envs
   environment:
-    SPRING_PROFILES_ACTIVE: docker
-    OAUTH2_SECURITY_ENABLED: false
+    SPRING_PROFILES_ACTIVE: docker,auth0
+    OAUTH2_SECURITY_ENABLED: true
     TRACING_ENABLED: false
 
 services:
@@ -39,8 +39,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
 
   order-service:
     build: ./order-service
@@ -57,8 +55,6 @@ services:
       - "8380:8380"
     depends_on:
       postgres:
-        condition: service_healthy
-      keycloak:
         condition: service_healthy
 
   warehouse-service:
@@ -77,8 +73,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
 
   warranty-service:
     build: ./warranty-service
@@ -95,8 +89,6 @@ services:
       - "8180:8180"
     depends_on:
       postgres:
-        condition: service_healthy
-      keycloak:
         condition: service_healthy
 
 volumes:
