@@ -44,24 +44,24 @@
         },
         {
             "key": "username",
-            "value": "program@mail.ru",
+            "value": "ronin@romanow-alex.ru",
             "enabled": true
         },
         {
             "key": "password",
-            "value": "test",
+            "value": "Qwerty123",
             "type": "secret",
             "enabled": true
         },
         {
             "key": "clientId",
-            "value": "store",
+            "value": "pXrawhpoDM63b82A7fkiLvRIH81wgmH9",
             "type": "secret",
             "enabled": true
         },
         {
             "key": "clientSecret",
-            "value": "kIrcBrIz9OvgnDKQEUAi8XsiI6ekzUZC",
+            "value": "LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V",
             "type": "secret",
             "enabled": true
         },
