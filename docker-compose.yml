@@ -1,8 +1,7 @@
 x-common-envs: &common-envs
   environment:
-    SPRING_PROFILES_ACTIVE: docker,auth0,keycloak
-    OAUTH2_SECURITY_ENABLED: true
-    KEYCLOAK_ISSUER_URI: http://keycloak:8100/realms/master
+    SPRING_PROFILES_ACTIVE: docker
+    OAUTH2_SECURITY_ENABLED: false
     TRACING_ENABLED: false
 
 services:
