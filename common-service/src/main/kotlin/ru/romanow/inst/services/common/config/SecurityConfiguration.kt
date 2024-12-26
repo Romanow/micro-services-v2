@@ -4,6 +4,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import ru.romanow.inst.services.common.properties.ActuatorSecurityProperties
@@ -30,20 +32,22 @@ class SecurityConfiguration {
     @Bean
     @Order(FIRST)
     @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
-    fun tokenSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity, properties: OAuth2ClientProperties): SecurityFilterChain {
+        val sources = PROVIDERS.filter { it in properties.provider }.map { properties.provider[it]!!.issuerUri }
         return http
             .securityMatcher("/api/v1/**")
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }
             .oauth2ResourceServer {
-                it.jwt {}
+                it.authenticationManagerResolver(JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(sources))
             }
             .build()
     }
 
     @Bean
     @Order(SECOND)
+    @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
     fun managementSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
         return http
             .securityMatcher(
@@ -74,7 +78,7 @@ class SecurityConfiguration {
     @Bean
     @Order(THIRD)
     @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
-    fun permitAllSecurityFilterChain(http: HttpSecurity, properties: ActuatorSecurityProperties): SecurityFilterChain {
+    fun permitAllSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .securityMatcher("/**")
             .authorizeHttpRequests { it.anyRequest().permitAll() }
@@ -95,5 +99,6 @@ class SecurityConfiguration {
         private const val FIRST = 1
         private const val SECOND = 2
         private const val THIRD = 3
+        private val PROVIDERS = listOf("auth0", "keycloak")
     }
 }

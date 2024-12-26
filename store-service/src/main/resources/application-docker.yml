@@ -7,8 +7,6 @@ management:
   otlp:
     tracing:
       endpoint: http://jaeger:4318/v1/traces
-  tracing:
-    enabled: true
 
 logging:
   pattern:

@@ -7,9 +7,5 @@ spring:
     include: common
   config:
     import: optional:git.properties
-  application.name: warehouse
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${JWT_ISSUER_URI:https://romanowalex.eu.auth0.com/}
+  application:
+    name: warehouse

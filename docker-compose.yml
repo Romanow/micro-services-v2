@@ -1,3 +1,10 @@
+x-common-envs: &common-envs
+  environment:
+    SPRING_PROFILES_ACTIVE: docker,auth0,keycloak
+    OAUTH2_SECURITY_ENABLED: true
+    KEYCLOAK_ISSUER_URI: http://keycloak:8100/realms/master
+    TRACING_ENABLED: false
+
 services:
   postgres:
     image: postgres:15
@@ -14,15 +21,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
       - ./docker/postgres/:/docker-entrypoint-initdb.d/
 
   store-service:
     build: ./store-service
-    image: ${REPOSITORY_NAME}/store-service:v3.1
+    image: ${REPOSITORY_NAME}/store-service:v3.2
     container_name: store
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
+    restart: on-failure
+    <<: *common-envs
     healthcheck:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8480/manage/health" ]
       interval: 10s
@@ -33,13 +40,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
   order-service:
     build: ./order-service
-    image: ${REPOSITORY_NAME}/order-service:v3.1
+    image: ${REPOSITORY_NAME}/order-service:v3.2
     container_name: orders
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
+    restart: on-failure
+    <<: *common-envs
     healthcheck:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8380/manage/health" ]
       interval: 10s
@@ -50,13 +59,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
   warehouse-service:
     build: ./warehouse-service
-    image: ${REPOSITORY_NAME}/warehouse-service:v3.1
+    image: ${REPOSITORY_NAME}/warehouse-service:v3.2
     container_name: warehouse
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
+    restart: on-failure
+    <<: *common-envs
     healthcheck:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8280/manage/health" ]
       interval: 10s
@@ -67,13 +78,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
   warranty-service:
     build: ./warranty-service
-    image: ${REPOSITORY_NAME}/warranty-service:v3.1
+    image: ${REPOSITORY_NAME}/warranty-service:v3.2
     container_name: warranty
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
+    restart: on-failure
+    <<: *common-envs
     healthcheck:
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8180/manage/health" ]
       interval: 10s
@@ -84,6 +97,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
 volumes:
-  db-data:
+  postgres:

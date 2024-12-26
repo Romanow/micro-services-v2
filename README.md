@@ -95,6 +95,7 @@ $ brew install k6
 
 $ docker compose \
     -f docker-compose.yml \
+    -f docker-compose.keycloak.yml \
     -f docker-compose.tracing.yml \
     -f docker-compose.logging.yml \
     -f docker-compose.monitoring.yml \
@@ -102,8 +103,8 @@ $ docker compose \
 
 $ K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=report.html \
   k6 run \
-    -e USERNAME=ronin@romanow-alex.ru \
-    -e PASSWORD=Qwerty123 \
+    -e USERNAME=program@mail.ru \
+    -e PASSWORD=test \
     -e CLIENT_ID=pXrawhpoDM63b82A7fkiLvRIH81wgmH9 \
     -e CLIENT_SECRET=LzQSxUOE2dmAUdgstWke4ngXUeZNLVczvSid7ZVV8HTegCRbOxchQtJ_23EuZ9_V \
     k6.auth.js

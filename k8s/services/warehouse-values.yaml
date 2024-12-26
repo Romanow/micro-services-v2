@@ -1,6 +1,6 @@
 image:
   repository: romanowalex/warehouse-service
-  tag: v3.1
+  tag: v3.2
 
 database:
   name: warehouse

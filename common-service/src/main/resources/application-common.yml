@@ -5,17 +5,19 @@ spring:
   cloud:
     discovery:
       client.health-indicator.enabled: false
+  main:
+    allow-bean-definition-overriding: true
 
 oauth2:
   security:
-    enabled: ${OAUTH2_SECURITY_ENABLED:true}
+    enabled: ${OAUTH2_SECURITY_ENABLED:false}
 
 management:
   otlp:
     tracing:
       endpoint: ${COLLECTOR_ENDPOINT:http://localhost:4318/v1/traces}
   tracing:
-    enabled: ${TRACING_ENABLED:true}
+    enabled: ${TRACING_ENABLED:false}
     sampling:
       probability: 1.0
   endpoint:
@@ -49,7 +51,7 @@ springdoc:
     path: /api-docs
 
 circuit-breaker:
-  enabled: ${CIRCUIT_BREAKER_ENABLED:true}
+  enabled: ${CIRCUIT_BREAKER_ENABLED:false}
   default-timeout: ${CIRCUIT_BREAKER_TIMEOUT:30s}
 
 logging:

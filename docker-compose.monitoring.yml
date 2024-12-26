@@ -14,7 +14,7 @@ services:
       - "9090:9090"
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
+      - prometheus:/prometheus
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.49.1
@@ -68,12 +68,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana:/var/lib/grafana
       - ./docker/grafana/:/etc/grafana/provisioning/
     depends_on:
       prometheus:
         condition: service_healthy
 
 volumes:
-  prometheus-data:
-  grafana-data:
+  prometheus:
+  grafana:
