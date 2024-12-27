@@ -617,7 +617,7 @@
                             "script": {
                                 "exec": [
                                     "var uuid = require(\"uuid\");",
-                                    "postman.setEnvironmentVariable(\"userUid\", uuid.v4());"
+                                    "pm.environment.set(\"userUid\", uuid.v4());"
                                 ],
                                 "type": "text/javascript"
                             }
@@ -1143,7 +1143,7 @@
                             "script": {
                                 "exec": [
                                     "var uuid = require(\"uuid\");",
-                                    "postman.setEnvironmentVariable(\"orderUid\", uuid.v4());"
+                                    "pm.environment.set(\"orderUid\", uuid.v4());"
                                 ],
                                 "type": "text/javascript"
                             }
@@ -1555,7 +1555,7 @@
                             "script": {
                                 "exec": [
                                     "var uuid = require(\"uuid\");",
-                                    "postman.setEnvironmentVariable(\"itemUid\", uuid.v4());"
+                                    "pm.environment.set(\"itemUid\", uuid.v4());"
                                 ],
                                 "type": "text/javascript"
                             }
