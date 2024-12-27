@@ -33,7 +33,7 @@ class SecurityConfiguration {
     @Order(FIRST)
     @ConditionalOnProperty("oauth2.security.enabled", havingValue = "true", matchIfMissing = true)
     fun securityFilterChain(http: HttpSecurity, properties: OAuth2ClientProperties): SecurityFilterChain {
-        val sources = PROVIDERS.filter { it in properties.provider }.map { properties.provider[it]!!.issuerUri }
+        val sources = properties.provider.map { it.value.issuerUri }
         return http
             .securityMatcher("/api/v1/**")
             .authorizeHttpRequests {
@@ -99,6 +99,5 @@ class SecurityConfiguration {
         private const val FIRST = 1
         private const val SECOND = 2
         private const val THIRD = 3
-        private val PROVIDERS = listOf("auth0", "keycloak")
     }
 }
